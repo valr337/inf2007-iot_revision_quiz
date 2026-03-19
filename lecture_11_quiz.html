@@ -1,0 +1,1380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 11 MCQ Quiz: ZigBee & Z-Wave</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 11 MCQ Quiz: ZigBee & Z-Wave</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 11</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What is Matter according to the lecture?",
+    "options": [
+      "An open standard for smart home technology that lets devices work with any Matter-certified ecosystem using a single protocol",
+      "A proprietary radio used only by ZigBee coordinators",
+      "A transport protocol for industrial Ethernet only",
+      "A battery technology for IoT sensors"
+    ],
+    "correct": 0,
+    "why": "The lecture defines Matter as an open smart-home standard that enables interoperability across Matter-certified ecosystems using a single protocol."
+  },
+  {
+    "q": "Which organization is associated with Matter in the lecture?",
+    "options": [
+      "Connectivity Standards Alliance",
+      "ZigBee Forum",
+      "IEEE 802 Committee",
+      "Wi-Fi Alliance"
+    ],
+    "correct": 0,
+    "why": "The slide says Matter comes from the Connectivity Standards Alliance."
+  },
+  {
+    "q": "Matter is mainly presented in the lecture as being used for which domain?",
+    "options": [
+      "Smart home technology",
+      "Satellite communication",
+      "Cellular base stations",
+      "Automotive CAN buses"
+    ],
+    "correct": 0,
+    "why": "The lecture introduces Matter in the context of smart home technology."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee market on the lecture slides?",
+    "options": [
+      "Building automation",
+      "Deep-space telemetry only",
+      "High-frequency stock trading",
+      "Desktop CPU overclocking"
+    ],
+    "correct": 0,
+    "why": "The markets slide includes building automation among several ZigBee application areas."
+  },
+  {
+    "q": "Which application is explicitly mentioned as a ZigBee use case in the overview slide?",
+    "options": [
+      "Wireless light switches",
+      "4K video streaming",
+      "Cloud database replication",
+      "Massive file backup"
+    ],
+    "correct": 0,
+    "why": "The ZigBee overview lists wireless light switches as an example application."
+  },
+  {
+    "q": "The lecture describes ZigBee applications as usually being turned off most of the time with approximately what duty cycle?",
+    "options": [
+      "Less than 1%",
+      "Around 25%",
+      "About 50%",
+      "Always on"
+    ],
+    "correct": 0,
+    "why": "The slide states that many ZigBee applications are turned off most of the time, with a duty cycle below 1%."
+  },
+  {
+    "q": "When was the first ZigBee standard published according to the lecture?",
+    "options": [
+      "2004",
+      "1998",
+      "2010",
+      "2022"
+    ],
+    "correct": 0,
+    "why": "The ZigBee overview slide states that the first standard was published in 2004."
+  },
+  {
+    "q": "Which description best matches ZigBee in the lecture?",
+    "options": [
+      "Ultra-low power and low-data rate with multi-year battery life",
+      "High-power and high-bandwidth with daily battery charging",
+      "Only for wired industrial control",
+      "Designed primarily for video transport"
+    ],
+    "correct": 0,
+    "why": "The lecture characterizes ZigBee as ultra-low power, low-data rate, and capable of multi-year battery life."
+  },
+  {
+    "q": "Why does the lecture say ZigBee uses power management?",
+    "options": [
+      "To ensure low power consumption",
+      "To increase video resolution",
+      "To avoid using routers",
+      "To replace acknowledgements"
+    ],
+    "correct": 0,
+    "why": "The ZigBee overview explicitly says power management is used to ensure low power consumption."
+  },
+  {
+    "q": "According to the lecture, ZigBee protocol complexity is roughly compared as which stack sizes?",
+    "options": [
+      "32 kB for ZigBee versus 250 kB for Bluetooth",
+      "250 kB for ZigBee versus 32 kB for Bluetooth",
+      "32 MB for ZigBee versus 250 MB for Bluetooth",
+      "Both are 250 kB"
+    ],
+    "correct": 0,
+    "why": "The slide says ZigBee is less complex, giving 32 kB for ZigBee versus 250 kB for Bluetooth."
+  },
+  {
+    "q": "What range is given for ZigBee on the overview slide?",
+    "options": [
+      "1 to 100 m",
+      "1 to 100 km",
+      "500 to 1000 m only",
+      "Exactly 30 m only"
+    ],
+    "correct": 0,
+    "why": "The overview slide lists ZigBee range as 1 to 100 m."
+  },
+  {
+    "q": "About how many nodes can ZigBee support according to the lecture overview?",
+    "options": [
+      "Up to about 65,000 nodes",
+      "Up to 64 nodes only",
+      "Up to 500 nodes only",
+      "Unlimited nodes"
+    ],
+    "correct": 0,
+    "why": "The overview states up to 65,000 nodes, and another slide phrases it as up to 65,536 simpler nodes."
+  },
+  {
+    "q": "How many 2.4 GHz ISM channels does ZigBee have according to the lecture?",
+    "options": [
+      "16",
+      "3",
+      "10",
+      "40"
+    ],
+    "correct": 0,
+    "why": "The tri-band overview lists 16 channels at 2.4 GHz."
+  },
+  {
+    "q": "What data rate does the lecture associate with ZigBee in the 2.4 GHz ISM band?",
+    "options": [
+      "250 kbps",
+      "20 kbps",
+      "40 kbps",
+      "2 Mbps"
+    ],
+    "correct": 0,
+    "why": "The slide states 16 channels at 250 kbps in the 2.4 GHz ISM band."
+  },
+  {
+    "q": "In the Americas, how many ZigBee channels are listed for the 915 MHz ISM band?",
+    "options": [
+      "10",
+      "1",
+      "16",
+      "40"
+    ],
+    "correct": 0,
+    "why": "The lecture lists 10 channels in the 915 MHz ISM band for the Americas."
+  },
+  {
+    "q": "What data rate does the lecture give for ZigBee in the 915 MHz ISM band?",
+    "options": [
+      "40 kb/s",
+      "250 kbps",
+      "20 Mb/s",
+      "1 Gb/s"
+    ],
+    "correct": 0,
+    "why": "The overview slide gives 40 kb/s for the 915 MHz band."
+  },
+  {
+    "q": "How many ZigBee channels are listed for the European 868 MHz band?",
+    "options": [
+      "One",
+      "Three",
+      "Ten",
+      "Sixteen"
+    ],
+    "correct": 0,
+    "why": "The lecture lists one channel at 20 kb/s in the European 868 MHz band."
+  },
+  {
+    "q": "What data rate is associated with the European 868 MHz ZigBee band in the lecture?",
+    "options": [
+      "20 kb/s",
+      "250 kbps",
+      "40 kb/s",
+      "100 kb/s"
+    ],
+    "correct": 0,
+    "why": "The slide gives 20 kb/s for the 868 MHz band."
+  },
+  {
+    "q": "Which additional regional frequency is explicitly mentioned for ZigBee?",
+    "options": [
+      "920 MHz in Japan",
+      "5 GHz worldwide",
+      "60 GHz for Europe",
+      "433 MHz in all markets"
+    ],
+    "correct": 0,
+    "why": "The overview slide explicitly mentions 920 MHz in Japan."
+  },
+  {
+    "q": "Which IEEE standard does the lecture say ZigBee uses for MAC and PHY?",
+    "options": [
+      "IEEE 802.15.4",
+      "IEEE 802.11ax",
+      "IEEE 802.3",
+      "IEEE 802.16"
+    ],
+    "correct": 0,
+    "why": "The ZigBee overview states IEEE 802.15.4 MAC and PHY, except for ZigBee Smart Energy 2.0."
+  },
+  {
+    "q": "Who provides ZigBee higher-layer support and interoperability according to the lecture?",
+    "options": [
+      "ZigBee Alliance",
+      "Bluetooth SIG",
+      "3GPP",
+      "IETF CoRE WG"
+    ],
+    "correct": 0,
+    "why": "The lecture says higher layer and interoperability are provided by the ZigBee Alliance."
+  },
+  {
+    "q": "The name ZigBee is said to come from what?",
+    "options": [
+      "The zigzag dance of honeybees",
+      "A zigzag radio antenna pattern",
+      "Zero-interference gigabit behavior",
+      "A brand name for 802.11 routers"
+    ],
+    "correct": 0,
+    "why": "The lecture says ZigBee is named after the zigzag dance of honeybees."
+  },
+  {
+    "q": "In the lecture, the honeybee dance indicates what?",
+    "options": [
+      "The location of food",
+      "The battery level of the hive",
+      "The weather forecast",
+      "The speed of radio transmission"
+    ],
+    "correct": 0,
+    "why": "The slide states that the direction of the dance indicates the location of food."
+  },
+  {
+    "q": "Which phrase best describes ZigBee networking in the lecture?",
+    "options": [
+      "Multi-hop ad-hoc mesh network",
+      "Single-hop wired bus",
+      "Only point-to-point optical network",
+      "Centralized satellite topology"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly describes ZigBee as a multi-hop ad-hoc mesh network."
+  },
+  {
+    "q": "What does multi-hop routing mean in the ZigBee overview slide?",
+    "options": [
+      "Messages can be sent to non-adjacent nodes",
+      "Only direct one-hop delivery is allowed",
+      "Routing happens only in the cloud",
+      "Every message must be broadcast"
+    ],
+    "correct": 0,
+    "why": "The slide defines multi-hop routing as sending messages to non-adjacent nodes."
+  },
+  {
+    "q": "What does ad-hoc topology mean in the ZigBee overview slide?",
+    "options": [
+      "There is no fixed topology and nodes discover each other",
+      "A fixed tree must always be preconfigured",
+      "The network must be wired before startup",
+      "Only one end device is allowed"
+    ],
+    "correct": 0,
+    "why": "The lecture states that ad-hoc topology means no fixed topology and nodes discover each other."
+  },
+  {
+    "q": "According to the lecture, what is possible in a ZigBee mesh topology?",
+    "options": [
+      "Loops",
+      "Only a single path",
+      "Only star networking",
+      "No routers"
+    ],
+    "correct": 0,
+    "why": "The overview slide explicitly notes that loops are possible in mesh topology."
+  },
+  {
+    "q": "What does a ZigBee compliant platform ensure according to the interoperability slide?",
+    "options": [
+      "Network interoperability but not necessarily application layer interoperability",
+      "Guaranteed interoperability for every application profile",
+      "Only physical-layer interoperability",
+      "No need for IEEE 802.15.4"
+    ],
+    "correct": 0,
+    "why": "The platform interoperability slide says it ensures network interoperability but does not imply application-layer interoperability."
+  },
+  {
+    "q": "What additional element is needed for end-to-end product interoperability in ZigBee products?",
+    "options": [
+      "The same application profile",
+      "The same battery brand",
+      "The same device color",
+      "The same MAC address"
+    ],
+    "correct": 0,
+    "why": "The product interoperability slide says products with the same application profiles interoperate end to end."
+  },
+  {
+    "q": "Which device type is required exactly once in each ZigBee network?",
+    "options": [
+      "ZigBee Coordinator (ZC)",
+      "ZigBee Router (ZR)",
+      "ZigBee End Device (ZED)",
+      "ZigBee Master"
+    ],
+    "correct": 0,
+    "why": "The device-types slide says one coordinator is required for each ZigBee network."
+  },
+  {
+    "q": "What does the ZigBee Coordinator do?",
+    "options": [
+      "Initiates network formation",
+      "Only senses temperature",
+      "Cannot communicate with other nodes",
+      "Exists only in Z-Wave"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the ZigBee Coordinator initiates network formation."
+  },
+  {
+    "q": "What is the main role of a ZigBee Router according to the lecture?",
+    "options": [
+      "Participates in multi-hop routing of messages",
+      "Acts only as a broadcast address",
+      "Disables association in the network",
+      "Replaces the coordinator"
+    ],
+    "correct": 0,
+    "why": "The device-types slide says the ZigBee Router participates in multi-hop routing."
+  },
+  {
+    "q": "Which statement about a ZigBee End Device is correct according to the lecture?",
+    "options": [
+      "It does not allow association or routing",
+      "It is required to form the network",
+      "It performs all route discovery",
+      "It is the same as a coordinator"
+    ],
+    "correct": 0,
+    "why": "The device-types slide states that a ZigBee End Device does not allow association or routing."
+  },
+  {
+    "q": "Why does the lecture say ZigBee End Devices are attractive?",
+    "options": [
+      "They enable very low-cost solutions",
+      "They support gigabit throughput",
+      "They remove the need for profiles",
+      "They replace all routers"
+    ],
+    "correct": 0,
+    "why": "The slide notes that ZigBee End Devices enable very low-cost solutions."
+  },
+  {
+    "q": "Which topology is shown as supported by ZigBee?",
+    "options": [
+      "Cluster tree",
+      "Bus only",
+      "Ring only",
+      "Token ring"
+    ],
+    "correct": 0,
+    "why": "The network topologies slide shows star, mesh, and cluster tree."
+  },
+  {
+    "q": "Which topology is not shown as a ZigBee network topology in the lecture?",
+    "options": [
+      "Bus",
+      "Mesh",
+      "Star",
+      "Cluster tree"
+    ],
+    "correct": 0,
+    "why": "The lecture shows star, mesh, and cluster tree, not bus."
+  },
+  {
+    "q": "What routing protocol is explicitly named on the ZigBee routing slide?",
+    "options": [
+      "Ad-Hoc On-Demand Distance Vector (AODV)",
+      "BGP",
+      "OSPF",
+      "RIPng only"
+    ],
+    "correct": 0,
+    "why": "The routing slide explicitly names Ad-Hoc On-Demand Distance Vector."
+  },
+  {
+    "q": "How is AODV characterized on the lecture slide?",
+    "options": [
+      "On-demand and reactive",
+      "Proactive and table-driven",
+      "Static and manual",
+      "Connection-oriented and reliable transport"
+    ],
+    "correct": 0,
+    "why": "The slide says on-demand means reactive and constructs a route when needed."
+  },
+  {
+    "q": "In ZigBee AODV, what does the source broadcast to neighbors when starting route discovery?",
+    "options": [
+      "A Route-Request (RREQ)",
+      "A DHCP offer",
+      "An ARP reply",
+      "A Route-Error only"
+    ],
+    "correct": 0,
+    "why": "The lecture says the source broadcasts a Route-Request command to all neighbors."
+  },
+  {
+    "q": "Which information is included in the RREQ according to the lecture?",
+    "options": [
+      "Source, destination, and broadcast ID",
+      "Only destination MAC address",
+      "Only battery level",
+      "Application profile and attribute ID"
+    ],
+    "correct": 0,
+    "why": "The routing slide lists source, destination, and broadcast ID in the RREQ."
+  },
+  {
+    "q": "What does a node create when it receives a new or lower-cost route request in ZigBee AODV?",
+    "options": [
+      "A reverse route entry for the source",
+      "A new application profile",
+      "A gateway broadcast address",
+      "A transport-layer socket"
+    ],
+    "correct": 0,
+    "why": "The slide says the node makes a reverse-route entry for the source in its table."
+  },
+  {
+    "q": "If a ZigBee node already has a route to the destination during AODV discovery, what does it send?",
+    "options": [
+      "A route reply",
+      "A route error",
+      "A profile attribute",
+      "A beacon disable frame"
+    ],
+    "correct": 0,
+    "why": "The lecture says the node sends a route reply to the source if it has a route to the destination."
+  },
+  {
+    "q": "When the source receives route replies in ZigBee AODV, what path does it choose?",
+    "options": [
+      "The lowest-cost path",
+      "The longest path",
+      "The newest MAC address",
+      "A random path"
+    ],
+    "correct": 0,
+    "why": "The slide states that the source selects the lowest-cost path."
+  },
+  {
+    "q": "What happens if a ZigBee node cannot forward a packet in AODV routing?",
+    "options": [
+      "It sends a Route Error back to the source",
+      "It silently deletes the entire network",
+      "It becomes the coordinator",
+      "It switches to Bluetooth"
+    ],
+    "correct": 0,
+    "why": "The routing slide says that if a node cannot forward the packet, it sends a Route Error back to the source."
+  },
+  {
+    "q": "In tree hierarchical routing, where do leaf nodes send packets first?",
+    "options": [
+      "To their parent",
+      "Directly to every other leaf",
+      "Only to end device EP255",
+      "To an external cloud server"
+    ],
+    "correct": 0,
+    "why": "The lecture states that all leaf nodes send the packet to their parent in tree hierarchical routing."
+  },
+  {
+    "q": "In tree hierarchical routing, what does a parent check before forwarding?",
+    "options": [
+      "Whether the destination address is in its subrange",
+      "Whether the device battery is full",
+      "Whether the application profile is public",
+      "Whether the packet came from Wi-Fi"
+    ],
+    "correct": 0,
+    "why": "The lecture says each parent checks the address to see if it is in its subrange."
+  },
+  {
+    "q": "How is many-to-one routing described on the lecture slide?",
+    "options": [
+      "Used for sensor data collection toward a concentrator or gateway",
+      "Used only for video broadcast",
+      "Used only between coordinators",
+      "Used only in bus topology"
+    ],
+    "correct": 0,
+    "why": "The many-to-one routing slide says it is used for sensor data collection where all data goes to a concentrator or gateway."
+  },
+  {
+    "q": "In many-to-one routing, what special capability does the gateway have?",
+    "options": [
+      "Large memory to hold complete routes to all nodes",
+      "No need for any routing table",
+      "It acts only as a battery charger",
+      "It disables mesh networking"
+    ],
+    "correct": 0,
+    "why": "The lecture says the gateway has a large memory and can hold complete routes to all nodes."
+  },
+  {
+    "q": "What does each ordinary node remember in many-to-one routing?",
+    "options": [
+      "Only the next hop toward the gateway",
+      "Complete routes to every node",
+      "Only application-layer attributes",
+      "Only its broadcast ID"
+    ],
+    "correct": 0,
+    "why": "The slide states that each node remembers only the next hop toward the gateway."
+  },
+  {
+    "q": "What network property is illustrated by the sequence of ZigBee mesh slides?",
+    "options": [
+      "Self-healing",
+      "Full duplex video streaming",
+      "Transport-layer tunneling",
+      "Centralized bus arbitration"
+    ],
+    "correct": 0,
+    "why": "Pages 15 to 19 are explicitly titled ZigBee Mesh Networking – Self-Healing Property."
+  },
+  {
+    "q": "In practical terms, self-healing in a mesh means what?",
+    "options": [
+      "The network can find alternate paths when some nodes fail",
+      "Broken batteries repair themselves automatically",
+      "All packets become broadcasts",
+      "No routing is needed anymore"
+    ],
+    "correct": 0,
+    "why": "The self-healing illustrations show the mesh rerouting around failed nodes."
+  },
+  {
+    "q": "Which lower ZigBee stack layer is labeled as 802.15.4 Medium Access?",
+    "options": [
+      "MAC",
+      "APS",
+      "ZDO",
+      "AO"
+    ],
+    "correct": 0,
+    "why": "The stack architecture slide labels Medium Access (MAC) as 802.15.4."
+  },
+  {
+    "q": "Which lower ZigBee stack layer is labeled as 802.15.4 Physical Radio?",
+    "options": [
+      "PHY",
+      "NWK",
+      "APS",
+      "ZDO"
+    ],
+    "correct": 0,
+    "why": "The stack architecture slide labels Physical Radio (PHY) as 802.15.4."
+  },
+  {
+    "q": "Which ZigBee layer is responsible for network organization, route discovery, and message relaying?",
+    "options": [
+      "NWK",
+      "APS",
+      "PHY",
+      "AO"
+    ],
+    "correct": 0,
+    "why": "The stack architecture slide assigns those responsibilities to the NWK layer."
+  },
+  {
+    "q": "Which ZigBee component handles device binding and messaging according to the stack architecture slide?",
+    "options": [
+      "App Support (APS)",
+      "PHY",
+      "MAC",
+      "SSP"
+    ],
+    "correct": 0,
+    "why": "The slide points device binding and messaging to the APS block."
+  },
+  {
+    "q": "Which ZigBee component handles device management, device discovery, and service discovery?",
+    "options": [
+      "ZDO",
+      "NWK",
+      "MAC",
+      "AO only"
+    ],
+    "correct": 0,
+    "why": "The stack architecture slide points those management and discovery functions to ZDO."
+  },
+  {
+    "q": "What does SSP provide in the ZigBee stack architecture slide?",
+    "options": [
+      "Security functions",
+      "Video transcoding",
+      "Battery charging",
+      "Cloud synchronization"
+    ],
+    "correct": 0,
+    "why": "The slide labels SSP with security functions."
+  },
+  {
+    "q": "What does AO stand for in the ZigBee stack architecture slide?",
+    "options": [
+      "Application Object",
+      "Association Object",
+      "Address Output",
+      "Automation Operation"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly defines AO as Application Object, or end-point."
+  },
+  {
+    "q": "Up to how many AOs per node are shown on the ZigBee stack architecture slide?",
+    "options": [
+      "250",
+      "16",
+      "32",
+      "65535"
+    ],
+    "correct": 0,
+    "why": "The slide says up to 250 AOs per node."
+  },
+  {
+    "q": "What does the ZigBee application layer consist of?",
+    "options": [
+      "Application objects and ZigBee device objects (ZDOs)",
+      "Only PHY and MAC",
+      "Only transport and session layers",
+      "Only routers and coordinators"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide says it consists of application objects and ZDOs."
+  },
+  {
+    "q": "How many endpoint addresses are listed in the lecture for ZigBee?",
+    "options": [
+      "256",
+      "16",
+      "240",
+      "1024"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide says there are 256 endpoint addresses."
+  },
+  {
+    "q": "Which endpoint is reserved for the ZigBee Device Object (ZDO)?",
+    "options": [
+      "EP0",
+      "EP1",
+      "EP240",
+      "EP255"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide states that ZDO is EP0."
+  },
+  {
+    "q": "Which endpoint range is used for application objects in ZigBee?",
+    "options": [
+      "EP1 through EP240",
+      "EP0 only",
+      "EP241 through EP254",
+      "EP255 only"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide assigns EP1 through EP240 to application objects."
+  },
+  {
+    "q": "What is the status of endpoints 241 to 254 in the lecture?",
+    "options": [
+      "Reserved",
+      "Used only for coordinators",
+      "Broadcast-only",
+      "Mandatory for home automation"
+    ],
+    "correct": 0,
+    "why": "The slide says endpoints 241 to 254 are reserved."
+  },
+  {
+    "q": "Which endpoint is used as broadcast in ZigBee according to the lecture?",
+    "options": [
+      "EP255",
+      "EP0",
+      "EP1",
+      "EP254"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide explicitly states EP255 is broadcast."
+  },
+  {
+    "q": "What does each ZigBee endpoint have according to the lecture?",
+    "options": [
+      "One application profile",
+      "One transport port",
+      "One IPv6 prefix",
+      "One Wi-Fi SSID"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide says each endpoint has one application profile."
+  },
+  {
+    "q": "In the lecture, what is an attribute in ZigBee?",
+    "options": [
+      "A data item required by a profile",
+      "A radio frequency hopping slot",
+      "A battery chemistry",
+      "A route error counter"
+    ],
+    "correct": 0,
+    "why": "The slide defines each data item required by a profile as an attribute."
+  },
+  {
+    "q": "What size is the attribute ID assigned by the ZigBee forum according to the lecture?",
+    "options": [
+      "16-bit",
+      "8-bit",
+      "32-bit",
+      "64-bit"
+    ],
+    "correct": 0,
+    "why": "The application-layer slide says each attribute is assigned a 16-bit attribute ID."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee public profile?",
+    "options": [
+      "Smart Energy (SE)",
+      "Border Gateway Profile",
+      "QUIC Streaming Profile",
+      "Cellular Handover Profile"
+    ],
+    "correct": 0,
+    "why": "The public-profiles slide lists Smart Energy (SE)."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee public profile?",
+    "options": [
+      "Home Automation (HA)",
+      "Dynamic Web Services",
+      "Industrial Ethernet TSN",
+      "Aviation Telemetry"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Home Automation (HA) as a public profile."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee public profile?",
+    "options": [
+      "Commercial Building Automation (CBA)",
+      "Low Earth Orbit Control",
+      "Bluetooth Audio Mesh",
+      "REST Device Discovery"
+    ],
+    "correct": 0,
+    "why": "The public profiles slide includes Commercial Building Automation (CBA)."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee public profile?",
+    "options": [
+      "ZigBee Health Care (ZHC)",
+      "ZigBee Hypervisor Control",
+      "ZigBee Transport Layer",
+      "ZigBee Cellular Core"
+    ],
+    "correct": 0,
+    "why": "The lecture lists ZigBee Health Care (ZHC) among the public profiles."
+  },
+  {
+    "q": "Which of the following is listed as a ZigBee public profile?",
+    "options": [
+      "Telecom Applications (TA)",
+      "Remote Kernel Management",
+      "Transport Aggregation",
+      "Distributed Compiler Farm"
+    ],
+    "correct": 0,
+    "why": "Telecom Applications (TA) appears on the public profiles slide."
+  },
+  {
+    "q": "Which specialized ZigBee public profile is shown for remote control?",
+    "options": [
+      "ZigBee RF4CE Remote Control",
+      "ZigBee LTE Control",
+      "ZigBee HTTP Control",
+      "ZigBee CAN Remote Control"
+    ],
+    "correct": 0,
+    "why": "The lecture lists ZigBee RF4CE Remote Control."
+  },
+  {
+    "q": "Which item is shown as part of ZigBee Home Automation for home control?",
+    "options": [
+      "Lighting",
+      "5G core slicing",
+      "Satellite downlink",
+      "Compiler optimization"
+    ],
+    "correct": 0,
+    "why": "The home automation slide explicitly shows lighting as one of the controlled functions."
+  },
+  {
+    "q": "What does HAN stand for on the ZigBee home automation slide?",
+    "options": [
+      "Home Area Network",
+      "Hybrid Access Node",
+      "Host Application Namespace",
+      "Hierarchical Address Network"
+    ],
+    "correct": 0,
+    "why": "The slide labels the smart-home setup as a ZigBee Home Area Network (HAN)."
+  },
+  {
+    "q": "What does the Smart Energy and Home Automation slide emphasize?",
+    "options": [
+      "Compatibility with mainstream home automation systems enables customer choice",
+      "Smart energy replaces home automation completely",
+      "Only wired metering is allowed",
+      "Profiles are no longer needed"
+    ],
+    "correct": 0,
+    "why": "The slide says urgent demand for Smart Energy plus compatibility with mainstream Home Automation systems enables customer choice."
+  },
+  {
+    "q": "How is Z-Wave described in the lecture?",
+    "options": [
+      "A low-power MAC protocol designed for home automation",
+      "A cloud-only application protocol",
+      "A transport-layer extension of ZigBee",
+      "A video codec for smart TVs"
+    ],
+    "correct": 0,
+    "why": "The Z-Wave slide defines it as a low-power MAC protocol designed for home automation."
+  },
+  {
+    "q": "For which domains does the lecture say Z-Wave is especially used?",
+    "options": [
+      "Smart home and small commercial domains",
+      "Large datacenter backbones only",
+      "Submarine fiber systems",
+      "Automotive infotainment only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Z-Wave is especially used for smart home and small commercial domains."
+  },
+  {
+    "q": "What point-to-point range is given for Z-Wave in the lecture?",
+    "options": [
+      "About 30 meters",
+      "About 300 kilometers",
+      "Exactly 1 meter",
+      "About 1 kilometer indoor"
+    ],
+    "correct": 0,
+    "why": "The Z-Wave slide says it covers about 30-meter point-to-point communication."
+  },
+  {
+    "q": "What kind of messages is Z-Wave said to be suitable for?",
+    "options": [
+      "Small messages in IoT applications",
+      "Only ultra-HD video streams",
+      "Massive bulk file transfer",
+      "Only XML database dumps"
+    ],
+    "correct": 0,
+    "why": "The lecture says Z-Wave is suitable for small messages in IoT applications."
+  },
+  {
+    "q": "Which MAC access method does the lecture say Z-Wave uses?",
+    "options": [
+      "CSMA/CA",
+      "TDMA only",
+      "ALOHA only",
+      "Token passing"
+    ],
+    "correct": 0,
+    "why": "The Z-Wave slide states that it uses CSMA/CA."
+  },
+  {
+    "q": "Why does the lecture mention ACK messages in Z-Wave?",
+    "options": [
+      "For reliable transmission",
+      "For frequency hopping only",
+      "To create application profiles",
+      "To replace coordinators"
+    ],
+    "correct": 0,
+    "why": "The slide says ACK messages are used for reliable transmission."
+  },
+  {
+    "q": "Which network architecture does the lecture associate with Z-Wave?",
+    "options": [
+      "Master/slave",
+      "Pure peer-to-peer only",
+      "Ring coordinatorless",
+      "Bus repeaterless"
+    ],
+    "correct": 0,
+    "why": "The lecture says Z-Wave follows a master/slave architecture."
+  },
+  {
+    "q": "In the Z-Wave architecture described by the lecture, what does the master do?",
+    "options": [
+      "Controls the slaves, sends commands, and handles network scheduling",
+      "Acts only as a passive repeater",
+      "Creates application attributes only",
+      "Disables all acknowledgements"
+    ],
+    "correct": 0,
+    "why": "The slide says the master controls the slaves, sends them commands, and handles scheduling."
+  },
+  {
+    "q": "According to the lecture comparison slide, what do ZigBee and Z-Wave have in common?",
+    "options": [
+      "Both are mesh networks",
+      "Both use only 2.4 GHz globally",
+      "Both are purely wired technologies",
+      "Both are high-bandwidth multimedia protocols"
+    ],
+    "correct": 0,
+    "why": "The comparison slide says both technologies are mesh networks."
+  },
+  {
+    "q": "According to the lecture, what additional role can a node play in both ZigBee and Z-Wave networks?",
+    "options": [
+      "A repeater for forwarding data hop by hop",
+      "A cellular base station",
+      "A cloud compiler",
+      "A video transcoder"
+    ],
+    "correct": 0,
+    "why": "The lecture says each node can act as both a wireless data source and a repeater."
+  },
+  {
+    "q": "According to the lecture comparison slide, both ZigBee and Z-Wave use which protocol for the unified physical layer and packet structuring?",
+    "options": [
+      "IEEE 802.15.4 low-rate personal area network (LR-PAN)",
+      "IEEE 802.11ac",
+      "MPEG-TS",
+      "HTTP/3"
+    ],
+    "correct": 0,
+    "why": "The lecture comparison slide states that both use IEEE 802.15.4 LR-PAN for the unified physical layer and structuring packets."
+  },
+  {
+    "q": "Which usage area is mentioned for both ZigBee and Z-Wave?",
+    "options": [
+      "Security systems and home automation",
+      "Long-haul submarine cables",
+      "Streaming cinema distribution",
+      "Enterprise ERP backends only"
+    ],
+    "correct": 0,
+    "why": "The lecture says both are widely used in local area sensor data networks such as security systems and home automation."
+  },
+  {
+    "q": "How does the lecture describe the Z-Wave product ecosystem compared with ZigBee?",
+    "options": [
+      "Z-Wave has a tightly controlled product ecosystem, while ZigBee can be used for several applications",
+      "ZigBee is tightly controlled while Z-Wave is completely open",
+      "Both have identical vendor control models",
+      "Neither has any ecosystem control"
+    ],
+    "correct": 0,
+    "why": "The difference slide says Z-Wave has a tightly controlled product ecosystem, while ZigBee can be used for several applications."
+  },
+  {
+    "q": "Which frequency band does the lecture associate with ZigBee?",
+    "options": [
+      "Global 2.4 GHz ISM band",
+      "Only 60 GHz",
+      "Only 5 GHz",
+      "Only 700 MHz cellular band"
+    ],
+    "correct": 0,
+    "why": "The difference slide states that ZigBee uses the global standard 2.4 GHz ISM frequency band."
+  },
+  {
+    "q": "Which frequencies does the lecture associate with Z-Wave?",
+    "options": [
+      "915 MHz in the U.S. and 868 MHz in Europe",
+      "2.4 GHz everywhere",
+      "5 GHz and 6 GHz",
+      "433 MHz and 13.56 MHz"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Z-Wave uses 915 MHz in the U.S. and 868 MHz in Europe."
+  },
+  {
+    "q": "Why does the lecture say Z-Wave can face fewer interference issues than ZigBee?",
+    "options": [
+      "Its sub-GHz bands do not face the same Wi-Fi and Bluetooth interference as 2.4 GHz",
+      "It never uses radio transmission",
+      "It disables acknowledgements",
+      "It only works over cable"
+    ],
+    "correct": 0,
+    "why": "The slide contrasts 2.4 GHz interference from Wi-Fi and Bluetooth with Z-Wave sub-GHz bands."
+  },
+  {
+    "q": "How does the lecture describe radio-provider availability for ZigBee versus Z-Wave?",
+    "options": [
+      "Many providers make ZigBee radios, but Z-Wave uses a proprietary radio system from Sigma Designs",
+      "Only Sigma Designs makes ZigBee radios",
+      "Both use the same open radio chipset only",
+      "Neither technology uses dedicated radios"
+    ],
+    "correct": 0,
+    "why": "The difference slide says many providers make ZigBee radios, while Z-Wave uses a proprietary radio system from Sigma Designs."
+  },
+  {
+    "q": "Which modulation does the lecture associate with Z-Wave?",
+    "options": [
+      "Frequency-shift keying (FSK)",
+      "Direct sequence spread spectrum (DSSS)",
+      "Orthogonal frequency-division multiplexing (OFDM)",
+      "Pulse-code modulation (PCM)"
+    ],
+    "correct": 0,
+    "why": "The difference slide says Z-Wave uses frequency-shift keyed modulation."
+  },
+  {
+    "q": "Which modulation does the lecture associate with ZigBee?",
+    "options": [
+      "Direct sequence spread spectrum (DSSS)",
+      "Frequency-shift keying (FSK)",
+      "QAM-1024",
+      "Pulse-position modulation only"
+    ],
+    "correct": 0,
+    "why": "The lecture says ZigBee modulation is carried out through DSSS."
+  },
+  {
+    "q": "Which summary statement about ZigBee appears in the lecture?",
+    "options": [
+      "It is an IoT protocol for sensors, industrial automation, and remote control using IEEE 802.15.4 PHY and MAC",
+      "It is a high-bandwidth cellular backbone protocol",
+      "It is only an application-layer profile with no PHY/MAC",
+      "It is only for desktop peripherals"
+    ],
+    "correct": 0,
+    "why": "The summary slide describes ZigBee as an IoT protocol for sensors, industrial automation, and remote control using IEEE 802.15.4 PHY and MAC."
+  },
+  {
+    "q": "What peak data rate is highlighted for ZigBee on the summary slide?",
+    "options": [
+      "Up to 250 kbps",
+      "Up to 2 Gbps",
+      "Up to 54 Mbps",
+      "Exactly 10 kbps"
+    ],
+    "correct": 0,
+    "why": "The summary slide states up to 250 kbps."
+  },
+  {
+    "q": "What newer ZigBee capabilities are emphasized on the summary slide?",
+    "options": [
+      "Many-to-one routing, fragmentation, and mesh topologies",
+      "Only bus topology and no routing",
+      "5G slicing and beamforming",
+      "Video transcoding and cloud storage"
+    ],
+    "correct": 0,
+    "why": "The summary slide lists many-to-one routing, fragmentation, and mesh topologies."
+  },
+  {
+    "q": "According to the summary slide, control and management in ZigBee are provided by what?",
+    "options": [
+      "ZDOs",
+      "Only the PHY layer",
+      "Transport sockets",
+      "Sigma Designs radios"
+    ],
+    "correct": 0,
+    "why": "The summary says several application profiles have been defined, with control and management provided by ZDOs."
+  },
+  {
+    "q": "Which summary statement about Z-Wave appears in the lecture?",
+    "options": [
+      "It uses a sub-GHz band that is less susceptible to interference and occlusions, but it is proprietary",
+      "It uses only 2.4 GHz and is fully open",
+      "It is a transport layer for ZigBee",
+      "It is designed for high-definition video"
+    ],
+    "correct": 0,
+    "why": "The summary slide states that Z-Wave uses the sub-GHz band and is a proprietary protocol."
+  },
+  {
+    "q": "True or false based on the lecture: ZigBee has a transport layer in its shown stack architecture.",
+    "options": [
+      "False",
+      "True",
+      "Only in ZED devices",
+      "Only in Smart Energy gateways"
+    ],
+    "correct": 0,
+    "why": "The shown ZigBee stack includes PHY, MAC, NWK, APS, ZDO, and application objects, not a separate transport layer."
+  },
+  {
+    "q": "True or false based on the lecture: Z-Wave is an implementation of a ZigBee protocol.",
+    "options": [
+      "False",
+      "True",
+      "Only in Europe",
+      "Only for smart meters"
+    ],
+    "correct": 0,
+    "why": "The lecture treats ZigBee and Z-Wave as different IoT technologies and compares them explicitly as separate systems."
+  },
+  {
+    "q": "Which of the following is NOT presented as a feature of ZigBee in the lecture?",
+    "options": [
+      "Large bandwidth",
+      "Low power consumption",
+      "Industrial monitoring support",
+      "Multi-year battery life"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes low power and low data rate, not large bandwidth."
+  },
+  {
+    "q": "Which set best represents application areas for ZigBee from the lecture?",
+    "options": [
+      "Healthcare, industrial control, and home automation",
+      "Only high-speed office Wi-Fi",
+      "Only cellular core networking",
+      "Only multimedia streaming"
+    ],
+    "correct": 0,
+    "why": "The lecture slides show ZigBee use in healthcare, industrial control, home automation, and more."
+  },
+  {
+    "q": "Which devices do not contribute to routing according to the clearer device-type slide?",
+    "options": [
+      "ZigBee End Devices",
+      "ZigBee Routers",
+      "ZigBee Coordinators",
+      "Gateways in many-to-one routing"
+    ],
+    "correct": 0,
+    "why": "The device-type slide explicitly states that ZigBee End Devices do not allow association or routing."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 2 MCQ Quiz: HTTP & REST</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 2 MCQ Quiz: HTTP & REST</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 2</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What type of architecture do RESTful APIs follow?",
+    "options": [
+      "Client-server architecture",
+      "Peer-to-peer architecture",
+      "Monolithic architecture",
+      "Publisher-subscriber architecture"
+    ],
+    "correct": 0,
+    "why": "REST follows the client-server architectural constraint, where client and server act independently."
+  },
+  {
+    "q": "In RESTful APIs, what is used to uniquely identify a resource?",
+    "options": [
+      "URI (Uniform Resource Identifier)",
+      "API key",
+      "Session ID",
+      "Query parameter only"
+    ],
+    "correct": 0,
+    "why": "REST uses URIs to identify resources. The slides show examples such as /books/ISBN-0011 and /classes/cs2650."
+  },
+  {
+    "q": "What does REST stand for?",
+    "options": [
+      "Representational State Transfer",
+      "Remote Server Transaction",
+      "Relative State Transmission",
+      "Real-time State Transfer"
+    ],
+    "correct": 0,
+    "why": "The lecture expands REST as Representational State Transfer."
+  },
+  {
+    "q": "What is a resource in REST?",
+    "options": [
+      "Any named information exposed via a global identifier such as a URI",
+      "Only a database table",
+      "Only a physical IoT device",
+      "A function that performs business logic"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a resource as a conceptual mapping to a set of entities; anything that can be named can be a resource."
+  },
+  {
+    "q": "Which HTTP method is used to retrieve a resource in RESTful architecture?",
+    "options": [
+      "GET",
+      "POST",
+      "DELETE",
+      "PUT"
+    ],
+    "correct": 0,
+    "why": "GET is used to retrieve representations of resources from the server."
+  },
+  {
+    "q": "What is the primary role of REST's Uniform Interface constraint?",
+    "options": [
+      "To make client-server interaction uniform and predictable",
+      "To ensure the API is stateful",
+      "To force all resources into one database table",
+      "To restrict communication to POST only"
+    ],
+    "correct": 0,
+    "why": "Uniform Interface means the client and server interact in a uniform, predictable way, and resources are clearly exposed."
+  },
+  {
+    "q": "In HTTP, a status code in the 5xx range generally signifies what?",
+    "options": [
+      "Server error",
+      "Client error",
+      "Redirection",
+      "Successful operation"
+    ],
+    "correct": 0,
+    "why": "5xx status codes indicate server-side errors. This is standard HTTP behavior."
+  },
+  {
+    "q": "In RESTful APIs, the current state of a resource is typically conveyed through what?",
+    "options": [
+      "A representation in the response body",
+      "The client's MAC address",
+      "The TCP port number",
+      "The URI alone"
+    ],
+    "correct": 0,
+    "why": "REST returns resource representations, commonly in JSON or XML, in the response body."
+  },
+  {
+    "q": "What is the purpose of a payload in a POST request?",
+    "options": [
+      "To contain the data being sent by the client",
+      "To replace the need for headers",
+      "To store the server status code",
+      "To define the URL path"
+    ],
+    "correct": 0,
+    "why": "POST commonly carries submitted data in the request body."
+  },
+  {
+    "q": "What does idempotence mean in the context of RESTful APIs?",
+    "options": [
+      "Repeating the same request produces the same resulting state",
+      "The API encrypts all traffic automatically",
+      "The API only supports asynchronous calls",
+      "Every repeated request creates a new resource"
+    ],
+    "correct": 0,
+    "why": "An idempotent operation can be repeated without changing the final result beyond the first successful application."
+  },
+  {
+    "q": "Which HTTP status code commonly indicates a successful GET request?",
+    "options": [
+      "200 OK",
+      "201 Created",
+      "400 Bad Request",
+      "500 Internal Server Error"
+    ],
+    "correct": 0,
+    "why": "The lecture lists 200 OK as a successful response without error."
+  },
+  {
+    "q": "Which HTTP method is commonly used to create a new resource in RESTful architecture?",
+    "options": [
+      "POST",
+      "PUT",
+      "DELETE",
+      "GET"
+    ],
+    "correct": 0,
+    "why": "The lecture's REST examples use POST to create a new book resource."
+  },
+  {
+    "q": "Which of the following is NOT one of the six REST architectural constraints?",
+    "options": [
+      "Cookie-based authentication",
+      "Client-server architecture",
+      "Statelessness",
+      "Cacheable"
+    ],
+    "correct": 0,
+    "why": "The lecture lists client-server, statelessness, cacheable, layered system, uniform interface, and optional code on demand."
+  },
+  {
+    "q": "Which HTTP method should be used to update an existing resource completely?",
+    "options": [
+      "PUT",
+      "GET",
+      "DELETE",
+      "POST"
+    ],
+    "correct": 0,
+    "why": "PUT replaces an existing resource with the submitted representation."
+  },
+  {
+    "q": "How do HTTP clients and servers communicate according to the lecture?",
+    "options": [
+      "They establish a TCP connection, exchange request/response, then usually close it",
+      "They always use UDP broadcasts",
+      "They communicate only through shared files",
+      "They must keep one permanent connection open forever"
+    ],
+    "correct": 0,
+    "why": "The lecture states that client and server establish a TCP connection, request/response is exchanged, and the connection is usually closed."
+  },
+  {
+    "q": "What is web content in HTTP?",
+    "options": [
+      "A sequence of bytes with an associated MIME type",
+      "Only HTML documents",
+      "Only text files",
+      "A URL without any data"
+    ],
+    "correct": 0,
+    "why": "The lecture defines web content as a sequence of bytes with an associated MIME type."
+  },
+  {
+    "q": "Which pair is correctly matched as an example MIME type and its content?",
+    "options": [
+      "image/jpeg — binary image encoded in JPEG format",
+      "text/plain — HTML document",
+      "application/postscript — GIF image",
+      "image/gif — plain text"
+    ],
+    "correct": 0,
+    "why": "The lecture lists image/jpeg as a binary image encoded in JPEG format."
+  },
+  {
+    "q": "Which statement about static and dynamic content is correct?",
+    "options": [
+      "Static content is stored in files; dynamic content is produced on-the-fly",
+      "Dynamic content cannot be returned over HTTP",
+      "Static content must always be JSON",
+      "Only dynamic content has a MIME type"
+    ],
+    "correct": 0,
+    "why": "The lecture contrasts static content stored in files with dynamic content generated in response to a request."
+  },
+  {
+    "q": "According to the lecture, what is the bottom line about all web content?",
+    "options": [
+      "It is associated with a file managed by the server",
+      "It is always generated dynamically",
+      "It exists only in the browser cache",
+      "It must be stored in a database table"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly states that all web content is associated with a file managed by the server."
+  },
+  {
+    "q": "What does a URL identify in the lecture's explanation?",
+    "options": [
+      "A file managed by a server, possibly with host and port information",
+      "Only the IP address of a client",
+      "Only a transport-layer port",
+      "Only the MIME type of a response"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that each file managed by a server has a unique name called a URL."
+  },
+  {
+    "q": "What is the correct format of an HTTP request line?",
+    "options": [
+      "&lt;method&gt; &lt;uri&gt; &lt;version&gt;",
+      "&lt;version&gt; &lt;method&gt; &lt;status&gt;",
+      "&lt;uri&gt; &lt;header&gt; &lt;body&gt;",
+      "&lt;method&gt; &lt;status&gt; &lt;length&gt;"
+    ],
+    "correct": 0,
+    "why": "The lecture gives the request line format as <method> <uri> <version>."
+  },
+  {
+    "q": "Which of the following is listed as an HTTP request method in the lecture?",
+    "options": [
+      "TRACE",
+      "SUBSCRIBE",
+      "CONNECTIVITY",
+      "EMIT"
+    ],
+    "correct": 0,
+    "why": "The lecture lists GET, POST, OPTIONS, HEAD, PUT, DELETE, and TRACE."
+  },
+  {
+    "q": "What is special about the HEAD method?",
+    "options": [
+      "It is like GET but without data in the response body",
+      "It creates a new resource",
+      "It deletes a resource",
+      "It always returns 201 Created"
+    ],
+    "correct": 0,
+    "why": "HEAD behaves like GET, except the response does not include the body."
+  },
+  {
+    "q": "What is TRACE mainly useful for?",
+    "options": [
+      "Debugging by echoing the request in the response body",
+      "Uploading files to the server",
+      "Replacing an existing resource",
+      "Caching static images"
+    ],
+    "correct": 0,
+    "why": "The lecture says TRACE echoes the request in the response body and is useful for debugging."
+  },
+  {
+    "q": "What is the correct format of an HTTP response line?",
+    "options": [
+      "&lt;version&gt; &lt;status code&gt; &lt;status msg&gt;",
+      "&lt;method&gt; &lt;uri&gt; &lt;version&gt;",
+      "&lt;status code&gt; &lt;body&gt; &lt;host&gt;",
+      "&lt;version&gt; &lt;content-type&gt; &lt;length&gt;"
+    ],
+    "correct": 0,
+    "why": "The lecture gives the response line format as <version> <status code> <status msg>."
+  },
+  {
+    "q": "Which response header indicates the MIME type of the response body?",
+    "options": [
+      "Content-Type",
+      "Content-Length",
+      "Host",
+      "Connection"
+    ],
+    "correct": 0,
+    "why": "Content-Type tells the client the MIME type of the returned content."
+  },
+  {
+    "q": "Which response header indicates the length of the response body?",
+    "options": [
+      "Content-Length",
+      "Content-Type",
+      "Location",
+      "Accept"
+    ],
+    "correct": 0,
+    "why": "Content-Length specifies the length of the content in the response body."
+  },
+  {
+    "q": "In the lecture's telnet example, which header is required for the HTTP/1.1 POST request?",
+    "options": [
+      "Host",
+      "Upgrade",
+      "Referer",
+      "Authorization"
+    ],
+    "correct": 0,
+    "why": "The example annotates the Host header as required for HTTP/1.1."
+  },
+  {
+    "q": "What status line is returned in the lecture's IoT POST example after sensor data is saved?",
+    "options": [
+      "HTTP/1.1 201 Created",
+      "HTTP/1.1 200 OK",
+      "HTTP/1.1 404 Not Found",
+      "HTTP/1.1 500 Internal Server Error"
+    ],
+    "correct": 0,
+    "why": "The telnet example shows the server replying with HTTP/1.1 201 Created."
+  },
+  {
+    "q": "Which statement about REST is correct?",
+    "options": [
+      "REST is an architectural style, not a protocol",
+      "REST is a transport-layer protocol",
+      "REST replaces HTTP completely",
+      "REST can only use XML"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states REST is not a protocol but an architectural style."
+  },
+  {
+    "q": "Who first introduced REST, according to the lecture?",
+    "options": [
+      "Roy Fielding",
+      "Tim Berners-Lee",
+      "Vint Cerf",
+      "Andrew Tanenbaum"
+    ],
+    "correct": 0,
+    "why": "The lecture states REST was first introduced by Roy Fielding in 2000."
+  },
+  {
+    "q": "Which REST architectural constraint is optional?",
+    "options": [
+      "Code on Demand",
+      "Statelessness",
+      "Uniform Interface",
+      "Client-Server Architecture"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Code on Demand as the optional REST constraint."
+  },
+  {
+    "q": "Which URI best represents a hierarchical REST resource for a device status?",
+    "options": [
+      "/devices/123/status",
+      "/status?device=123&all=true&mode=rest",
+      "/getDeviceStatusNow",
+      "/status-device-123-create"
+    ],
+    "correct": 0,
+    "why": "The IoT best-practices slide recommends clear, hierarchical resource names such as /devices/{id}/status."
+  },
+  {
+    "q": "What does GET do in REST?",
+    "options": [
+      "Retrieve data without changing the resource",
+      "Create a new resource",
+      "Replace an entire resource",
+      "Delete a resource"
+    ],
+    "correct": 0,
+    "why": "GET retrieves representations of resources and is safe and idempotent."
+  },
+  {
+    "q": "Which statement about POST is correct?",
+    "options": [
+      "It is commonly used to create a resource and is not idempotent",
+      "It is safe and idempotent like GET",
+      "It is used only for deleting resources",
+      "It cannot include a request body"
+    ],
+    "correct": 0,
+    "why": "The lecture's POST example creates a new resource and notes that POST is not idempotent."
+  },
+  {
+    "q": "Which statement about PUT is correct?",
+    "options": [
+      "It updates or replaces an entire existing resource and is idempotent",
+      "It only retrieves headers",
+      "It is never used in REST",
+      "It always creates multiple new entries"
+    ],
+    "correct": 0,
+    "why": "The lecture says PUT updates the entire resource and is idempotent."
+  },
+  {
+    "q": "Which statement about PATCH is correct?",
+    "options": [
+      "It updates part of an existing resource",
+      "It deletes a resource",
+      "It retrieves the response headers only",
+      "It always returns 204 No Content in the lecture"
+    ],
+    "correct": 0,
+    "why": "PATCH is shown as updating part of a resource, such as only the title field."
+  },
+  {
+    "q": "Which statement about DELETE is correct in the lecture?",
+    "options": [
+      "Deleting the same resource twice has the same result, so DELETE is idempotent",
+      "DELETE is used to create a new resource",
+      "DELETE is safe because it never changes anything",
+      "DELETE always requires a JSON body"
+    ],
+    "correct": 0,
+    "why": "The DELETE slide explicitly notes that deleting twice has the same result, making it idempotent."
+  },
+  {
+    "q": "What are JSON and XML in the context of REST?",
+    "options": [
+      "Representations of a resource, not the resource itself",
+      "REST transport protocols",
+      "Database engines",
+      "HTTP status code classes"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes that JSON and XML are just ways to represent a resource."
+  },
+  {
+    "q": "Which practice is recommended for RESTful IoT APIs?",
+    "options": [
+      "Use authentication and HTTPS, and validate all inputs",
+      "Expose device control endpoints publicly",
+      "Store all state on the server between every request",
+      "Prefer verbose formats over lightweight ones"
+    ],
+    "correct": 0,
+    "why": "The security note recommends authentication, HTTPS, limited access, and validating all inputs."
+  },
+  {
+    "q": "Which is listed as a limitation of HTTP for IoT?",
+    "options": [
+      "High overhead from large text-based headers",
+      "It cannot work over TCP",
+      "It has no request-response model",
+      "It is binary and ultra-compact by default"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that HTTP has high overhead due to large headers and text-based formatting."
+  },
+  {
+    "q": "Why is HTTP's request-response model often not ideal for IoT?",
+    "options": [
+      "It is synchronous, and devices may need to poll for updates",
+      "It cannot return JSON",
+      "It prevents authentication",
+      "It only works for file downloads"
+    ],
+    "correct": 0,
+    "why": "The lecture says synchronous request-response is not ideal for real-time or event-driven IoT and can force polling."
+  },
+  {
+    "q": "Why is HTTP not optimized for constrained IoT networks?",
+    "options": [
+      "Protocols like LoRa and Zigbee do not directly support HTTP due to its overhead",
+      "HTTP uses radio frequencies that IoT chips cannot tune to",
+      "HTTP requires GPU acceleration",
+      "HTTP can only run on desktop browsers"
+    ],
+    "correct": 0,
+    "why": "The lecture states that LoRa and Zigbee do not support HTTP directly because of its overhead."
+  },
+  {
+    "q": "According to the comparison table, which protocol has a publish-subscribe model?",
+    "options": [
+      "MQTT",
+      "HTTP",
+      "CoAP",
+      "REST"
+    ],
+    "correct": 0,
+    "why": "The comparison table shows MQTT as publish-subscribe, while HTTP and CoAP are request-response."
+  },
+  {
+    "q": "According to the comparison table, which protocol has very low overhead and is suited for constrained devices and M2M?",
+    "options": [
+      "CoAP",
+      "HTTP",
+      "REST",
+      "TLS"
+    ],
+    "correct": 0,
+    "why": "The comparison table describes CoAP as very low overhead and suited for constrained devices and M2M."
+  },
+  {
+    "q": "Which statement best summarizes HTTP and REST in IoT?",
+    "options": [
+      "RESTful APIs are useful for internet-connected IoT applications, but HTTP overhead makes them less suitable for constrained devices",
+      "REST replaces all IoT protocols, including MQTT and CoAP",
+      "HTTP is always the best choice for low-power, lossy networks",
+      "REST only supports browser-based applications"
+    ],
+    "correct": 0,
+    "why": "The summary slide says RESTful APIs suit high-bandwidth, internet-connected IoT applications, while MQTT and CoAP address constrained-device limitations."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

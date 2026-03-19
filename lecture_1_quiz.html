@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 1 MCQ Quiz: Introduction to IoT</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 1 MCQ Quiz: Introduction to IoT</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 1</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "IoT refers to ... (select the best answer)",
+    "options": [
+      "Interconnections of devices in a network",
+      "Exchange of data between devices in a network",
+      "An ecosystem of devices accessible through the Internet",
+      "All of them"
+    ],
+    "correct": 3,
+    "why": "The lecture definitions describe IoT as connected physical objects exchanging data over the Internet, which covers all three ideas."
+  },
+  {
+    "q": "According to the IEEE definition in the lecture, an IoT system is best described as a ...",
+    "options": [
+      "single local sensor network",
+      "network of networks",
+      "database of smart devices only",
+      "mobile app ecosystem"
+    ],
+    "correct": 1,
+    "why": "The IEEE slide explicitly defines an IoT system as a network of networks."
+  },
+  {
+    "q": "According to the IEEE definition shown in the lecture, IoT systems provide value-added services via ...",
+    "options": [
+      "manual hardware replacement",
+      "intelligent data processing and management",
+      "larger batteries only",
+      "faster screen refresh rates"
+    ],
+    "correct": 1,
+    "why": "The IEEE definition highlights intelligent data processing and management as the basis for value-added services."
+  },
+  {
+    "q": "Which of the following is NOT a component in an IoT device?",
+    "options": [
+      "Controller",
+      "Communication",
+      "Actuator",
+      "Power Supply"
+    ],
+    "correct": 3,
+    "why": "The lecture breaks an IoT thing into controller, sensors/actuators, and networks/communication. Power supply is not listed in that component slide."
+  },
+  {
+    "q": "Devices in IoT support ... (select the best answer)",
+    "options": [
+      "Actuating only",
+      "Sensing only",
+      "Data collection only",
+      "All of them"
+    ],
+    "correct": 3,
+    "why": "The lecture shows IoT things combining sensors, actuators, communication, and controller functions, so all of these are part of IoT device behaviour."
+  },
+  {
+    "q": "The lecture summarizes the purpose of IoT with which three words?",
+    "options": [
+      "Store, Train, Predict",
+      "Collect, Connect, Comprehend",
+      "Sense, Sleep, Save",
+      "Build, Deploy, Scale"
+    ],
+    "correct": 1,
+    "why": "The purpose slide uses the exact sequence: Collect, Connect, Comprehend."
+  },
+  {
+    "q": "Which choice best represents the ultimate aim for IoT according to the lecture?",
+    "options": [
+      "To reduce network bandwidth only",
+      "To transform raw data into insights",
+      "To connect as many things as possible",
+      "To collect as much data as possible"
+    ],
+    "correct": 1,
+    "why": "The Data vs. Knowledge slide says the ultimate goal is transforming raw IoT data into actionable insights for decision-making and automation."
+  },
+  {
+    "q": "According to the lecture, transforming raw IoT data into actionable insights usually requires ...",
+    "options": [
+      "data from multiple sources and near-real-time analytics/visualisation",
+      "only a bigger battery",
+      "only one sensor type",
+      "removing all networking layers"
+    ],
+    "correct": 0,
+    "why": "The lecture states this usually requires data from multiple sources plus near-real-time analytics and visualisation or semantic representations."
+  },
+  {
+    "q": "Which of the following is listed as a characteristic of IoT communications?",
+    "options": [
+      "High storage capacity",
+      "Always wired",
+      "Extensive network of connections (scalability)",
+      "Large-size devices by default"
+    ],
+    "correct": 2,
+    "why": "The lecture lists scalability through extensive network connections as a characteristic, while high storage, always-wired, and large devices are not listed."
+  },
+  {
+    "q": "Which of the following supports the longest range?",
+    "options": [
+      "WiFi",
+      "ZigBee",
+      "BLE",
+      "LoRa"
+    ],
+    "correct": 3,
+    "why": "The lecture summary marks LoRaWAN/LoRa-style technologies as long-range, while Bluetooth and Zigbee are short-range."
+  },
+  {
+    "q": "Which set of technologies uses 2.4GHz according to the communication table in the lecture?",
+    "options": [
+      "Bluetooth/BLE, ZigBee, WiFi, WirelessHART",
+      "LoRa, SigFox, NB-IoT, Z-Wave",
+      "2G/3G, LTE Cat-M1, NB-IoT, SigFox",
+      "LoRa, Weightless, WiFi only, RFID"
+    ],
+    "correct": 0,
+    "why": "The table shows 2.4GHz for Bluetooth/BLE, ZigBee, WiFi (among its bands), and WirelessHART."
+  },
+  {
+    "q": "Which technology in the lecture communication table has a data rate below 1 kbps?",
+    "options": [
+      "BLE",
+      "SigFox",
+      "WiFi",
+      "802.15.4"
+    ],
+    "correct": 1,
+    "why": "The table lists SigFox as having data rate below 1 kbps."
+  },
+  {
+    "q": "Which technology in the lecture communication table is shown with low power usage and a typical range of 1–3 miles?",
+    "options": [
+      "WiFi",
+      "LoRa",
+      "Bluetooth/BLE",
+      "WirelessHART"
+    ],
+    "correct": 1,
+    "why": "The lecture table shows LoRa with low power usage and range of roughly 1–3 miles."
+  },
+  {
+    "q": "In the IoT connectivity technologies chart, which of the following is in licensed spectrum?",
+    "options": [
+      "Bluetooth",
+      "802.15.4",
+      "LTE-M",
+      "LoRa"
+    ],
+    "correct": 2,
+    "why": "The chart distinguishes LTE-M, LTE-A, and NB-IoT as licensed-spectrum technologies."
+  },
+  {
+    "q": "In the lecture summary, which protocols are given as short-range examples?",
+    "options": [
+      "BLE and Zigbee",
+      "LoRaWAN and Sigfox",
+      "NB-IoT and LTE-M",
+      "WiFi and LTE-A only"
+    ],
+    "correct": 0,
+    "why": "The summary slide explicitly lists Bluetooth and Zigbee as short-range examples."
+  },
+  {
+    "q": "In the lecture summary, which protocols are given as long-range examples?",
+    "options": [
+      "BLE and Zigbee",
+      "WiFi and WirelessHART",
+      "LoRaWAN and Sigfox",
+      "RFID and NFC"
+    ],
+    "correct": 2,
+    "why": "The summary slide explicitly lists LoRaWAN and Sigfox as long-range examples."
+  },
+  {
+    "q": "Which protocols appear at the application/data layer in the Current Protocols for IoT diagram?",
+    "options": [
+      "UDP and TCP",
+      "HTTP, MQTT, and CoAP",
+      "IPv4 and IPv6",
+      "BLE and IEEE 802.15.4"
+    ],
+    "correct": 1,
+    "why": "The diagram places HTTP, MQTT, and CoAP in the application/data layer."
+  },
+  {
+    "q": "Which protocols appear at the transport layer in the Current Protocols for IoT diagram?",
+    "options": [
+      "MQTT and CoAP",
+      "IPv6 and RPL",
+      "UDP and TCP",
+      "BLE and Thread"
+    ],
+    "correct": 2,
+    "why": "The diagram shows UDP and TCP in the transport layer."
+  },
+  {
+    "q": "Which protocols appear at the network layer in the Current Protocols for IoT diagram?",
+    "options": [
+      "IPv6, RPL, and IPv4",
+      "HTTP, MQTT, and CoAP",
+      "WiFi, BLE, and RFID/NFC",
+      "Application 1, 2, and N"
+    ],
+    "correct": 0,
+    "why": "The network layer in the diagram contains IPv6, RPL, and IPv4."
+  },
+  {
+    "q": "Which layer of the ITU-T IoT Reference Model contains Device Capabilities and Gateway Capabilities?",
+    "options": [
+      "Application Layer",
+      "Service & Application Support Layer",
+      "Network Layer",
+      "Device Layer"
+    ],
+    "correct": 3,
+    "why": "The IoT reference model places device and gateway capabilities in the Device Layer."
+  },
+  {
+    "q": "Which layer of the ITU-T IoT Reference Model contains Generic Support Capabilities and Specific Support Capabilities?",
+    "options": [
+      "Service & Application Support Layer",
+      "Application Layer",
+      "Device Layer",
+      "Physical Layer"
+    ],
+    "correct": 0,
+    "why": "The reference model shows generic and specific support capabilities in the Service & Application Support Layer."
+  },
+  {
+    "q": "Which sequence correctly orders the data-centric view of IoT operations from bottom to top?",
+    "options": [
+      "Physical Devices & Controllers → Connectivity → Edge Computing → Data Accumulation → Data Abstraction → Application → Collaboration & Processes",
+      "Connectivity → Physical Devices & Controllers → Data Accumulation → Edge Computing → Application → Data Abstraction → Collaboration & Processes",
+      "Physical Devices & Controllers → Edge Computing → Connectivity → Data Abstraction → Data Accumulation → Application → Collaboration & Processes",
+      "Physical Devices & Controllers → Connectivity → Data Abstraction → Edge Computing → Data Accumulation → Application → Collaboration & Processes"
+    ],
+    "correct": 0,
+    "why": "The data-centric operations diagram builds upward from devices to connectivity, edge computing, storage, abstraction, application, and finally collaboration/processes."
+  },
+  {
+    "q": "In the data-centric view of IoT operations, which level is associated with storage?",
+    "options": [
+      "Data Accumulation",
+      "Connectivity",
+      "Physical Devices & Controllers",
+      "Collaboration & Processes"
+    ],
+    "correct": 0,
+    "why": "The diagram labels Data Accumulation as the storage level."
+  },
+  {
+    "q": "In the data-centric view of IoT operations, which level is associated with reporting, analytics, and control?",
+    "options": [
+      "Application",
+      "Connectivity",
+      "Data Accumulation",
+      "Physical Devices & Controllers"
+    ],
+    "correct": 0,
+    "why": "The Application level is labelled with functions like reporting, analytics, and control."
+  },
+  {
+    "q": "Which IoT design requirement refers to tens of thousands of sensors at one site or millions distributed geographically?",
+    "options": [
+      "Geography",
+      "Scale",
+      "Intrusiveness",
+      "Accessibility-Visibility of end-points"
+    ],
+    "correct": 1,
+    "why": "The design requirements table uses Scale for this exact description."
+  },
+  {
+    "q": "Which IoT design requirement is associated with human life critical applications such as healthcare and smart grid?",
+    "options": [
+      "Geography",
+      "Heterogeneous end-points",
+      "Criticality of services",
+      "Scale"
+    ],
+    "correct": 2,
+    "why": "The design requirements slide links healthcare and smart grid examples to Criticality of services."
+  },
+  {
+    "q": "Which IoT network connectivity requirement says some endpoints may be mostly sleeping and awakened only when required?",
+    "options": [
+      "Low Power",
+      "Longevity",
+      "Embedded",
+      "High Sensitivity on reception"
+    ],
+    "correct": 0,
+    "why": "The network connectivity requirements slide states this under Low Power."
+  },
+  {
+    "q": "According to the lecture, severely resource-constrained endpoints typically have constraints in ...",
+    "options": [
+      "display brightness and speaker volume",
+      "memory and compute",
+      "camera resolution only",
+      "database replication only"
+    ],
+    "correct": 1,
+    "why": "The slide explicitly describes resource-constrained endpoints as severely constrained in memory and compute."
+  },
+  {
+    "q": "What sensitivity range is mentioned for gateways and end-devices with high sensitivity on reception?",
+    "options": [
+      "-20 dBm to -5 dBm",
+      "-60 dBm to -40 dBm",
+      "-150 dBm to -125 dBm",
+      "0 dBm to +10 dBm"
+    ],
+    "correct": 2,
+    "why": "The lecture cites high sensitivity around -150 dBm to -125 dBm."
+  },
+  {
+    "q": "Which key IoT network metric is defined as the time between sending data and receiving an acknowledgement or echo?",
+    "options": [
+      "Throughput",
+      "Latency",
+      "Packet Loss",
+      "Jitter"
+    ],
+    "correct": 1,
+    "why": "The metrics slide defines latency, specifically round-trip time, that way."
+  },
+  {
+    "q": "Which key IoT network metric is defined as the amount of data transferred per unit time?",
+    "options": [
+      "Throughput",
+      "Latency",
+      "Packet Loss",
+      "Jitter"
+    ],
+    "correct": 0,
+    "why": "The lecture defines throughput as data rate, measured as transferred data per unit time."
+  },
+  {
+    "q": "Which key IoT network metric is defined as the fraction of transmitted packets that never arrive or get acknowledged?",
+    "options": [
+      "Latency",
+      "Throughput",
+      "Packet Loss",
+      "Jitter"
+    ],
+    "correct": 2,
+    "why": "The lecture defines packet loss exactly this way."
+  },
+  {
+    "q": "Which key IoT network metric is defined as fluctuation in packet delay over time?",
+    "options": [
+      "Packet Loss",
+      "Jitter",
+      "Throughput",
+      "Coverage"
+    ],
+    "correct": 1,
+    "why": "The lecture defines jitter as latency variation over time."
+  },
+  {
+    "q": "When measuring network performance without dedicated tools, what is the formula given for throughput?",
+    "options": [
+      "(ReceiveTime - SendTime) / Total Bytes",
+      "(Total Bytes * 8) / Elapsed Time",
+      "(Sent - Received) / Sent",
+      "Variation in consecutive packet latencies"
+    ],
+    "correct": 1,
+    "why": "The lecture gives throughput as total transferred bits divided by elapsed time."
+  },
+  {
+    "q": "When measuring network performance without dedicated tools, what is the formula given for packet loss?",
+    "options": [
+      "(ReceiveTime - SendTime)",
+      "(Total Bytes * 8) / Elapsed Time",
+      "(Sent - Received) / Sent",
+      "Received / Sent"
+    ],
+    "correct": 2,
+    "why": "The slide explicitly gives packet loss as (Sent - Received) / Sent."
+  },
+  {
+    "q": "According to the lecture, how can Wi-Fi be tested when adapting the custom metric-collection logic to each protocol?",
+    "options": [
+      "Use a custom GATT characteristic",
+      "Send UDP/TCP data directly over IP",
+      "Use uplinks and confirmations only",
+      "Avoid sending any packets"
+    ],
+    "correct": 1,
+    "why": "The protocol-specific measurement slide states Wi-Fi can send UDP/TCP data directly over IP."
+  },
+  {
+    "q": "According to the lecture, how can Bluetooth/BLE be tested when adapting the custom metric-collection logic to each protocol?",
+    "options": [
+      "Send data using a custom GATT characteristic and receive notifications",
+      "Use LoRa uplinks only",
+      "Use only wired Ethernet",
+      "Rely on SQL queries"
+    ],
+    "correct": 0,
+    "why": "The lecture suggests using a custom GATT characteristic for BLE measurements."
+  },
+  {
+    "q": "According to the lecture, how can LoRaWAN or Zigbee be tested when adapting the custom metric-collection logic to each protocol?",
+    "options": [
+      "Use raw HDMI packets",
+      "Rely on sending data uplinks and receiving confirmations",
+      "Use web sockets only",
+      "Disable acknowledgements completely"
+    ],
+    "correct": 1,
+    "why": "The lecture states LoRaWAN/Zigbee measurement can rely on uplinks and confirmations."
+  },
+  {
+    "q": "What does AIoT represent in the lecture?",
+    "options": [
+      "A replacement for IoT networking",
+      "Fusing AI with IoT",
+      "A storage-only edge architecture",
+      "A protocol for BLE"
+    ],
+    "correct": 1,
+    "why": "The AIoT slide is titled “Fusing AI with IoT”."
+  },
+  {
+    "q": "Which of the following is shown as an AIoT example in the lecture?",
+    "options": [
+      "Crowd Counting",
+      "Relational database indexing",
+      "Compiler optimization only",
+      "Spreadsheet pivoting"
+    ],
+    "correct": 0,
+    "why": "The AIoT slide shows examples including crowd counting, object localisation/classification, and license plate recognition."
+  },
+  {
+    "q": "According to the edge-computing motivation slide, IDC estimates that connected IoT devices will reach about how many in 2025?",
+    "options": [
+      "4.16 million",
+      "41.6 billion",
+      "79.4 billion",
+      "416 billion"
+    ],
+    "correct": 1,
+    "why": "The lecture slide states 41.6 billion connected IoT devices in 2025."
+  },
+  {
+    "q": "According to the same slide, those devices are estimated to generate about how much data in 2025?",
+    "options": [
+      "79.4 terabytes",
+      "7.94 petabytes",
+      "79.4 zettabytes",
+      "794 exabytes"
+    ],
+    "correct": 2,
+    "why": "The slide cites 79.4 zettabytes of data in 2025."
+  },
+  {
+    "q": "Which of the following is listed as an advantage of edge computing?",
+    "options": [
+      "Higher network bandwidth requirement",
+      "Faster response time",
+      "Guaranteed unlimited storage",
+      "Removal of all hardware constraints"
+    ],
+    "correct": 1,
+    "why": "The edge-computing advantages slide explicitly lists faster response time."
+  },
+  {
+    "q": "Which sequence of heterogeneous edge computing platforms is shown from smaller to larger capability?",
+    "options": [
+      "Heavy Edge → Medium Edge → Mini Edge → Micro Edge",
+      "Micro Edge → Mini Edge → Medium Edge → Heavy Edge",
+      "Mini Edge → Micro Edge → Heavy Edge → Medium Edge",
+      "Medium Edge → Heavy Edge → Micro Edge → Mini Edge"
+    ],
+    "correct": 1,
+    "why": "The lecture slide names the heterogeneous platforms as Micro Edge, Mini Edge, Medium Edge, and Heavy Edge."
+  },
+  {
+    "q": "Which of the following is listed as a key consideration when designing for the edge?",
+    "options": [
+      "Latency and Response Time",
+      "Removing all privacy concerns permanently",
+      "Ignoring hardware constraints",
+      "Avoiding scalability"
+    ],
+    "correct": 0,
+    "why": "The key-considerations slide starts with latency and response time and includes security, bandwidth, hardware, energy, and more."
+  },
+  {
+    "q": "According to the summary slide, which protocols are highlighted as low-power choices for battery-powered devices?",
+    "options": [
+      "BLE and Zigbee",
+      "WiFi and LTE-A",
+      "HTTP and MQTT",
+      "IPv4 and TCP"
+    ],
+    "correct": 0,
+    "why": "The summary slide explicitly lists BLE and Zigbee as low-power protocols."
+  },
+  {
+    "q": "According to the summary slide, which security technologies are mentioned as examples for sensitive data?",
+    "options": [
+      "FTP and Telnet",
+      "TLS and DTLS",
+      "SMTP and POP3",
+      "ARP and ICMP"
+    ],
+    "correct": 1,
+    "why": "The lecture summary cites TLS and DTLS as security examples for sensitive data."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

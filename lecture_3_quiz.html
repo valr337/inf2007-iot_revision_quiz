@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 3 MCQ Quiz: CoAP &amp; MQTT</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 3 MCQ Quiz: CoAP &amp; MQTT</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 3</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What does CoAP stand for?",
+    "options": [
+      "Constrained Application Protocol",
+      "Compact Application Protocol",
+      "Common Application Protocol",
+      "Control Application Protocol"
+    ],
+    "correct": 0,
+    "why": "The lecture defines CoAP as Constrained Application Protocol."
+  },
+  {
+    "q": "Which transport protocol does CoAP use?",
+    "options": [
+      "UDP",
+      "TCP",
+      "ICMP",
+      "REST"
+    ],
+    "correct": 0,
+    "why": "The slides state that CoAP communicates using UDP instead of TCP."
+  },
+  {
+    "q": "Which RFC specifies the core CoAP protocol?",
+    "options": [
+      "RFC 7252",
+      "RFC 7524",
+      "RFC 7254",
+      "RFC 7452"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly labels CoAP as RFC 7252."
+  },
+  {
+    "q": "How is CoAP described in the lecture?",
+    "options": [
+      "A REST-based web transfer protocol",
+      "A database replication protocol",
+      "A transport-layer encryption standard",
+      "A binary file format"
+    ],
+    "correct": 0,
+    "why": "The lecture describes CoAP as a REST-based web transfer protocol."
+  },
+  {
+    "q": "CoAP was designed for what kind of devices?",
+    "options": [
+      "Resource-constrained microcontrollers",
+      "High-end desktop workstations",
+      "Only cloud servers",
+      "Only smartphones"
+    ],
+    "correct": 0,
+    "why": "The slides state that CoAP was designed for resource-constrained microcontrollers."
+  },
+  {
+    "q": "According to the lecture, CoAP can be used to adapt what into a more compact protocol?",
+    "options": [
+      "Simple HTTP interfaces",
+      "SQL queries",
+      "Bluetooth pairing flows",
+      "Image compression streams"
+    ],
+    "correct": 0,
+    "why": "The lecture says CoAP could be used for adapting simple HTTP interfaces into a more compact protocol."
+  },
+  {
+    "q": "Which set of resource methods is listed for CoAP?",
+    "options": [
+      "GET, PUT, POST, DELETE, and OBSERVE",
+      "CONNECT, TRACE, PATCH, and HEAD only",
+      "SUBSCRIBE, PUBLISH, RETAIN, and RESET",
+      "OPEN, CLOSE, SEND, and RECEIVE"
+    ],
+    "correct": 0,
+    "why": "The lecture lists GET, PUT, POST, DELETE, and OBSERVE."
+  },
+  {
+    "q": "Which statement about CoAP is TRUE?",
+    "options": [
+      "It supports multicast and congestion control",
+      "It requires TCP to work",
+      "It replaces IP in the stack",
+      "It only works with XML payloads"
+    ],
+    "correct": 0,
+    "why": "The slides explicitly state that CoAP supports multicast and congestion control."
+  },
+  {
+    "q": "CoAP is closely modeled after which protocol family conceptually?",
+    "options": [
+      "HTTP",
+      "FTP",
+      "AMQP",
+      "SMTP"
+    ],
+    "correct": 0,
+    "why": "The lecture presents CoAP as a compact REST-style protocol and shows HTTP/CoAP working together."
+  },
+  {
+    "q": "Which two sub-layers are shown inside the CoAP protocol layer?",
+    "options": [
+      "Message sub-layer and Request/Response sub-layer",
+      "Transport sub-layer and Security sub-layer",
+      "Publish sub-layer and Subscribe sub-layer",
+      "Broker sub-layer and Topic sub-layer"
+    ],
+    "correct": 0,
+    "why": "The CoAP stack slide shows a Message sub-layer and a Request/Response sub-layer."
+  },
+  {
+    "q": "What is the fixed size of the basic CoAP message header?",
+    "options": [
+      "4 bytes",
+      "2 bytes",
+      "8 bytes",
+      "16 bytes"
+    ],
+    "correct": 0,
+    "why": "The lecture slide is titled 'Message Header (4 bytes)'."
+  },
+  {
+    "q": "In the CoAP header, what does the Message ID help with?",
+    "options": [
+      "Matching responses",
+      "Choosing the transport protocol",
+      "Encrypting the payload",
+      "Assigning a topic name"
+    ],
+    "correct": 0,
+    "why": "The header slide says Message ID is a 16-bit identifier for matching responses."
+  },
+  {
+    "q": "Which CoAP message type requires an acknowledgement?",
+    "options": [
+      "Confirmable (CON)",
+      "Non-confirmable (NON)",
+      "Reset (RST)",
+      "Observe (OBS)"
+    ],
+    "correct": 0,
+    "why": "The Message Layer Model slide states that Confirmable messages require an ACK."
+  },
+  {
+    "q": "Which CoAP message type does not require an acknowledgement?",
+    "options": [
+      "Non-confirmable (NON)",
+      "Confirmable (CON)",
+      "Acknowledgement (ACK)",
+      "Reset (RST)"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NON messages need no acknowledgement."
+  },
+  {
+    "q": "What does a CoAP Reset (RST) message indicate?",
+    "options": [
+      "A confirmable message was received but context is missing for processing",
+      "The payload is encrypted with DTLS",
+      "The broker has disconnected",
+      "The message must be retained"
+    ],
+    "correct": 0,
+    "why": "The lecture defines RST as meaning the confirmable message was received but cannot be processed due to missing context."
+  },
+  {
+    "q": "In a piggy-backed CoAP response, what carries the actual response content?",
+    "options": [
+      "The ACK to the confirmable request",
+      "A DNS reply",
+      "A separate TCP connection",
+      "A RESET packet"
+    ],
+    "correct": 0,
+    "why": "The piggy-backed example shows ACK carrying 2.05 Content back to the client."
+  },
+  {
+    "q": "How does the lecture show CoAP dealing with packet loss for a confirmable request?",
+    "options": [
+      "The client retransmits the request after a timeout",
+      "The broker retains the message",
+      "The client changes from UDP to TCP automatically",
+      "The server multicasts the answer repeatedly"
+    ],
+    "correct": 0,
+    "why": "The packet-loss example shows the request timing out and then being retransmitted."
+  },
+  {
+    "q": "How is a CoAP observe relationship initiated in the lecture example?",
+    "options": [
+      "With a GET request carrying Observe: 0",
+      "With a PUBLISH packet",
+      "With a CONNECT handshake",
+      "With a PUT request to /.well-known/core"
+    ],
+    "correct": 0,
+    "why": "The Observation slide shows 'CON GET /light Observe: 0 Token: 0x41'."
+  },
+  {
+    "q": "Which path is used for CoAP resource discovery?",
+    "options": [
+      "/.well-known/core",
+      "/discover/resources",
+      "/topics/all",
+      "/coap/discovery"
+    ],
+    "correct": 0,
+    "why": "The Resource Discovery slide shows a GET to /.well-known/core."
+  },
+  {
+    "q": "In CoAP block transfer, what does the 'm' flag indicate?",
+    "options": [
+      "Whether more blocks follow",
+      "The message is multicast",
+      "The media type is JSON",
+      "The message is mapped to MQTT"
+    ],
+    "correct": 0,
+    "why": "The Block Transfer slide defines m as the 'more blocks' flag."
+  },
+  {
+    "q": "What does DTLS refer to in the CoAP section?",
+    "options": [
+      "TLS/SSL for datagrams",
+      "A topic discovery naming system",
+      "A transport for large files",
+      "A database transaction layer"
+    ],
+    "correct": 0,
+    "why": "The lecture states 'Security - DTLS (TLS/SSL for Datagrams)'."
+  },
+  {
+    "q": "What does MQTT stand for?",
+    "options": [
+      "Message Queuing Telemetry Transport",
+      "Message Querying Telecommunication Transmission",
+      "Message Quorum Transport Technology",
+      "Message Queuing Transaction Transport"
+    ],
+    "correct": 0,
+    "why": "The lecture expands MQTT as Message Queuing Telemetry Transport."
+  },
+  {
+    "q": "Who are credited in the lecture with inventing MQTT?",
+    "options": [
+      "Andy Stanford-Clark and Arlen Nipper",
+      "Roy Fielding and Tim Berners-Lee",
+      "Whitfield Diffie and Martin Hellman",
+      "Vint Cerf and Bob Kahn"
+    ],
+    "correct": 0,
+    "why": "The lecture states MQTT was invented by Andy Stanford-Clark and Arlen Nipper."
+  },
+  {
+    "q": "What was the original use case mentioned for MQTT?",
+    "options": [
+      "Connecting oil pipelines over satellite links with minimal battery loss and bandwidth",
+      "Streaming HD video over Wi-Fi",
+      "Managing relational databases in the cloud",
+      "Replacing Ethernet in offices"
+    ],
+    "correct": 0,
+    "why": "The lecture gives oil pipelines over satellite connections as the original use case."
+  },
+  {
+    "q": "Which of the following is NOT presented as a core MQTT goal in the lecture?",
+    "options": [
+      "Synchronous request/response messaging as the main model",
+      "Simple to implement",
+      "QoS data delivery",
+      "Continuous session awareness"
+    ],
+    "correct": 0,
+    "why": "The lecture presents MQTT as push-based, lightweight, and QoS-capable, not primarily synchronous request/response."
+  },
+  {
+    "q": "How is MQTT described at the protocol layer?",
+    "options": [
+      "An application protocol",
+      "A transport protocol",
+      "A network protocol",
+      "A presentation protocol"
+    ],
+    "correct": 0,
+    "why": "The lecture stack shows Application → MQTT → optional TLS/SSL → TCP → IP."
+  },
+  {
+    "q": "Which statement about MQTT encoding is correct?",
+    "options": [
+      "MQTT is binary-based, not text-string based",
+      "MQTT packets are always JSON text",
+      "MQTT uses XML as its control format",
+      "MQTT is an image-oriented protocol"
+    ],
+    "correct": 0,
+    "why": "The slides state that MQTT is a binary-based protocol where control elements are binary bytes."
+  },
+  {
+    "q": "What is the default TCP/IP port for MQTT without TLS?",
+    "options": [
+      "1883",
+      "1833",
+      "8883",
+      "5683"
+    ],
+    "correct": 0,
+    "why": "The lecture states that MQTT uses TCP/IP port 1883 by default."
+  },
+  {
+    "q": "What TCP/IP port is used for MQTT over TLS/SSL according to the lecture?",
+    "options": [
+      "8883",
+      "1883",
+      "5683",
+      "443"
+    ],
+    "correct": 0,
+    "why": "The lecture states port 8883 is used when MQTT runs over TLS/SSL."
+  },
+  {
+    "q": "MQTT consists of which three roles?",
+    "options": [
+      "Broker, subscribers, and publishers",
+      "Server, proxy, and router",
+      "Client, sensor, and database only",
+      "Producer, consumer, and gateway only"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly lists broker, subscribers, and publishers."
+  },
+  {
+    "q": "In MQTT publish/subscribe, what must clients know to communicate?",
+    "options": [
+      "The broker's IP and port",
+      "Each subscriber's IP address",
+      "Each publisher's MAC address",
+      "The server's SQL schema"
+    ],
+    "correct": 0,
+    "why": "The publish/subscribe slide says clients do not need each other's IP address; they need the broker's IP and port."
+  },
+  {
+    "q": "How does the publisher know who is subscribing in MQTT?",
+    "options": [
+      "The publisher does not know",
+      "The broker emails the publisher",
+      "The subscriber sends its IP to the publisher directly",
+      "The publisher polls every subscriber"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes decoupling in space and time; publishers and subscribers are separated by the broker."
+  },
+  {
+    "q": "What is a topic in MQTT?",
+    "options": [
+      "A string used to filter messages in a publish/subscribe model",
+      "A client identifier",
+      "A message checksum",
+      "A fixed TCP header field"
+    ],
+    "correct": 0,
+    "why": "The lecture defines topics as the names used to categorize published data and route it to subscribers."
+  },
+  {
+    "q": "Which topic example matches the lecture format?",
+    "options": [
+      "home/rooms/kitchen/temperature",
+      "home.rooms.kitchen.temperature",
+      "home->rooms->kitchen->temperature",
+      "home rooms kitchen temperature"
+    ],
+    "correct": 0,
+    "why": "The lecture shows topics as slash-separated sub-topics like home/rooms/kitchen/temperature."
+  },
+  {
+    "q": "What is the shortest possible MQTT message length according to the slide?",
+    "options": [
+      "Two bytes",
+      "One byte",
+      "Four bytes",
+      "Eight bytes"
+    ],
+    "correct": 0,
+    "why": "The MQTT Message Format slide states that the shortest message is two bytes."
+  },
+  {
+    "q": "Which wildcard matches exactly one topic level in MQTT?",
+    "options": [
+      "+",
+      "#",
+      "*",
+      "%"
+    ],
+    "correct": 0,
+    "why": "The wildcard slide labels + as the single-level wildcard."
+  },
+  {
+    "q": "Which wildcard matches all remaining topic levels in MQTT?",
+    "options": [
+      "#",
+      "+",
+      "*",
+      "/"
+    ],
+    "correct": 0,
+    "why": "The wildcard slide labels # as the multi-level wildcard."
+  },
+  {
+    "q": "Which topic filter would get the temperature data of three rooms in the lecture example?",
+    "options": [
+      "myhome/+/temperature",
+      "myhome/#/temperature",
+      "myhome/temperature/+",
+      "myhome/bedroom/+"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly uses myhome/+/temperature for that case."
+  },
+  {
+    "q": "Which of the following is listed as an MQTT topic best practice?",
+    "options": [
+      "Avoid spaces in topics",
+      "Always start every topic with /",
+      "Subscribe to # by default",
+      "Use non-printable characters for compression"
+    ],
+    "correct": 0,
+    "why": "The best-practices slide says never use spaces in a topic."
+  },
+  {
+    "q": "Which topic naming practice does the lecture recommend?",
+    "options": [
+      "Use specific topics such as myhome/livingroom/temperature",
+      "Use one generic topic for all sensor data",
+      "Prefer topics beginning with $",
+      "Always use very long topics with spaces"
+    ],
+    "correct": 0,
+    "why": "The lecture recommends specific, concise topic names."
+  },
+  {
+    "q": "What delivery guarantee does MQTT QoS 0 provide?",
+    "options": [
+      "At most once",
+      "At least once",
+      "Exactly once",
+      "Exactly twice"
+    ],
+    "correct": 0,
+    "why": "The lecture calls QoS 0 'at most once' and describes it as fire-and-forget."
+  },
+  {
+    "q": "What delivery guarantee does MQTT QoS 1 provide?",
+    "options": [
+      "At least once",
+      "At most once",
+      "Exactly once",
+      "No delivery guarantee at all"
+    ],
+    "correct": 0,
+    "why": "The lecture states QoS 1 delivers messages at least once, so duplicates are possible."
+  },
+  {
+    "q": "What delivery guarantee does MQTT QoS 2 provide?",
+    "options": [
+      "Exactly once",
+      "At most once",
+      "At least once",
+      "Best effort only"
+    ],
+    "correct": 0,
+    "why": "The lecture states QoS 2 provides exactly-once delivery."
+  },
+  {
+    "q": "Which QoS level has the highest overhead and is the slowest?",
+    "options": [
+      "QoS 2",
+      "QoS 1",
+      "QoS 0",
+      "All QoS levels have the same overhead"
+    ],
+    "correct": 0,
+    "why": "The lecture says QoS 2 has the most overhead and is the slowest."
+  },
+  {
+    "q": "What is the purpose of MQTT retained messages?",
+    "options": [
+      "To let a new subscriber immediately receive the last retained state",
+      "To force QoS 2 delivery",
+      "To replace the broker with peer-to-peer routing",
+      "To encrypt the payload automatically"
+    ],
+    "correct": 0,
+    "why": "The Retain Message slide shows a later subscriber receiving the last retained battery value."
+  },
+  {
+    "q": "What is the purpose of MQTT Last Will and Testament (LWT)?",
+    "options": [
+      "To notify subscribers when a client fails or disconnects unexpectedly",
+      "To guarantee that every message is delivered",
+      "To configure topic aliases",
+      "To publish only binary images"
+    ],
+    "correct": 0,
+    "why": "The LWT slide shows the broker publishing a status message when the client has a network problem."
+  },
+  {
+    "q": "What does the lecture show in the Python Paho-MQTT example?",
+    "options": [
+      "A client can subscribe to multiple topics",
+      "MQTT only supports one topic per client forever",
+      "QoS must always be 2",
+      "The broker can be omitted from MQTT"
+    ],
+    "correct": 0,
+    "why": "The example includes a subscribe call with multiple topics and QoS values."
+  },
+  {
+    "q": "Which feature is listed as new in MQTT 5?",
+    "options": [
+      "Shared subscriptions",
+      "Replacing TCP with UDP",
+      "Removing topics completely",
+      "Eliminating authentication"
+    ],
+    "correct": 0,
+    "why": "The MQTT 5 slide lists shared subscriptions among the new features."
+  },
+  {
+    "q": "What is the shared subscription format shown in the lecture?",
+    "options": [
+      "$share/GROUPID/TOPIC",
+      "$group/share/TOPIC",
+      "share://GROUPID/TOPIC",
+      "#/GROUPID/TOPIC"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly shows $share/GROUPID/TOPIC."
+  },
+  {
+    "q": "What does Payload Format Indicator value 0 mean in MQTT 5?",
+    "options": [
+      "Unspecified byte stream",
+      "UTF-8 encoded payload",
+      "JSON payload only",
+      "JPEG image only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 0 indicates an unspecified byte stream."
+  },
+  {
+    "q": "What does Payload Format Indicator value 1 mean in MQTT 5?",
+    "options": [
+      "UTF-8 encoded payload",
+      "Encrypted payload",
+      "Compressed binary payload",
+      "Checksum only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 1 represents a UTF-8 encoded payload."
+  },
+  {
+    "q": "When is a Topic Alias useful according to the lecture?",
+    "options": [
+      "When payloads are small, topics are long, and throughput is high",
+      "When every topic is only one character long",
+      "Only for retained messages",
+      "Only when using UDP instead of TCP"
+    ],
+    "correct": 0,
+    "why": "The Topic Alias slide lists those three conditions."
+  },
+  {
+    "q": "What is the default MQTT 5 Receive Maximum if not specified?",
+    "options": [
+      "65,535",
+      "1,024",
+      "1883",
+      "256"
+    ],
+    "correct": 0,
+    "why": "The Flow Control slide says the default Receive Maximum is 65,535."
+  },
+  {
+    "q": "What is Receive Maximum used for in MQTT 5 flow control?",
+    "options": [
+      "Limiting the number of unacknowledged PUBLISH messages a client can accommodate",
+      "Limiting topic name length",
+      "Forcing all clients to use QoS 0",
+      "Replacing ACL authorization"
+    ],
+    "correct": 0,
+    "why": "The slide defines Receive Maximum as the max number of unacknowledged PUBLISH messages the client can accommodate."
+  },
+  {
+    "q": "What authentication style is highlighted in MQTT 5 enhanced authentication?",
+    "options": [
+      "Challenge-response",
+      "Plaintext topic matching",
+      "ARP discovery",
+      "Static IP whitelisting only"
+    ],
+    "correct": 0,
+    "why": "The Enhanced Authentication slide highlights challenge-response."
+  },
+  {
+    "q": "Which new packet type is mentioned for MQTT 5 enhanced authentication?",
+    "options": [
+      "AUTH",
+      "OBSERVE",
+      "RST",
+      "BLOCK2"
+    ],
+    "correct": 0,
+    "why": "The lecture states enhanced authentication uses new AUTH packets."
+  },
+  {
+    "q": "Where is an Access Control List (ACL) implemented according to the lecture?",
+    "options": [
+      "In the broker, not as part of MQTT itself",
+      "Inside the publisher firmware only",
+      "Inside DNS",
+      "Inside the TCP header"
+    ],
+    "correct": 0,
+    "why": "The ACL slide explicitly says ACL is implemented by the broker and is not part of MQTT."
+  },
+  {
+    "q": "What does an MQTT ACL define?",
+    "options": [
+      "Who can publish and who can subscribe to which topics",
+      "Which payloads must be JSON",
+      "Which client owns the IP subnet",
+      "How to fragment CoAP blocks"
+    ],
+    "correct": 0,
+    "why": "The ACL slide states that it defines who can publish and subscribe to which topics."
+  },
+  {
+    "q": "What is the role of TLS in MQTT security according to the lecture?",
+    "options": [
+      "Encrypting the client-broker network connection",
+      "Replacing the broker with direct device-to-device messaging",
+      "Storing retained messages",
+      "Providing wildcard subscriptions"
+    ],
+    "correct": 0,
+    "why": "The lecture states TLS/SSL encrypts the network connection between client and broker."
+  },
+  {
+    "q": "What does the lecture say about SSL versus TLS?",
+    "options": [
+      "SSL is old and deprecated; TLS is the secure protocol used today",
+      "SSL is newer than TLS",
+      "TLS is deprecated but SSL is recommended",
+      "Both are identical names for MQTT QoS levels"
+    ],
+    "correct": 0,
+    "why": "The summary slide states SSL is old, insecure, and deprecated, while TLS is the real protocol used today."
+  },
+  {
+    "q": "According to the comparison slide, when is MQTT generally preferred over CoAP?",
+    "options": [
+      "When reliability in unstable or high-latency networks and large-scale pub/sub are important",
+      "When multicast to many constrained devices is the primary need",
+      "When direct RESTful web integration without a broker is required",
+      "When extremely low-power UDP-only devices dominate"
+    ],
+    "correct": 0,
+    "why": "The comparison slide lists reliability, high-latency support, scalability, and broad ecosystem support as MQTT strengths."
+  },
+  {
+    "q": "According to the comparison slide, when is CoAP generally preferred over MQTT?",
+    "options": [
+      "For extremely low-power devices, UDP-based networks, direct web integration, and multicast",
+      "For broker-centric enterprise analytics only",
+      "For the largest possible payload sizes",
+      "When exactly-once delivery through four-message handshake is required"
+    ],
+    "correct": 0,
+    "why": "The comparison slide highlights low power, UDP, HTTP proxying/web integration, multicast, and low-latency device-to-device communication as CoAP advantages."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

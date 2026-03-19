@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 4 MCQ Quiz: Wireless Mesh</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 4 MCQ Quiz: Wireless Mesh</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 4</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What is a wireless mesh network according to the lecture?",
+    "options": [
+      "A decentralized network architecture comprising radio nodes organised in a mesh topology",
+      "A centralized network controlled by a single router only",
+      "A wired backbone used for data center replication",
+      "A point-to-point link between exactly two radios"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a wireless mesh network as a decentralized architecture of radio nodes organised in a mesh topology."
+  },
+  {
+    "q": "How do nodes connect in a wireless mesh network?",
+    "options": [
+      "Directly and dynamically to multiple other nodes without relying on a central router or server",
+      "Only through a cloud broker on the Internet",
+      "Only to one parent node in a strict tree",
+      "Only through wired Ethernet switches"
+    ],
+    "correct": 0,
+    "why": "The definition slide states that each node connects directly and dynamically to multiple other nodes without a central router or server."
+  },
+  {
+    "q": "What communication role does each node play in a mesh network?",
+    "options": [
+      "It can both send and receive data",
+      "It can only receive data",
+      "It can only send data",
+      "It only manages security keys"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each node in the network can both send and receive data."
+  },
+  {
+    "q": "Which statement best explains why mesh networking improves reliability?",
+    "options": [
+      "Data can be rerouted through alternative paths if some nodes fail",
+      "Every node uses a fixed dedicated cable backup",
+      "A central server always duplicates every packet",
+      "All packets are stored permanently in each node"
+    ],
+    "correct": 0,
+    "why": "Reliability comes from having multiple potential paths, so data can be rerouted when nodes or paths fail."
+  },
+  {
+    "q": "Which of the following is listed as a use case for wireless mesh networks?",
+    "options": [
+      "Smart cities",
+      "Standalone offline calculators only",
+      "Optical fiber core routing only",
+      "Desktop CPU overclocking"
+    ],
+    "correct": 0,
+    "why": "The lecture mentions IoT applications such as smart cities, broadband home networking, and emergency services communications."
+  },
+  {
+    "q": "Which characteristic is NOT a feature of wireless mesh networking?",
+    "options": [
+      "Centralized architecture",
+      "Efficient data routing",
+      "Self-healing",
+      "Scalability"
+    ],
+    "correct": 0,
+    "why": "Wireless mesh networking is presented as decentralized rather than centralized."
+  },
+  {
+    "q": "In the context of mesh networks, what does the term self-healing refer to?",
+    "options": [
+      "The network automatically reroutes data if a node fails or a path becomes unreliable",
+      "The network physically repairs damaged hardware",
+      "The network restores deleted files automatically",
+      "The network shuts down nodes to save power"
+    ],
+    "correct": 0,
+    "why": "The lecture defines self-healing as automatic rerouting through other nodes when failures occur."
+  },
+  {
+    "q": "Which of the following is one of the “Why Mesh?” benefits shown in the slides?",
+    "options": [
+      "Failure in one device will not break the network",
+      "Every node must rely on one master server",
+      "The network only supports single-hop communication",
+      "New devices cannot be added after deployment"
+    ],
+    "correct": 0,
+    "why": "The “Why Mesh?” slide highlights failure tolerance, easier addition of devices, and no traffic problems."
+  },
+  {
+    "q": "What are the three high-level types of mesh described in the lecture?",
+    "options": [
+      "Distributed, Centralised, and Hybrid",
+      "Star, Ring, and Bus",
+      "Client, Server, and Broker",
+      "IPv4, IPv6, and NAT"
+    ],
+    "correct": 0,
+    "why": "The lecture divides mesh networks into Distributed, Centralised, and Hybrid forms."
+  },
+  {
+    "q": "In a centralised mesh, what does the central node do?",
+    "options": [
+      "Assigns roles and establishes topology and routes",
+      "Only provides battery charging",
+      "Only encrypts packets without routing them",
+      "Acts only as a passive monitor"
+    ],
+    "correct": 0,
+    "why": "The centralised mesh slide states that nodes rely on a central node to assign roles and establish topology and routes."
+  },
+  {
+    "q": "Why can centralised mesh conserve resources on nodes?",
+    "options": [
+      "Nodes do not need to perform adjacency discovery to send packets",
+      "Nodes never transmit data",
+      "Nodes use wired backhaul only",
+      "Nodes skip all authentication"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that node resources such as power are conserved because discovery of adjacency is not needed on every node."
+  },
+  {
+    "q": "Which example is used for a centralised mesh in the lecture?",
+    "options": [
+      "Zigbee with a Network Coordinator",
+      "HTTP with REST constraints",
+      "LoRaWAN Class A",
+      "Bluetooth Classic audio streaming"
+    ],
+    "correct": 0,
+    "why": "Zigbee is given as the example, where the Network Coordinator forms and maintains the network."
+  },
+  {
+    "q": "In a distributed mesh network, how are routes between nodes established?",
+    "options": [
+      "Nodes communicate with each other to determine adjacency and routes",
+      "A single root node hardcodes all routes forever",
+      "All nodes send every message directly to the Internet",
+      "Only a cloud dashboard decides routes"
+    ],
+    "correct": 0,
+    "why": "The distributed mesh slide states that nodes communicate with each other to determine adjacency and routes."
+  },
+  {
+    "q": "Which statement about distributed mesh is correct?",
+    "options": [
+      "It can use reactive or proactive routing protocols to enable multi-hop routing",
+      "It only supports static single-hop routes",
+      "It always requires one central coordinator for routing",
+      "It cannot detect node failures"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that distributed mesh can use reactive or proactive protocols for multi-hop routing."
+  },
+  {
+    "q": "Which protocol is given as an example of distributed mesh routing?",
+    "options": [
+      "Ad-hoc On-Demand Distance Vector (AODV)",
+      "HTTP/2",
+      "DNS",
+      "FTP"
+    ],
+    "correct": 0,
+    "why": "AODV is used as the distributed mesh example in the lecture."
+  },
+  {
+    "q": "What does hybrid mesh combine?",
+    "options": [
+      "Centralized topology establishment with autonomous route maintenance",
+      "Only wired routing with optical switching",
+      "Only flooding with no structured routing",
+      "Only Bluetooth pairing with no routing"
+    ],
+    "correct": 0,
+    "why": "Hybrid mesh uses a central node to establish topology, while nodes maintain routes and adjacencies autonomously."
+  },
+  {
+    "q": "Which example is used for hybrid mesh?",
+    "options": [
+      "Hybrid Wireless Mesh Protocol (HWMP)",
+      "SMTP",
+      "CoAP Observe",
+      "NTP"
+    ],
+    "correct": 0,
+    "why": "The lecture names Hybrid Wireless Mesh Protocol as the example of hybrid mesh."
+  },
+  {
+    "q": "According to the lecture, a good mesh routing algorithm should be ______.",
+    "options": [
+      "Decentralized, self-organizable, and self-healing",
+      "Centralized, manual, and static",
+      "Brokered, encrypted, and text-based",
+      "Wired, cloud-managed, and IPv4-only"
+    ],
+    "correct": 0,
+    "why": "The routing algorithm slide lists decentralized, self-organizable, and self-healing as desirable properties."
+  },
+  {
+    "q": "What should routing in mesh networks adapt to according to the lecture?",
+    "options": [
+      "Bandwidth limitations of the wireless spectrum and multi-hopping for load balancing",
+      "Only the operating system version",
+      "Only the screen size of the device",
+      "Only the battery manufacturer"
+    ],
+    "correct": 0,
+    "why": "The lecture states routing should adapt to wireless bandwidth limitations and exploit multi-hopping for better load balancing."
+  },
+  {
+    "q": "Why is power consumption important in mesh routing?",
+    "options": [
+      "It is essential for providing an energy-efficient wireless solution",
+      "It determines the HTML version supported",
+      "It is only relevant for desktop PCs",
+      "It eliminates the need for routing algorithms"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that power consumption is essential for energy-efficient wireless networks."
+  },
+  {
+    "q": "What is mesh flooding?",
+    "options": [
+      "Sending data packets to all nodes so they can still reach the destination if the optimal path is unavailable",
+      "Sending packets only to one chosen gateway",
+      "Using DNS to discover the destination address",
+      "Encrypting packets with a device key"
+    ],
+    "correct": 0,
+    "why": "The flooding slide explains that packets are sent to all nodes to keep delivery possible even when the optimal path is unavailable."
+  },
+  {
+    "q": "What is a major disadvantage of mesh flooding?",
+    "options": [
+      "It can lead to congestion and redundant transmissions",
+      "It never reaches the destination",
+      "It requires optical fiber",
+      "It prevents multi-hop routing"
+    ],
+    "correct": 0,
+    "why": "The lecture highlights congestion and a high number of redundant transmissions as major flooding drawbacks."
+  },
+  {
+    "q": "Which of the following is listed as an advantage of mesh flooding?",
+    "options": [
+      "Shortest path usefulness when many nodes need to keep in sync",
+      "Zero overhead regardless of network size",
+      "Guaranteed immunity to attacks",
+      "No retransmissions are ever needed in any case"
+    ],
+    "correct": 0,
+    "why": "The flooding slide lists shortest path usefulness, reduced retransmissions, and lower power consumption as advantages."
+  },
+  {
+    "q": "Which of the following is NOT listed as a flooding disadvantage?",
+    "options": [
+      "Unlimited bandwidth",
+      "High overhead",
+      "High latency",
+      "Complexity"
+    ],
+    "correct": 0,
+    "why": "The lecture lists resource utilization, security, complexity, scalability, overhead, and latency—not unlimited bandwidth."
+  },
+  {
+    "q": "Which flooding algorithm is the basic form where control messages are broadcast to all nodes without optimisation?",
+    "options": [
+      "Simple Flooding",
+      "Reduced Flooding",
+      "Adaptive Flooding",
+      "Probabilistic Flooding"
+    ],
+    "correct": 0,
+    "why": "The “Types of Mesh Flooding Algorithm” slide defines Simple Flooding in exactly this way."
+  },
+  {
+    "q": "In Simple Flooding, all nodes act as ______.",
+    "options": [
+      "Both sender and receiver",
+      "Only receivers",
+      "Only coordinators",
+      "Only authentication servers"
+    ],
+    "correct": 0,
+    "why": "The simple flooding slide states the dual role: all nodes act as sender and receiver."
+  },
+  {
+    "q": "What is compared in Simple Flooding to decide whether data is forwarded to a neighbour?",
+    "options": [
+      "Sequence number",
+      "MAC vendor name",
+      "Screen resolution",
+      "Country code"
+    ],
+    "correct": 0,
+    "why": "The lecture says Simple Flooding compares sequence numbers to determine forwarding."
+  },
+  {
+    "q": "Which is a disadvantage of Simple Flooding?",
+    "options": [
+      "Broadcast storms",
+      "No path redundancy",
+      "No scalability at all in any network",
+      "It requires a central router"
+    ],
+    "correct": 0,
+    "why": "The lecture lists overhead, inefficiency, latency, broadcast storms, and battery drain as disadvantages of Simple Flooding."
+  },
+  {
+    "q": "Which flooding algorithm divides the network into subnets for routing?",
+    "options": [
+      "Reduced Flooding",
+      "Selective Flooding",
+      "Simple Flooding",
+      "Adaptive Flooding"
+    ],
+    "correct": 0,
+    "why": "The reduced flooding slide describes a hierarchical reduced routing algorithm that divides the network into subnets."
+  },
+  {
+    "q": "In Reduced Flooding, each subnet has a ______.",
+    "options": [
+      "Subnet coordinator",
+      "Cloud broker",
+      "REST endpoint",
+      "Private CA"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each subnet has a subnet coordinator acting as an intermediary."
+  },
+  {
+    "q": "What is the purpose of TTL in Reduced Flooding?",
+    "options": [
+      "To limit how many hops a packet can take before being discarded",
+      "To encrypt packets hop by hop",
+      "To assign static routes permanently",
+      "To synchronize clocks between all nodes"
+    ],
+    "correct": 0,
+    "why": "TTL limits the distance a packet can travel and helps ensure packets are not flooded indiscriminately."
+  },
+  {
+    "q": "Which is an advantage of Reduced Flooding?",
+    "options": [
+      "Reduced memory and processing requirements",
+      "Zero latency in all scenarios",
+      "No need for coordinators",
+      "Guaranteed delivery even if coordinators fail"
+    ],
+    "correct": 0,
+    "why": "The lecture lists reduced congestion, scalability, and reduced memory and processing requirements as advantages."
+  },
+  {
+    "q": "Which is a disadvantage of Reduced Flooding?",
+    "options": [
+      "Important control messages may not be transmitted if a subnet coordinator malfunctions",
+      "Nodes can never be grouped into subnets",
+      "It cannot reduce congestion",
+      "It forbids multi-hop communication"
+    ],
+    "correct": 0,
+    "why": "The reduced flooding slide warns that coordinator malfunction can hurt reliability."
+  },
+  {
+    "q": "What does Adaptive Flooding adjust based on?",
+    "options": [
+      "Network conditions and resource availability",
+      "Time of day only",
+      "Static factory settings only",
+      "Screen brightness"
+    ],
+    "correct": 0,
+    "why": "Adaptive Flooding dynamically adjusts the number of participating nodes based on network conditions."
+  },
+  {
+    "q": "How do nodes behave under high network load in Adaptive Flooding?",
+    "options": [
+      "They reduce forwarding",
+      "They always flood more aggressively",
+      "They disable route maintenance permanently",
+      "They switch to Ethernet"
+    ],
+    "correct": 0,
+    "why": "The lecture says nodes observing high load reduce forwarding, while nodes observing low load increase it."
+  },
+  {
+    "q": "Which is a disadvantage of Adaptive Flooding?",
+    "options": [
+      "Nodes must monitor network load, increasing resource requirements",
+      "It cannot scale to large networks",
+      "It does not use forwarding at all",
+      "It requires one central coordinator"
+    ],
+    "correct": 0,
+    "why": "The lecture lists complexity, added resource requirements, and possible increased latency as disadvantages."
+  },
+  {
+    "q": "How does Selective Flooding work?",
+    "options": [
+      "It forwards packets to nodes likely to have a route and floods neighbours only if no route is known",
+      "It always broadcasts to every node with no filtering",
+      "It only forwards packets within one subnet",
+      "It uses only Bluetooth pairing to choose routes"
+    ],
+    "correct": 0,
+    "why": "The selective flooding slide describes exactly this selective-forward-otherwise-flood behavior."
+  },
+  {
+    "q": "What is the main trade-off of Selective Flooding?",
+    "options": [
+      "Lower overhead but higher algorithmic complexity",
+      "Lower reliability but zero complexity",
+      "More flooding but less latency than all others in every case",
+      "No need to determine routes"
+    ],
+    "correct": 0,
+    "why": "Selective Flooding reduces overhead and improves scalability, but needs complex logic to identify likely routes."
+  },
+  {
+    "q": "Probabilistic Flooding assigns a probability value to each neighbour based on factors such as ______.",
+    "options": [
+      "Link quality, number of hops to destination, and number of packets previously forwarded",
+      "Only battery brand and device color",
+      "Only IP address length",
+      "Only signal encryption type"
+    ],
+    "correct": 0,
+    "why": "Those three factors are explicitly listed on the probabilistic flooding slide."
+  },
+  {
+    "q": "What is one risk of setting the Probabilistic Flooding threshold too high?",
+    "options": [
+      "Longer delivery time",
+      "Immediate battery replacement",
+      "Forced switch to proactive routing",
+      "Loss of all route caches"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that delivery may take longer if the threshold is set too high."
+  },
+  {
+    "q": "Hybrid Flooding in the lecture is based on which protocol?",
+    "options": [
+      "Zone Routing Protocol (ZRP)",
+      "HTTP",
+      "MQTT",
+      "DSDV only"
+    ],
+    "correct": 0,
+    "why": "The hybrid flooding slide says it works using the Zone Routing Protocol (ZRP)."
+  },
+  {
+    "q": "In Hybrid Flooding, IARP is ______ and IERP is ______.",
+    "options": [
+      "proactive; reactive",
+      "reactive; proactive",
+      "both proactive",
+      "both probabilistic"
+    ],
+    "correct": 0,
+    "why": "The lecture labels Intra-zone Routing Protocol (IARP) as proactive and Inter-zone Routing Protocol (IERP) as reactive."
+  },
+  {
+    "q": "Which flooding type has poor scalability due to high congestion and bandwidth usage?",
+    "options": [
+      "Simple Flooding",
+      "Selective Flooding",
+      "Adaptive Flooding",
+      "Hybrid Flooding"
+    ],
+    "correct": 0,
+    "why": "The comparison table rates Simple Flooding as having poor scalability because of high congestion and bandwidth usage."
+  },
+  {
+    "q": "Which flooding type is described as having excellent scalability due to targeted flooding?",
+    "options": [
+      "Selective Flooding",
+      "Simple Flooding",
+      "Reduced Flooding",
+      "Adaptive Flooding"
+    ],
+    "correct": 0,
+    "why": "The comparison table lists Selective Flooding as having excellent scalability due to targeted flooding."
+  },
+  {
+    "q": "Which statement about proactive mesh routing algorithms is correct?",
+    "options": [
+      "They are table-driven, provide lower latency for data transmission, and increase overhead",
+      "They discover routes only when needed and always have lower overhead",
+      "They cannot support any routing tables",
+      "They are the same as flooding-based routing"
+    ],
+    "correct": 0,
+    "why": "The structured routing slide describes proactive routing as table-driven with preemptive route maintenance, lower latency, and increased overhead."
+  },
+  {
+    "q": "Which of the following is NOT a proactive mesh routing algorithm?",
+    "options": [
+      "Dynamic Source Routing, Ad hoc On-Demand Distance Vector, and Temporally-Ordered Routing Algorithm",
+      "Optimized Link State Routing, DSDV, and WRP",
+      "OLSR, BATMAN, and DSDV",
+      "WRP, OLSR, and BATMAN"
+    ],
+    "correct": 0,
+    "why": "DSR, AODV, and TORA are listed under reactive routing, not proactive routing."
+  },
+  {
+    "q": "Which statement about reactive mesh routing algorithms is correct?",
+    "options": [
+      "They discover routes on demand, have higher latency for data transmission, and lower overhead",
+      "They always keep full routing tables updated proactively",
+      "They cannot operate in mobile networks",
+      "They rely on a central coordinator for every route decision"
+    ],
+    "correct": 0,
+    "why": "The lecture presents reactive routing as on-demand with higher latency but lower overhead."
+  },
+  {
+    "q": "Which of the following is NOT a reactive mesh routing algorithm?",
+    "options": [
+      "Wireless Routing Protocol, Optimized Link State Routing, and Destination-Sequenced Distance Vector",
+      "AODV, DSR, and TORA",
+      "DSR and AODV only",
+      "TORA, AODV, and DSR"
+    ],
+    "correct": 0,
+    "why": "WRP, OLSR, and DSDV are proactive algorithms, not reactive ones."
+  },
+  {
+    "q": "Optimized Link State Routing (OLSR) uses ______ to optimize transmission of link-state information.",
+    "options": [
+      "Multipoint relays (MPRs)",
+      "Single point relays",
+      "No relays at all",
+      "Only centralized coordinators"
+    ],
+    "correct": 0,
+    "why": "The OLSR slide states that it uses multipoint relays (MPRs) to optimize transmission."
+  },
+  {
+    "q": "Optimized Link State Routing Protocol uses triggered updates whenever there is a topology change.",
+    "options": [
+      "False",
+      "True",
+      "Only in centralized mesh",
+      "Only when bandwidth is low"
+    ],
+    "correct": 0,
+    "why": "The comparison table states that OLSR uses periodic table updates at intervals of a few seconds, not triggered updates."
+  },
+  {
+    "q": "Which statement about OLSR best matches the lecture?",
+    "options": [
+      "Each node collects direct neighbour information and shares it through periodic broadcasts",
+      "It avoids all broadcasts completely",
+      "It only uses source routing",
+      "It keeps no information about neighbours"
+    ],
+    "correct": 0,
+    "why": "The OLSR slide says nodes collect information about direct neighbours and share it through periodic broadcasts."
+  },
+  {
+    "q": "How many tables does Wireless Routing Protocol (WRP) maintain per node?",
+    "options": [
+      "Four",
+      "One",
+      "Two",
+      "Seven"
+    ],
+    "correct": 0,
+    "why": "The WRP slide explicitly states that each node maintains four tables."
+  },
+  {
+    "q": "Which of the following is NOT one of the WRP tables listed in the lecture?",
+    "options": [
+      "Certificate table",
+      "Distance table",
+      "Routing table",
+      "Link-cost table"
+    ],
+    "correct": 0,
+    "why": "WRP uses distance, routing, link-cost, and message retransmission list tables. A certificate table is not listed."
+  },
+  {
+    "q": "How does WRP help avoid the count-to-infinity problem?",
+    "options": [
+      "By forcing each node to check predecessor information for consistency",
+      "By disabling all updates",
+      "By using only one fixed route forever",
+      "By requiring Internet access for every route"
+    ],
+    "correct": 0,
+    "why": "The lecture states that WRP avoids count-to-infinity by checking predecessor information for neighbour consistency."
+  },
+  {
+    "q": "Why is reactive routing preferred over proactive routing in some mesh networks?",
+    "options": [
+      "It is more scalable, requires less overhead traffic, and is more adaptable to topology changes",
+      "It always has lower latency than proactive routing",
+      "It eliminates route discovery",
+      "It cannot support mobility"
+    ],
+    "correct": 0,
+    "why": "The “Motivation for Reactive over Proactive” slide lists scalability, lower overhead, and adaptability."
+  },
+  {
+    "q": "In Dynamic Source Routing (DSR), what does a host check first before starting route discovery?",
+    "options": [
+      "Its route cache for a pre-existing route",
+      "The central coordinator configuration",
+      "The DNS server log",
+      "The battery temperature"
+    ],
+    "correct": 0,
+    "why": "The DSR slide says the host first checks its route cache."
+  },
+  {
+    "q": "What is used for DSR route maintenance?",
+    "options": [
+      "Route error packets and acknowledgements",
+      "Only TTL counters",
+      "Only subnet coordinators",
+      "Bluetooth pairing requests"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that DSR route maintenance is achieved using route error packets and acknowledgements."
+  },
+  {
+    "q": "Dynamic Source Routing has multiple routes per destination.",
+    "options": [
+      "True",
+      "False",
+      "Only in centralized mesh",
+      "Only when using OLSR"
+    ],
+    "correct": 0,
+    "why": "The reactive routing comparison table states that DSR supports multiple routes per destination."
+  },
+  {
+    "q": "In AODV route discovery, what packet is broadcast to neighbours?",
+    "options": [
+      "Route Request (RREQ)",
+      "Route Reply (RREP)",
+      "Route Cache Entry (RCE)",
+      "Acknowledgement only"
+    ],
+    "correct": 0,
+    "why": "The AODV slide states that a route request (RREQ) packet is broadcast to neighbours."
+  },
+  {
+    "q": "What do intermediate nodes record when they first receive an AODV RREQ?",
+    "options": [
+      "The neighbour address from which the RREQ was first received, establishing a reverse path",
+      "Only the packet size",
+      "The device battery serial number",
+      "A static route for every future destination"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that intermediate nodes record the first neighbour address to establish a reverse path."
+  },
+  {
+    "q": "How does AODV help ensure loop-free and up-to-date routes?",
+    "options": [
+      "It uses destination sequence numbers",
+      "It never updates any routes",
+      "It only uses source routing headers",
+      "It relies only on MPR selection"
+    ],
+    "correct": 0,
+    "why": "AODV uses destination sequence numbers for loop-free, up-to-date routes."
+  },
+  {
+    "q": "Which statement correctly compares AODV and DSR?",
+    "options": [
+      "AODV is hop-by-hop with a single route per destination, while DSR uses source routing and can store multiple routes",
+      "AODV and DSR are both proactive protocols",
+      "AODV uses higher storage space than DSR in the lecture table",
+      "DSR is more suitable for higher mobility than AODV according to the table"
+    ],
+    "correct": 0,
+    "why": "The reactive comparison table states AODV is hop-by-hop with a single route per destination, while DSR uses source routing and multiple routes."
+  },
+  {
+    "q": "Which challenge of mesh networking relates to properly timed transmissions and synchronized nodes?",
+    "options": [
+      "Timing and synchronization",
+      "URL mapping",
+      "Cloud billing",
+      "Data serialization"
+    ],
+    "correct": 0,
+    "why": "The challenges slide explicitly lists timing and synchronization as one of the key mesh challenges."
+  },
+  {
+    "q": "Which of the following is listed as a common security threat in mesh networks?",
+    "options": [
+      "Blackhole attack",
+      "SQL schema drift",
+      "CRT monitor burn-in",
+      "Compiler warning overflow"
+    ],
+    "correct": 0,
+    "why": "The security threats slide lists blackhole attacks among common routing attacks."
+  },
+  {
+    "q": "What is a typical method to prevent malicious nodes from joining a wireless mesh network?",
+    "options": [
+      "Authentication",
+      "Decreasing signal strength",
+      "Ignoring new nodes",
+      "Removing all relays"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly recommends authentication before allowing devices to join the network."
+  },
+  {
+    "q": "How can compromised nodes be handled according to the lecture?",
+    "options": [
+      "Periodic reauthentication to ensure connected nodes are authentic",
+      "Never checking node validity again after join",
+      "Disabling all encryption",
+      "Forcing all traffic through a single broadcast storm"
+    ],
+    "correct": 0,
+    "why": "The “Compromised nodes” slide recommends periodic reauthentication."
+  },
+  {
+    "q": "What is the main mitigation for eavesdropping (MITM) mentioned in the lecture?",
+    "options": [
+      "Use encryption to keep data private",
+      "Increase flooding frequency",
+      "Reduce the number of nodes",
+      "Disable route maintenance"
+    ],
+    "correct": 0,
+    "why": "The eavesdropping slide begins with the recommendation to use encryption to keep data private."
+  },
+  {
+    "q": "In Bluetooth Mesh, which key is used for encrypting and decrypting data for specific applications?",
+    "options": [
+      "App Key",
+      "Network Key",
+      "Device Key",
+      "Route Key"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the App Key is used for encrypting and decrypting application data in Bluetooth Mesh."
+  },
+  {
+    "q": "Which future trend in wireless mesh networks is mentioned in the key takeaways?",
+    "options": [
+      "Integration with 5G and LoRaWAN",
+      "Removal of all security mechanisms",
+      "Replacement of all nodes with wired-only routers",
+      "Abandoning energy efficiency in IoT applications"
+    ],
+    "correct": 0,
+    "why": "The final slide lists integration with 5G and LoRaWAN, AI-driven self-healing, and energy-efficient protocols as future trends."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

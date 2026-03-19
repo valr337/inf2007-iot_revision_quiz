@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 5 MCQ Quiz: LoRa & LoRaWAN</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 5 MCQ Quiz: LoRa & LoRaWAN</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 5</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What type of IoT connectivity do LoRa and LoRaWAN mainly target in this lecture?",
+    "options": [
+      "Long-range, low-power wide area networking for low-bandwidth IoT devices",
+      "Short-range, high-throughput home entertainment networking",
+      "Wired industrial Ethernet replacement only",
+      "Always-on broadband video streaming"
+    ],
+    "correct": 0,
+    "why": "The lecture places LoRa/LoRaWAN in the LPWAN space for low-power, low-bandwidth IoT devices over long distances."
+  },
+  {
+    "q": "What does LPWAN stand for?",
+    "options": [
+      "Low Power Wide Area Network",
+      "Long Protocol Wireless Access Node",
+      "Low Packet Wideband Access Network",
+      "Layered Power Wireless Area Network"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly expands LPWAN as Low Power Wide Area Networks."
+  },
+  {
+    "q": "According to the LPWAN requirements slide, LPWANs are designed to connect which devices?",
+    "options": [
+      "Low-power, low-bandwidth IoT devices over long distances",
+      "High-power servers in data centers",
+      "Only smartphones using licensed cellular bands",
+      "Only short-range Bluetooth accessories"
+    ],
+    "correct": 0,
+    "why": "The LPWAN requirements slide states that LPWAN is designed for low-power, low-bandwidth IoT devices over long distances."
+  },
+  {
+    "q": "What traffic pattern is LPWAN especially meant for?",
+    "options": [
+      "Sensors that send small amounts of data intermittently",
+      "Continuous 4K video streaming",
+      "Real-time multiplayer gaming traffic",
+      "Large file transfers every second"
+    ],
+    "correct": 0,
+    "why": "The lecture says LPWAN focuses on sensors that transmit small amounts of data intermittently."
+  },
+  {
+    "q": "Which pair is listed as non-cellular LPWAN technologies on the lecture slide?",
+    "options": [
+      "Sigfox and LoRa",
+      "NB-IoT and LTE-M",
+      "Wi-Fi and BLE",
+      "Zigbee and Thread"
+    ],
+    "correct": 0,
+    "why": "The LPWAN slide distinguishes cellular technologies such as NB-IoT/LTE-M from non-cellular technologies such as Sigfox and LoRa."
+  },
+  {
+    "q": "In the IoT connectivity pyramid, LoRa is grouped under which service tier?",
+    "options": [
+      "Simple, low cost IoT: LPWA",
+      "High data rate IoT services",
+      "IoT with voice & mobility only",
+      "Short-range solutions only"
+    ],
+    "correct": 0,
+    "why": "The connectivity pyramid places Sigfox and LoRa in the simple, low-cost LPWA tier."
+  },
+  {
+    "q": "What is the main drawback of using LoRa for IoT applications?",
+    "options": [
+      "Limited data rate",
+      "Short range",
+      "High power consumption",
+      "Inability to scale to many devices"
+    ],
+    "correct": 0,
+    "why": "The lecture repeatedly characterizes LoRa/LoRaWAN as low-data-rate technologies optimized for long range and low power."
+  },
+  {
+    "q": "What is the main advantage combination highlighted for LoRa-style LPWAN use?",
+    "options": [
+      "Long range and low power consumption",
+      "Short range and very high throughput",
+      "High power and high bandwidth",
+      "Low latency and wired reliability"
+    ],
+    "correct": 0,
+    "why": "The lecture presents LoRa as a long-range, low-power communication technology."
+  },
+  {
+    "q": "Who originally developed LoRa technology?",
+    "options": [
+      "Cycleo",
+      "Cisco",
+      "Semtech",
+      "Sigfox"
+    ],
+    "correct": 0,
+    "why": "The lecture states that LoRa was originally developed by the French company Cycleo."
+  },
+  {
+    "q": "Which company acquired Cycleo and became the core owner/maintainer associated with LoRa?",
+    "options": [
+      "Semtech",
+      "Oracle",
+      "ARM",
+      "Nokia"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Semtech acquired Cycleo in 2012."
+  },
+  {
+    "q": "What year did Semtech acquire Cycleo according to the lecture?",
+    "options": [
+      "2012",
+      "2009",
+      "2015",
+      "2018"
+    ],
+    "correct": 0,
+    "why": "The LoRa technology slide states that Cycleo was acquired by Semtech in 2012."
+  },
+  {
+    "q": "What is LoRaWAN expanded as in the lecture and practice quiz context?",
+    "options": [
+      "Long Range Wide Area Network",
+      "Long Radio Wireless Access Node",
+      "Low Range Wireless Area Network",
+      "Layered Routing Wideband Access Network"
+    ],
+    "correct": 0,
+    "why": "LoRaWAN is expanded as Long Range Wide Area Network."
+  },
+  {
+    "q": "What best describes LoRa itself in the protocol stack?",
+    "options": [
+      "The physical/radio modulation layer",
+      "The application layer API",
+      "The network server software",
+      "The end-to-end database layer"
+    ],
+    "correct": 0,
+    "why": "The lecture differentiates LoRa as the PHY/modulation layer and LoRaWAN as the protocol built on top of it."
+  },
+  {
+    "q": "What best describes LoRaWAN in relation to LoRa?",
+    "options": [
+      "A standardized MAC-layer protocol built on top of the LoRa PHY layer",
+      "A modulation scheme that replaces LoRa radio waves",
+      "A wired backhaul protocol for gateways only",
+      "A database protocol for cloud applications"
+    ],
+    "correct": 0,
+    "why": "The lecture defines LoRaWAN as a standardized MAC-layer protocol built on top of the LoRa PHY layer."
+  },
+  {
+    "q": "Which statement best captures the lecture's contrast between LoRa and LoRaWAN?",
+    "options": [
+      "LoRa is the radio/modulation layer, while LoRaWAN adds MAC-level networking behavior",
+      "LoRa is the cloud server, while LoRaWAN is the end device",
+      "LoRa is only for Europe, while LoRaWAN is only for Asia",
+      "LoRa is licensed spectrum, while LoRaWAN is wired Ethernet"
+    ],
+    "correct": 0,
+    "why": "The lecture's comparison slides separate LoRa modulation from the LoRaWAN MAC and device classes."
+  },
+  {
+    "q": "LoRa modulation is a variation of what?",
+    "options": [
+      "Chirp Spread Spectrum",
+      "Orthogonal Frequency Division Multiplexing",
+      "Amplitude Modulation",
+      "Binary Phase Shift Keying"
+    ],
+    "correct": 0,
+    "why": "The lecture states that LoRa uses a form of Chirp Spread Spectrum (CSS)."
+  },
+  {
+    "q": "What type of modulation is used in LoRa?",
+    "options": [
+      "Chirp Spread Spectrum (CSS)",
+      "Amplitude Modulation (AM)",
+      "Frequency Shift Keying (FSK) only",
+      "Quadrature Amplitude Modulation (QAM)"
+    ],
+    "correct": 0,
+    "why": "The LoRa modulation slide explicitly states that LoRa uses a form of Chirp Spread Spectrum."
+  },
+  {
+    "q": "How is data encoded in LoRa modulation according to the lecture?",
+    "options": [
+      "Using the frequency increase/decrease rate of chirps",
+      "Using pixel brightness values",
+      "Using only packet length",
+      "Using TCP port numbers"
+    ],
+    "correct": 0,
+    "why": "The lecture says data is encoded using the frequency increase/decrease rate."
+  },
+  {
+    "q": "What does Chirp Spread Spectrum (CSS) use to encode information?",
+    "options": [
+      "Wideband linear frequency-modulated chirp pulses",
+      "Infrared light pulses only",
+      "Narrowband sinusoidal tones at one fixed frequency",
+      "Only analog voltage levels over copper wires"
+    ],
+    "correct": 0,
+    "why": "The CSS slide defines Chirp Spread Spectrum as using wideband linear frequency-modulated chirp pulses."
+  },
+  {
+    "q": "In spread spectrum techniques, what happens to the signal power?",
+    "options": [
+      "It is spread over the entire spectrum",
+      "It is concentrated at exactly one frequency only",
+      "It disappears after modulation",
+      "It is converted into routing information"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that spread spectrum deliberately spreads the signal in the frequency domain."
+  },
+  {
+    "q": "What is an up-chirp?",
+    "options": [
+      "A tone whose frequency increases with time",
+      "A tone whose amplitude becomes zero",
+      "A packet sent only to the network server",
+      "A fixed-frequency narrowband carrier"
+    ],
+    "correct": 0,
+    "why": "The lecture defines an up-chirp as a tone in which the frequency increases with time."
+  },
+  {
+    "q": "What is a down-chirp?",
+    "options": [
+      "A tone whose frequency decreases with time",
+      "A packet sent from the cloud to the app server only",
+      "A signal with zero bandwidth",
+      "A fixed carrier with no modulation"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a down-chirp as a tone in which the frequency decreases with time."
+  },
+  {
+    "q": "What is one major benefit of CSS highlighted in the lecture?",
+    "options": [
+      "Resistance to interference",
+      "Gigabit data rates",
+      "Zero airtime",
+      "No need for any synchronization anywhere"
+    ],
+    "correct": 0,
+    "why": "The benefits slide states that CSS provides resistance to interference."
+  },
+  {
+    "q": "Why can CSS improve range according to the lecture?",
+    "options": [
+      "Spreading the signal reduces its power at any single frequency, helping it travel further within limits",
+      "It increases the voltage of the battery directly",
+      "It removes all noise from the channel",
+      "It uses only wired backhaul links"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that spreading the signal reduces power at any single frequency and helps extend range without exceeding regulatory limits."
+  },
+  {
+    "q": "What security-related benefit of CSS is mentioned on the slide?",
+    "options": [
+      "The spreading code makes manipulation harder to do unnoticed",
+      "It replaces encryption entirely",
+      "It guarantees anonymity without keys",
+      "It disables all unauthorized radios automatically"
+    ],
+    "correct": 0,
+    "why": "The lecture mentions improved security because the spreading code makes unnoticed manipulation harder."
+  },
+  {
+    "q": "LoRa's spreading factor mainly affects which pair of characteristics?",
+    "options": [
+      "Data rate and range",
+      "Screen size and battery type",
+      "Database speed and storage format",
+      "IP version and DNS resolution"
+    ],
+    "correct": 0,
+    "why": "The lecture and practice item both connect spreading factor to the range/data-rate trade-off."
+  },
+  {
+    "q": "What happens when the spreading factor (SF) increases?",
+    "options": [
+      "Range increases and data rate decreases",
+      "Range decreases and data rate increases",
+      "Both range and data rate increase together",
+      "Neither changes"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that higher SF improves range but lowers the data rate and increases airtime."
+  },
+  {
+    "q": "What happens to LoRa Time-on-Air (ToA) as spreading factor increases?",
+    "options": [
+      "It increases exponentially",
+      "It stays fixed",
+      "It becomes zero",
+      "It decreases linearly"
+    ],
+    "correct": 0,
+    "why": "The Time-on-Air slide states that ToA increases exponentially with SF."
+  },
+  {
+    "q": "Why can a higher spreading factor be problematic for the network?",
+    "options": [
+      "It causes longer airtime, more collisions, and higher energy usage",
+      "It prevents any packet from reaching a gateway",
+      "It removes security keys from the device",
+      "It disables bidirectional communication"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that higher SF dramatically increases airtime, which can lead to more collisions and more energy use."
+  },
+  {
+    "q": "What is the effect of a higher coding rate (CR) in the lecture?",
+    "options": [
+      "More redundancy and more robustness",
+      "Lower robustness and lower redundancy",
+      "Higher battery voltage",
+      "No change at all to the signal"
+    ],
+    "correct": 0,
+    "why": "The lecture states that higher CR gives more redundancy and more robustness."
+  },
+  {
+    "q": "What is the effect of a lower coding rate (CR) according to the slide?",
+    "options": [
+      "Higher throughput",
+      "Higher encryption strength",
+      "Longer mandatory packets",
+      "Shorter radio range by definition only"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that lower CR yields higher throughput."
+  },
+  {
+    "q": "For the 12-byte example on the Time-on-Air slide, which case has the shortest airtime?",
+    "options": [
+      "SF7 at about 56 ms",
+      "SF9 at about 246 ms",
+      "SF12 at about 1483 ms",
+      "All are equal"
+    ],
+    "correct": 0,
+    "why": "The lecture example shows SF7 ≈ 56 ms, SF9 ≈ 246 ms, and SF12 ≈ 1483 ms."
+  },
+  {
+    "q": "For the 12-byte example, which case has the longest airtime?",
+    "options": [
+      "SF12 at about 1483 ms",
+      "SF9 at about 246 ms",
+      "SF7 at about 56 ms",
+      "All are equal"
+    ],
+    "correct": 0,
+    "why": "The Time-on-Air example shows SF12 taking the longest airtime."
+  },
+  {
+    "q": "What design guidance is explicitly given on the Time-on-Air slide?",
+    "options": [
+      "Use ADR whenever possible",
+      "Always force SF12 for every device",
+      "Never allow downlinks",
+      "Disable coding rate entirely"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states: Good design: Use ADR whenever possible."
+  },
+  {
+    "q": "Which statement about LoRa frequency use is correct according to the lecture?",
+    "options": [
+      "It uses ISM license-exempt bands",
+      "It only uses licensed LTE spectrum",
+      "It only uses 2.4 GHz",
+      "It requires Ethernet instead of radio"
+    ],
+    "correct": 0,
+    "why": "The frequency slide states that LoRa uses ISM license-exempt bands."
+  },
+  {
+    "q": "Which regional frequency is listed for the US on the lecture slide?",
+    "options": [
+      "915 MHz",
+      "868 MHz",
+      "433 MHz",
+      "2.4 GHz only"
+    ],
+    "correct": 0,
+    "why": "The frequency slide lists 915 MHz for the US."
+  },
+  {
+    "q": "Which regional frequency is listed for Europe on the lecture slide?",
+    "options": [
+      "868 MHz",
+      "915 MHz",
+      "433 MHz",
+      "5.8 GHz"
+    ],
+    "correct": 0,
+    "why": "The frequency slide lists 868 MHz for Europe."
+  },
+  {
+    "q": "Which regional frequency is listed for Asia on the lecture slide?",
+    "options": [
+      "433 MHz",
+      "868 MHz",
+      "915 MHz",
+      "60 GHz"
+    ],
+    "correct": 0,
+    "why": "The frequency slide lists 433 MHz for Asia."
+  },
+  {
+    "q": "Which Sub-GHz ISM frequency is used in the Singapore example channels shown later in the lecture?",
+    "options": [
+      "923 MHz band (AS923-1 example)",
+      "466 MHz band",
+      "2.4 GHz band",
+      "868 MHz only"
+    ],
+    "correct": 0,
+    "why": "The Singapore example slide shows channels 923.2 MHz, 923.4 MHz, and 923.6 MHz."
+  },
+  {
+    "q": "What power limit is mentioned for Singapore on the lecture slide?",
+    "options": [
+      "≤ 500 mW effective radiated power",
+      "≤ 5 W effective radiated power",
+      "≤ 50 W effective radiated power",
+      "No limit is mentioned"
+    ],
+    "correct": 0,
+    "why": "The lecture states that no approvals are required within the listed frequency range when ERP is at or below 500 mW."
+  },
+  {
+    "q": "In the lecture's public deployment description, where do all gateways report?",
+    "options": [
+      "The same server",
+      "Only a single end device",
+      "A Bluetooth coordinator",
+      "A local SQL database on each node"
+    ],
+    "correct": 0,
+    "why": "The frequency slide states that all gateways report to the same server."
+  },
+  {
+    "q": "In the same public deployment description, a device can talk to what?",
+    "options": [
+      "Any gateway",
+      "Only one fixed gateway forever",
+      "Only the application server directly",
+      "Only another device"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a device can talk to any gateway."
+  },
+  {
+    "q": "According to the public deployment bullet list, all devices use what in common?",
+    "options": [
+      "The same frequency",
+      "The same battery chemistry",
+      "The same spreading factor permanently",
+      "The same antenna length by requirement"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that all devices use the same frequency in that deployment description."
+  },
+  {
+    "q": "LoRa modulation technique sits at which OSI layer?",
+    "options": [
+      "Physical layer",
+      "Transport layer",
+      "Application layer",
+      "Session layer"
+    ],
+    "correct": 0,
+    "why": "LoRa is the radio/PHY layer in the lecture's protocol stack view."
+  },
+  {
+    "q": "What topology does LoRaWAN use?",
+    "options": [
+      "Star-of-Stars",
+      "Ring",
+      "Bus",
+      "Pure mesh only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that LoRaWAN uses a Star-of-Stars topology."
+  },
+  {
+    "q": "In LoRaWAN, end devices communicate with what first?",
+    "options": [
+      "Multiple gateways, which then forward to a centralized network server",
+      "Only the application server directly",
+      "Only one neighboring sensor in a chain",
+      "Only the DNS server"
+    ],
+    "correct": 0,
+    "why": "The lecture describes end devices communicating with multiple gateways that forward messages to a centralized network server."
+  },
+  {
+    "q": "What role is given to the LoRaWAN network server in the lecture?",
+    "options": [
+      "It acts as the brain of the network",
+      "It is only a battery charger for gateways",
+      "It is only used for cabling devices together",
+      "It replaces the application layer"
+    ],
+    "correct": 0,
+    "why": "The lecture describes the centralized network server as the brain of the LoRaWAN network."
+  },
+  {
+    "q": "What data-rate range is listed for LoRaWAN on the 'What is LoRaWAN?' slide?",
+    "options": [
+      "Typically 0.3–22 kbps",
+      "Typically 22–220 Mbps",
+      "Typically 1–10 Gbps",
+      "Exactly 100 Mbps"
+    ],
+    "correct": 0,
+    "why": "The lecture lists LoRaWAN low data rates as typically 0.3–22 kbps."
+  },
+  {
+    "q": "What security strength is explicitly mentioned for LoRaWAN?",
+    "options": [
+      "AES-128 keys",
+      "No encryption at all",
+      "Only plaintext identifiers",
+      "RSA-4096 only"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly lists strong security with AES-128 keys."
+  },
+  {
+    "q": "What is the main function of the Device EUI in LoRaWAN?",
+    "options": [
+      "To identify the device uniquely on the network",
+      "To specify the data rate permanently",
+      "To encrypt every packet by itself",
+      "To define the gateway's Ethernet address"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that EUIs such as DevEUI and JoinEUI are identifiers, not keys."
+  },
+  {
+    "q": "What is the lecture's correction about DevEUI and JoinEUI?",
+    "options": [
+      "They are 64-bit identifiers, not keys",
+      "They are session keys only",
+      "They are frequency values",
+      "They are coding-rate settings"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly notes that EUIs are 64-bit identifiers, not keys."
+  },
+  {
+    "q": "In the practice quiz wording, LoRaWAN's network server is responsible for which of the following?",
+    "options": [
+      "Processing and forwarding data toward application-side services while managing network behavior",
+      "Directly replacing all end-user applications",
+      "Only controlling the battery voltage of devices",
+      "Only fixing physical antennas"
+    ],
+    "correct": 0,
+    "why": "The lecture shows the server as centralized control that manages the network and interfaces toward application-side services."
+  },
+  {
+    "q": "Which of the following is a key LoRaWAN network-server function from the lecture?",
+    "options": [
+      "Removing duplicate packets received by multiple gateways",
+      "Rendering the mobile app UI",
+      "Replacing the radio antenna hardware",
+      "Increasing screen brightness on the sensor"
+    ],
+    "correct": 0,
+    "why": "The summary slide states that the network server removes duplicate packets from multiple gateways."
+  },
+  {
+    "q": "Which network-server function is described as assigning parameters per device?",
+    "options": [
+      "Giving each device a unique frequency, spreading code, and initial data rate",
+      "Giving each device a new CPU architecture",
+      "Giving each device a Bluetooth MAC address",
+      "Giving each device a wired IP-only interface"
+    ],
+    "correct": 0,
+    "why": "The MAC-function slide lists device assignment of frequency, spreading code, and initial data rate."
+  },
+  {
+    "q": "Which statement about network synchronization is correct in the lecture?",
+    "options": [
+      "All gateways are synchronized for seamless communication in Class B",
+      "Synchronization is only for Class A and never for Class B",
+      "Synchronization is not needed in LoRaWAN at all",
+      "Synchronization only matters for wired LANs"
+    ],
+    "correct": 0,
+    "why": "The MAC-function slide states that gateways are synchronized for seamless communication in Class B."
+  },
+  {
+    "q": "What does ADR stand for?",
+    "options": [
+      "Adaptive Data Rate",
+      "Automatic Device Relay",
+      "Advanced Duplex Routing",
+      "Adaptive Delay Reduction"
+    ],
+    "correct": 0,
+    "why": "The lecture expands ADR as Adaptive Data Rate."
+  },
+  {
+    "q": "What is ADR in LoRaWAN?",
+    "options": [
+      "A feature that automatically adjusts device data rate based on network conditions and needs",
+      "A mandatory wired synchronization protocol",
+      "An application-level image format",
+      "A gateway-only encryption standard"
+    ],
+    "correct": 0,
+    "why": "The ADR slide explains that ADR automatically adjusts the data rate of a device based on its network conditions and communication needs."
+  },
+  {
+    "q": "Which side monitors signal quality to drive ADR decisions?",
+    "options": [
+      "The LoRaWAN server",
+      "Only the battery management chip",
+      "Only the smartphone app",
+      "Only the application database"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the LoRaWAN server monitors the signal quality of each device."
+  },
+  {
+    "q": "Which factors are considered for ADR according to the lecture?",
+    "options": [
+      "Signal strength, distance to the gateway, and interference levels",
+      "Screen resolution, app theme, and CPU brand",
+      "Only packet color and timestamp format",
+      "Only whether the device uses Class A"
+    ],
+    "correct": 0,
+    "why": "The ADR slide lists signal strength, distance to the gateway, and interference levels."
+  },
+  {
+    "q": "What is one benefit of ADR?",
+    "options": [
+      "Reduced power consumption by using the lowest data rate needed for reliable communication",
+      "It guarantees unlimited bandwidth for every device",
+      "It removes all collisions from the network",
+      "It disables the need for gateways"
+    ],
+    "correct": 0,
+    "why": "The lecture states that ADR reduces power consumption and helps extend battery life."
+  },
+  {
+    "q": "What other benefit of ADR is mentioned?",
+    "options": [
+      "Improved network capacity",
+      "Guaranteed zero latency",
+      "Removal of all duty-cycle limits",
+      "Replacement of AES keys"
+    ],
+    "correct": 0,
+    "why": "The lecture says ADR improves overall network capacity."
+  },
+  {
+    "q": "In the lecture's ADR example, what happens when a sensor is close to the gateway?",
+    "options": [
+      "It can use a higher data rate",
+      "It must always use the lowest data rate",
+      "It loses the ability to send updates",
+      "It switches to Ethernet"
+    ],
+    "correct": 0,
+    "why": "The ADR example states that a sensor close to the gateway can use a higher data rate."
+  },
+  {
+    "q": "In the ADR example, what happens as the sensor moves further away or faces interference?",
+    "options": [
+      "ADR lowers the data rate to maintain reliable communication while conserving energy",
+      "The device stops using LoRaWAN forever",
+      "The data rate always increases",
+      "The gateway becomes a mesh router"
+    ],
+    "correct": 0,
+    "why": "The lecture states that ADR lowers the data rate as distance/interference increases."
+  },
+  {
+    "q": "In the Singapore AS923-1 example, what is CH0?",
+    "options": [
+      "923.2 MHz",
+      "923.4 MHz",
+      "923.6 MHz",
+      "868.0 MHz"
+    ],
+    "correct": 0,
+    "why": "The Singapore example slide lists CH0 as 923.2 MHz."
+  },
+  {
+    "q": "In the Singapore AS923-1 example, what is CH1?",
+    "options": [
+      "923.4 MHz",
+      "923.2 MHz",
+      "923.6 MHz",
+      "915.0 MHz"
+    ],
+    "correct": 0,
+    "why": "The Singapore example slide lists CH1 as 923.4 MHz."
+  },
+  {
+    "q": "In the Singapore AS923-1 example, what is CH2?",
+    "options": [
+      "923.6 MHz",
+      "923.2 MHz",
+      "923.4 MHz",
+      "433.0 MHz"
+    ],
+    "correct": 0,
+    "why": "The Singapore example slide lists CH2 as 923.6 MHz."
+  },
+  {
+    "q": "Who defines or offers the allowed channel list in the Singapore example discussion?",
+    "options": [
+      "The Network Server",
+      "Only the application server",
+      "Only the end user manually",
+      "Only the gateway antenna"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Network Server offers or defines the allowed channel list."
+  },
+  {
+    "q": "What do the Regional Parameters define in the Singapore example?",
+    "options": [
+      "The rules the device must follow, such as pseudo-random uplink hopping",
+      "The cloud database schema",
+      "The mobile app layout",
+      "The color of gateway LEDs"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Regional Parameters define the rules the device must follow."
+  },
+  {
+    "q": "According to the lecture, who chooses the actual channel for each uplink?",
+    "options": [
+      "The device itself, according to the allowed channels and regional rules",
+      "The application server GUI",
+      "A Bluetooth beacon",
+      "The end user through a phone app every time"
+    ],
+    "correct": 0,
+    "why": "The Singapore example slide says the device itself chooses the actual uplink channel according to those rules."
+  },
+  {
+    "q": "The final channel choice in the Singapore example is the intersection of what?",
+    "options": [
+      "Allowed channels, regional rules, and the device's internal hopping algorithm",
+      "Battery type, screen resolution, and firmware version",
+      "Only the gateway IP address and app topic",
+      "Only uplink packet length and CR"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly writes the final channel choice as the intersection of those three factors."
+  },
+  {
+    "q": "Which class of LoRaWAN is supported by all modules and listens only after end-device transmission?",
+    "options": [
+      "Class A",
+      "Class B",
+      "Class C",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture says Class A is supported by all modules and makes downlink available only after sensor transmission."
+  },
+  {
+    "q": "Which LoRaWAN class is the most energy efficient for battery-powered sensors?",
+    "options": [
+      "Class A",
+      "Class B",
+      "Class C",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture identifies Class A as the most energy efficient and adapted to battery-powered modules."
+  },
+  {
+    "q": "Which class matches this description: battery powered actuators, energy efficient with latency-controlled downlink, slotted communication synchronized with a beacon?",
+    "options": [
+      "Class B",
+      "Class A",
+      "Class C",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture's Class B slide uses exactly that description."
+  },
+  {
+    "q": "Which class is best suited for applications requiring minimal downlink latency?",
+    "options": [
+      "Class C",
+      "Class A",
+      "Class B",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture describes Class C as always listening and suited to strong reception-latency constraints."
+  },
+  {
+    "q": "Which class is adapted to modules on the grid or with no power constraints?",
+    "options": [
+      "Class C",
+      "Class B",
+      "Class A",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Class C is adapted to modules on the grid or with no power constraints."
+  },
+  {
+    "q": "Which class is associated with smart metering in the lecture table?",
+    "options": [
+      "Class B",
+      "Class A",
+      "Class C",
+      "None of them"
+    ],
+    "correct": 0,
+    "why": "The lecture lists smart metering as a Class B use case."
+  },
+  {
+    "q": "Which class is associated with fleet management and real-time traffic management in the lecture table?",
+    "options": [
+      "Class C",
+      "Class B",
+      "Class A",
+      "None of them"
+    ],
+    "correct": 0,
+    "why": "The lecture lists fleet management and real-time traffic management under Class C."
+  },
+  {
+    "q": "Which class is associated with fire detection and earthquake early detection in the lecture table?",
+    "options": [
+      "Class A",
+      "Class B",
+      "Class C",
+      "Class D"
+    ],
+    "correct": 0,
+    "why": "The lecture lists fire detection and earthquake early detection under Class A."
+  },
+  {
+    "q": "What does FUOTA stand for?",
+    "options": [
+      "Firmware Update Over-The-Air",
+      "Full Uplink Optimization and Tuning Architecture",
+      "Fast User-Oriented Telemetry Access",
+      "Frequency Update Over Transport API"
+    ],
+    "correct": 0,
+    "why": "The lecture expands FUOTA as Firmware Update Over-The-Air."
+  },
+  {
+    "q": "Which item is a FUOTA building block mentioned in the lecture?",
+    "options": [
+      "Remote Multicast Setup",
+      "SQL Schema Migration",
+      "Bluetooth Pairing Reset",
+      "Video Compression"
+    ],
+    "correct": 0,
+    "why": "The FUOTA slide lists Remote Multicast Setup as one of the building blocks."
+  },
+  {
+    "q": "Why is fragmentation needed for FUOTA?",
+    "options": [
+      "Because firmware images are large while LoRaWAN payloads are small",
+      "Because gateways cannot forward packets at all",
+      "Because devices only support images under 1 byte",
+      "Because chirps cannot carry binary data"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that a firmware image can be large, while a LoRaWAN payload may be only 51 bytes."
+  },
+  {
+    "q": "What LoRaWAN payload size example is used on the FUOTA fragmentation slide?",
+    "options": [
+      "51 bytes",
+      "512 bytes",
+      "64 KB",
+      "1 MB"
+    ],
+    "correct": 0,
+    "why": "The lecture gives a payload example of only 51 bytes."
+  },
+  {
+    "q": "Why is clock synchronization needed in FUOTA?",
+    "options": [
+      "Because Class B multicast needs aligned clocks and cheap RTCs can drift",
+      "Because the application server needs a prettier dashboard",
+      "Because encryption only works with synchronized monitors",
+      "Because gateways cannot count packets"
+    ],
+    "correct": 0,
+    "why": "The lecture says Class B requires clock alignment, but low-cost device RTCs can drift."
+  },
+  {
+    "q": "Without Class B or Class C, how many FUOTA fragments can Class A transmit per uplink according to the lecture?",
+    "options": [
+      "Only 1 fragment per uplink",
+      "Exactly 10 fragments per uplink",
+      "Unlimited fragments per uplink",
+      "Zero fragments per uplink"
+    ],
+    "correct": 0,
+    "why": "The lecture states that without Class B/C, Class A can transmit only 1 fragment per uplink."
+  },
+  {
+    "q": "Which classes are required for scalable FUOTA according to the lecture?",
+    "options": [
+      "Class B or Class C",
+      "Class A only",
+      "Class D only",
+      "Any class with no restrictions"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Class B/C are required for scalable updates."
+  },
+  {
+    "q": "Which step belongs in the typical FUOTA flow?",
+    "options": [
+      "Join the multicast group",
+      "Format the gateway hard disk",
+      "Switch from LoRa to Wi-Fi",
+      "Delete all session keys first"
+    ],
+    "correct": 0,
+    "why": "The typical FUOTA flow begins with joining the multicast group."
+  },
+  {
+    "q": "What do devices do after receiving FUOTA fragments?",
+    "options": [
+      "Reassemble and validate the firmware",
+      "Convert the packets into SQL tables",
+      "Broadcast them to Bluetooth devices",
+      "Delete them immediately"
+    ],
+    "correct": 0,
+    "why": "The typical FUOTA flow says the device reassembles and validates the fragments."
+  },
+  {
+    "q": "Link budget refers to what in the practice quiz item, consistent with communications meaning used in the lecture comparison table?",
+    "options": [
+      "The amount of loss that a data link can tolerate and still operate properly",
+      "The difference between battery size and payload length only",
+      "A direct wired connection between two databases",
+      "The amount of storage available on the gateway"
+    ],
+    "correct": 0,
+    "why": "The corrected practice item defines link budget as the amount of loss the link can tolerate while still operating properly."
+  },
+  {
+    "q": "LoRa is primarily used for what?",
+    "options": [
+      "Long-range, low-power communication",
+      "High-speed audio and video transmission",
+      "Short-range USB replacement",
+      "Desktop application rendering"
+    ],
+    "correct": 0,
+    "why": "The lecture positions LoRa as a long-range, low-power LPWAN technology."
+  },
+  {
+    "q": "Which statement about MIOTY is correct according to the last content slide?",
+    "options": [
+      "It is based on Telegram Splitting Multiple Access (TSMA)",
+      "It is a replacement name for LoRaWAN Class C",
+      "It uses only narrowband fixed single-tone signaling with no FEC",
+      "It is the same thing as Wi-Fi HaLow"
+    ],
+    "correct": 0,
+    "why": "The MIOTY slide says the key idea is Telegram Splitting Multiple Access (TSMA)."
+  },
+  {
+    "q": "What happens before splitting a MIOTY message into sub-packets?",
+    "options": [
+      "FEC is applied to the entire message",
+      "The message is converted into video",
+      "The message is routed through LTE only",
+      "The device disables error correction"
+    ],
+    "correct": 0,
+    "why": "The MIOTY slide states that FEC is applied to the entire message before splitting."
+  },
+  {
+    "q": "How much of the MIOTY sub-packets does the system need to recover the full message, according to the lecture?",
+    "options": [
+      "Half of the sub-packets",
+      "All sub-packets with zero loss",
+      "Only one sub-packet",
+      "Exactly 90% of the sub-packets"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the system only needs half of the sub-packets to recover the full message."
+  },
+  {
+    "q": "What benefit of MIOTY is explicitly mentioned?",
+    "options": [
+      "It survives interference and collisions",
+      "It gives gigabit throughput",
+      "It removes the need for gateways",
+      "It only works in perfectly quiet spectrum"
+    ],
+    "correct": 0,
+    "why": "The MIOTY slide lists surviving interference and collisions as a benefit."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

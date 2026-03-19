@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 9 MCQ Quiz: Cellular IoT</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 9 MCQ Quiz: Cellular IoT</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 9</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "In a cellular system, how are user messages fundamentally represented before transmission?",
+    "options": [
+      "As bits 1 and 0",
+      "As ASCII characters only",
+      "As analog voltages only",
+      "As JSON packets only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that messages are represented using bits “1” and “0” before transmission."
+  },
+  {
+    "q": "What is modulation in the lecture’s terminology?",
+    "options": [
+      "Encoding a group of bits as a symbol before wireless transmission",
+      "Encrypting the packet before routing",
+      "Compressing the signal after reception",
+      "Assigning an IP address to the device"
+    ],
+    "correct": 0,
+    "why": "The lecture defines modulation as encoding a group of bits as a symbol before transmitting over a wireless medium."
+  },
+  {
+    "q": "In Binary Phase Shift Keying (BPSK), what symbol is used for bit 1?",
+    "options": [
+      "+1",
+      "-1",
+      "0",
+      "+j"
+    ],
+    "correct": 0,
+    "why": "The slide states that in BPSK the symbol for bit 1 is +1, while bit 0 is -1."
+  },
+  {
+    "q": "In Binary Phase Shift Keying (BPSK), what symbol is used for bit 0?",
+    "options": [
+      "-1",
+      "+1",
+      "0",
+      "1/2"
+    ],
+    "correct": 0,
+    "why": "The slide states that in BPSK the symbol for bit 0 is -1."
+  },
+  {
+    "q": "How many bits are mapped to one symbol in QPSK according to the lecture?",
+    "options": [
+      "2 bits",
+      "1 bit",
+      "4 bits",
+      "8 bits"
+    ],
+    "correct": 0,
+    "why": "The lecture states that in QPSK one symbol is assigned for every two bits."
+  },
+  {
+    "q": "After mapping bits to symbols, the symbols are multiplied by what to generate the transmitted signal?",
+    "options": [
+      "A carrier, typically a cosine function",
+      "A hash function",
+      "A routing table",
+      "A TCP checksum"
+    ],
+    "correct": 0,
+    "why": "The lecture describes multiplying symbols by a carrier cos(2*pi*fc*t) to generate the signal."
+  },
+  {
+    "q": "A wireless signal can be represented in which two domains?",
+    "options": [
+      "Time domain and frequency domain",
+      "Application domain and transport domain",
+      "Only time domain",
+      "Only spatial domain"
+    ],
+    "correct": 0,
+    "why": "The preliminaries slide says a wireless signal can be represented in the time domain and frequency domain."
+  },
+  {
+    "q": "Why is multiple access needed in cellular systems?",
+    "options": [
+      "To allow multiple users to transmit",
+      "To eliminate modulation",
+      "To remove the need for guard bands",
+      "To turn analog signals into digital ones"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says multiple access is needed for multiple users to transmit."
+  },
+  {
+    "q": "Which of the following is listed as a multiple-access scheme in the lecture?",
+    "options": [
+      "TDMA",
+      "CSRF",
+      "NAT",
+      "DNS"
+    ],
+    "correct": 0,
+    "why": "The lecture lists TDMA, FDMA, CDMA, and OFDMA as multiple-access schemes."
+  },
+  {
+    "q": "In FDMA, users primarily share the medium by separating transmissions in which resource?",
+    "options": [
+      "Frequency",
+      "Code only at identical frequency and time",
+      "Application-layer ports",
+      "Battery slots"
+    ],
+    "correct": 0,
+    "why": "FDMA stands for Frequency Division Multiple Access, so users are separated in frequency."
+  },
+  {
+    "q": "In TDMA, users primarily share the medium by separating transmissions in which resource?",
+    "options": [
+      "Time",
+      "URL path",
+      "Different physical towers only",
+      "JSON fields"
+    ],
+    "correct": 0,
+    "why": "TDMA stands for Time Division Multiple Access, so users take turns in time."
+  },
+  {
+    "q": "In CDMA, users are distinguished mainly by what?",
+    "options": [
+      "Different spreading codes",
+      "Different browsers",
+      "Different REST verbs",
+      "Different SQL schemas"
+    ],
+    "correct": 0,
+    "why": "CDMA uses codes, also called spreading sequences, to distinguish users."
+  },
+  {
+    "q": "What is the key difference of OFDMA compared with TDMA, FDMA, and CDMA as described in the lecture?",
+    "options": [
+      "It can transmit multiple symbols at a given point in time",
+      "It removes the need for modulation",
+      "It requires no receiver",
+      "It is only for wired networks"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each user in TDMA, FDMA, or CDMA could transmit only one symbol at a point in time, but OFDMA can transmit multiple symbols at a given point in time."
+  },
+  {
+    "q": "What implementation cost is noted for OFDMA?",
+    "options": [
+      "It requires N modulators and N demodulators",
+      "It requires no synchronization",
+      "It works without subcarriers",
+      "It needs only one shared demodulator for the whole network"
+    ],
+    "correct": 0,
+    "why": "The OFDMA slide states that implementation requires N modulators and therefore N demodulators."
+  },
+  {
+    "q": "In the lecture’s OFDMA example, what is one time slot duration?",
+    "options": [
+      "0.5 ms",
+      "5 ms",
+      "50 ms",
+      "500 ms"
+    ],
+    "correct": 0,
+    "why": "The resource-allocation example states that one time slot is 0.5 ms."
+  },
+  {
+    "q": "In the lecture’s OFDMA example, what is the sub-band size?",
+    "options": [
+      "15 kHz",
+      "12 kHz",
+      "180 kHz",
+      "1.28 MHz"
+    ],
+    "correct": 0,
+    "why": "The example states a sub-band size of 15 kHz."
+  },
+  {
+    "q": "How is one Physical Resource Block (PRB) defined in the lecture’s OFDMA example?",
+    "options": [
+      "12 subcarriers over one time slot",
+      "1 subcarrier over 12 frames",
+      "15 subcarriers over one second",
+      "2 subcarriers over one frame"
+    ],
+    "correct": 0,
+    "why": "The slide defines a PRB as 12 subcarriers over one time slot."
+  },
+  {
+    "q": "What is the minimum allocation stated in the OFDMA example?",
+    "options": [
+      "2 PRBs per frame",
+      "1 PRB per second",
+      "12 PRBs per slot",
+      "No minimum allocation"
+    ],
+    "correct": 0,
+    "why": "The example slide states that the minimum allocation is 2 PRBs per frame."
+  },
+  {
+    "q": "What is a guard band used for in the FDMA example?",
+    "options": [
+      "To separate frequency allocations and reduce interference",
+      "To increase battery capacity",
+      "To encrypt the uplink",
+      "To assign IP addresses"
+    ],
+    "correct": 0,
+    "why": "The guard-band slide shows separated frequency allocations with guard spaces between operators and UL/DL allocations."
+  },
+  {
+    "q": "In the CDMA slides, what are spreading sequences with approximately zero pairwise cross-correlation called?",
+    "options": [
+      "PN sequences",
+      "ARP sequences",
+      "NAT sequences",
+      "SSID sequences"
+    ],
+    "correct": 0,
+    "why": "The lecture lists PN sequences as spreading sequences whose pairwise cross-correlation is approximately zero."
+  },
+  {
+    "q": "What is true of orthogonal codes in CDMA?",
+    "options": [
+      "All pairwise cross-correlations are zero",
+      "They require guard bands",
+      "They only work with one user",
+      "They are unique to Wi-Fi"
+    ],
+    "correct": 0,
+    "why": "The lecture states that orthogonal codes have pairwise cross-correlation equal to zero."
+  },
+  {
+    "q": "In the same-time CDMA transmission slide, how is the desired user’s symbol estimated?",
+    "options": [
+      "By summing received components multiplied by the desired user code",
+      "By choosing the largest frequency only",
+      "By dividing bandwidth by time slots",
+      "By reading the tower ID"
+    ],
+    "correct": 0,
+    "why": "The slide describes despreading by multiplying the received vector by the desired user code and summing the result."
+  },
+  {
+    "q": "Which pair of codes is orthogonal under the lecture-style dot-product check?",
+    "options": [
+      "<0,1,0,1> and <1,0,1,0>",
+      "<0,1,0,1> and <1,0,0,1>",
+      "<0,0,1,1> and <1,0,1,0>",
+      "All of the above"
+    ],
+    "correct": 0,
+    "why": "The pair <0,1,0,1> and <1,0,1,0> has dot product 0, so it is orthogonal under the given check."
+  },
+  {
+    "q": "Which two factors determine the bit rate of a communication system in the practice quiz item consistent with the lecture preliminaries?",
+    "options": [
+      "The modulation scheme and the symbol rate",
+      "The carrier frequency and the signal bandwidth only",
+      "The tower height and antenna color",
+      "The HTTP method and REST path"
+    ],
+    "correct": 0,
+    "why": "Bit rate depends on how many bits each symbol carries and how quickly symbols are sent, matching modulation scheme plus symbol rate."
+  },
+  {
+    "q": "If the subcarrier band size is increased from 15 kHz to 25 kHz, what is the bandwidth of one PRB assuming 12 subcarriers?",
+    "options": [
+      "300 kHz",
+      "250 kHz",
+      "375 kHz",
+      "500 kHz"
+    ],
+    "correct": 0,
+    "why": "A PRB uses 12 subcarriers, so 12 × 25 kHz = 300 kHz."
+  },
+  {
+    "q": "A network operator has 1000 kHz total spectrum and must keep 50 kHz guard band on each side. With FDMA and 40 kHz per user, how many users can be supported?",
+    "options": [
+      "22",
+      "23",
+      "24",
+      "25"
+    ],
+    "correct": 0,
+    "why": "Usable bandwidth is 1000 − 100 = 900 kHz. Dividing by 40 kHz gives 22.5, so at most 22 users can be supported."
+  },
+  {
+    "q": "A network operator has 1000 kHz total spectrum for 4G operation and 50 kHz guard band on each side. If each subcarrier is 15 kHz, what is the maximum number of subcarriers?",
+    "options": [
+      "60",
+      "50",
+      "40",
+      "70"
+    ],
+    "correct": 0,
+    "why": "After removing 100 kHz total guard band, 900 kHz remains. 900/15 = 60 subcarriers."
+  },
+  {
+    "q": "If TDMA is used and each user requires 400 kHz bandwidth, what total bandwidth is required to support 10 users when guard bands are 50 kHz on each side?",
+    "options": [
+      "500 kHz",
+      "400 kHz",
+      "4000 kHz",
+      "4100 kHz"
+    ],
+    "correct": 0,
+    "why": "In TDMA, users share the same bandwidth in different time slots, so the required spectrum is 400 kHz plus 100 kHz total guard band = 500 kHz."
+  },
+  {
+    "q": "LTE-M was introduced in which standard family according to the lecture?",
+    "options": [
+      "4G/LTE-Advanced",
+      "LTE-Advanced Pro",
+      "5G standalone only",
+      "Wi-Fi 6E"
+    ],
+    "correct": 0,
+    "why": "The lecture states that LTE-M was introduced in 4G/LTE-Advanced."
+  },
+  {
+    "q": "Which LTE-M machine-type application example has high uplink traffic and no mobility?",
+    "options": [
+      "Cameras",
+      "Fleet tracking",
+      "Meter reading",
+      "Smart parking sensor"
+    ],
+    "correct": 0,
+    "why": "The LTE-M slide lists cameras as high UL traffic with no mobility."
+  },
+  {
+    "q": "Which LTE-M machine-type application example has low traffic and high mobility?",
+    "options": [
+      "Fleet tracking",
+      "Cameras",
+      "Meter reading",
+      "Gaming consoles"
+    ],
+    "correct": 0,
+    "why": "The lecture lists fleet tracking as low traffic with high mobility."
+  },
+  {
+    "q": "Which LTE-M machine-type application example has very low traffic and no mobility?",
+    "options": [
+      "Meter reading",
+      "Fleet tracking",
+      "Video surveillance",
+      "Gaming devices"
+    ],
+    "correct": 0,
+    "why": "The lecture lists meter reading as very low traffic with no mobility."
+  },
+  {
+    "q": "What is one LTE-M design goal for devices with infrequent data transfer?",
+    "options": [
+      "Reduce signaling overhead",
+      "Increase video frame rate",
+      "Replace OFDMA with Wi-Fi",
+      "Eliminate all idle periods"
+    ],
+    "correct": 0,
+    "why": "The LTE-M slide explicitly mentions signaling overhead reduction for devices with infrequent data transfer."
+  },
+  {
+    "q": "In LTE-M, expected UE behavior is communicated to which network element?",
+    "options": [
+      "eNB",
+      "SCEF",
+      "S-GW",
+      "AP"
+    ],
+    "correct": 0,
+    "why": "The lecture states that expected UE behavior is communicated to the eNB (evolved Node B)."
+  },
+  {
+    "q": "Why is power optimization emphasized for LTE-M metering devices?",
+    "options": [
+      "Meters may use batteries and may need to sleep for a long time",
+      "Meters need ultra-high video throughput",
+      "Meters require continuous handoff",
+      "Meters transmit only through Wi-Fi"
+    ],
+    "correct": 0,
+    "why": "The LTE-M slide notes that meters may be battery-powered and that power saving mode lets them sleep for a long time."
+  },
+  {
+    "q": "NB-IoT was introduced in which standard family?",
+    "options": [
+      "LTE-Advanced Pro",
+      "LTE-Advanced",
+      "Wi-Fi 7",
+      "Bluetooth LE"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Narrowband IoT was introduced in LTE-Advanced Pro."
+  },
+  {
+    "q": "Which organization initiated NB-IoT standardization according to the lecture?",
+    "options": [
+      "3GPP",
+      "IETF",
+      "IEEE",
+      "Wi-Fi Alliance"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT is an initiative by 3GPP."
+  },
+  {
+    "q": "NB-IoT primarily addresses the needs of what type of devices?",
+    "options": [
+      "Very low data rate, long-range, often low-power devices",
+      "High-frame-rate video devices",
+      "Desktop computers on Ethernet",
+      "Only smartphones with full mobility"
+    ],
+    "correct": 0,
+    "why": "The lecture says NB-IoT targets very low data rate devices that need mobile-network connectivity, often with long range and low power."
+  },
+  {
+    "q": "As a cellular standard, what is one major goal of NB-IoT standardization?",
+    "options": [
+      "Interoperable and more reliable IoT devices",
+      "Eliminate licensed spectrum",
+      "Replace all LTE towers with Wi-Fi access points",
+      "Carry only voice traffic"
+    ],
+    "correct": 0,
+    "why": "The lecture states that as a cellular standard, the goal is to standardize IoT devices to be interoperable and more reliable."
+  },
+  {
+    "q": "NB-IoT is described in the lecture as what kind of wireless technology?",
+    "options": [
+      "A cellular-grade wireless technology using OFDMA",
+      "A short-range infrared standard",
+      "A Bluetooth mesh profile",
+      "A wired fieldbus protocol"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly describes NB-IoT as a cellular-grade wireless technology that uses OFDMA."
+  },
+  {
+    "q": "Compared with simpler LPWAN radio chips, NB-IoT chips are described as what?",
+    "options": [
+      "More complex, with better link budgets",
+      "Cheaper and simpler with worse coverage",
+      "Only usable in unlicensed spectrum",
+      "Unable to support indoor deployment"
+    ],
+    "correct": 0,
+    "why": "The lecture says NB-IoT chips are more complex, increasing cost and power, but offering better link budgets."
+  },
+  {
+    "q": "NB-IoT targets simpler devices that connect to an operator network via what kind of spectrum?",
+    "options": [
+      "Licensed spectrum",
+      "Only unlicensed spectrum",
+      "Infrared spectrum",
+      "Satellite-only spectrum"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT targets simpler devices that connect via licensed spectrum."
+  },
+  {
+    "q": "What mobility limitation is explicitly stated for NB-IoT devices?",
+    "options": [
+      "They cannot move while having an active connection",
+      "They support seamless high-speed roaming like smartphones",
+      "They must always connect through Wi-Fi when moving",
+      "They are limited to indoor-only movement"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT devices cannot move while they have an active connection; they must disconnect, move, and reconnect."
+  },
+  {
+    "q": "Which uplink/downlink design does NB-IoT reuse from LTE according to the lecture?",
+    "options": [
+      "DL: OFDMA, UL: SC-FDMA",
+      "DL: TDMA, UL: FDMA",
+      "DL: CDMA, UL: CSMA",
+      "DL: Ethernet, UL: OFDMA"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT uses LTE design extensively, specifically DL OFDMA and UL SC-FDMA."
+  },
+  {
+    "q": "What channel width is associated with NB-IoT in the lecture?",
+    "options": [
+      "180 kHz",
+      "15 kHz",
+      "1.8 MHz",
+      "20 MHz"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT supports a 180 kHz narrowband channel."
+  },
+  {
+    "q": "What maximum coupling loss or link budget is highlighted for NB-IoT standalone coverage?",
+    "options": [
+      "164 dB",
+      "144 dB",
+      "142.7 dB",
+      "128 dB"
+    ],
+    "correct": 0,
+    "why": "The lecture states extended coverage of 164 dB maximum coupling loss or link budget for NB-IoT standalone."
+  },
+  {
+    "q": "What receiver sensitivity value is highlighted on the NB-IoT slide?",
+    "options": [
+      "-141 dBm",
+      "-41 dBm",
+      "-164 dBm",
+      "-20 dBm"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly lists low receiver sensitivity as -141 dBm."
+  },
+  {
+    "q": "What battery-life figure is highlighted for NB-IoT, depending on traffic and coverage needs?",
+    "options": [
+      "10 years with a 5 Wh battery",
+      "1 year with a 50 Wh battery",
+      "20 years with a coin cell only",
+      "6 months with a 5 Wh battery"
+    ],
+    "correct": 0,
+    "why": "The lecture states a long battery life of 10 years with a 5-Watt Hour battery, depending on traffic and coverage needs."
+  },
+  {
+    "q": "How many devices per cell does the lecture say NB-IoT can support at least?",
+    "options": [
+      "50,000",
+      "5,000",
+      "500",
+      "500,000"
+    ],
+    "correct": 0,
+    "why": "The lecture states support for at least 50,000 devices per cell."
+  },
+  {
+    "q": "What does Power Save Mode (PSM) help NB-IoT devices do?",
+    "options": [
+      "Extend tracking-area update intervals to several days",
+      "Increase data rate to video levels",
+      "Enable handoff while maintaining an active connection",
+      "Replace licensed spectrum with unlicensed spectrum"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT devices can extend tracking-area update timers to several days using Power Save Mode."
+  },
+  {
+    "q": "In idle state, how often do normal LTE devices listen to paging according to the lecture?",
+    "options": [
+      "Every 1.28 seconds",
+      "Every 20.48 seconds",
+      "Every 175 minutes",
+      "Every 0.5 ms"
+    ],
+    "correct": 0,
+    "why": "The eDRX slide states that normal LTE devices listen to paging every 1.28 seconds in idle state."
+  },
+  {
+    "q": "NB-IoT devices can request eDRX extension to what range if the network accepts?",
+    "options": [
+      "20.48 seconds to 175 minutes",
+      "1.28 seconds to 5 seconds",
+      "175 seconds to 20.48 minutes",
+      "0.5 ms to 15 ms"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT devices can extend paging intervals to 20.48 seconds up to 175 minutes."
+  },
+  {
+    "q": "If the network accepts eDRX, what can the device do during that long period?",
+    "options": [
+      "Power off for that duration without losing its state, including IP address",
+      "Roam between towers without reconnecting",
+      "Transmit video continuously",
+      "Act as a base station for other devices"
+    ],
+    "correct": 0,
+    "why": "The lecture states that with accepted eDRX, the device can power off for that long without losing its state, including its IP address."
+  },
+  {
+    "q": "What traffic pattern is NB-IoT mainly intended for?",
+    "options": [
+      "Small amounts of data, such as tens or hundreds of bytes per day",
+      "Continuous high-definition video streaming",
+      "High-speed gaming traffic",
+      "Heavy bulk file transfers"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT is meant to send and receive small amounts of data, typically tens or hundreds of bytes per day."
+  },
+  {
+    "q": "Compared with Sigfox and LoRa, how is NB-IoT described?",
+    "options": [
+      "Message-based but with a much faster modulation rate that can handle more data",
+      "Always lower data rate and shorter range",
+      "Only usable indoors",
+      "Not suitable for operator networks"
+    ],
+    "correct": 0,
+    "why": "The lecture says NB-IoT is message-based like Sigfox and LoRa, but with a much faster modulation rate that can handle more data."
+  },
+  {
+    "q": "Is NB-IoT an IP-based communication protocol like LTE-M?",
+    "options": [
+      "No",
+      "Yes, always",
+      "Only in guard-band mode",
+      "Only when using QPSK"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that NB-IoT is not an IP-based communication protocol like LTE-M."
+  },
+  {
+    "q": "What does NIDD stand for in the NB-IoT context?",
+    "options": [
+      "Non-IP Data Delivery",
+      "Networked IP Data Distribution",
+      "New Integrated Device Discovery",
+      "Narrowband Inter-Domain Dispatch"
+    ],
+    "correct": 0,
+    "why": "The lecture expands NIDD as Non-IP Data Delivery."
+  },
+  {
+    "q": "Which network element interfaces NIDD with IoT application services by encapsulating and decapsulating data?",
+    "options": [
+      "SCEF",
+      "eNB",
+      "AP",
+      "DNS"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Service Capability Exposure Function (SCEF) handles encapsulation/decapsulation for NIDD."
+  },
+  {
+    "q": "Why is NIDD particularly suitable for NB-IoT?",
+    "options": [
+      "It eliminates IP overhead for small data packets",
+      "It enables direct device-to-device communication without a network",
+      "It is optimized for high-bandwidth video",
+      "It removes the need for modulation"
+    ],
+    "correct": 0,
+    "why": "The lecture describes NIDD as a non-IP mechanism, which avoids IP-header overhead and suits small NB-IoT payloads."
+  },
+  {
+    "q": "What is required if you want NB-IoT traffic to reach an IP network?",
+    "options": [
+      "IP tunneling",
+      "Bluetooth pairing",
+      "A guard band",
+      "An infrared bridge"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT requires IP tunneling for IP-network usage."
+  },
+  {
+    "q": "Compared with LTE-M, NB-IoT is described as more power efficient but designed for what kind of communication?",
+    "options": [
+      "More infrequent communication",
+      "Continuous high-rate communication",
+      "Low-latency gaming",
+      "Only peer-to-peer communication"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT is more power efficient than LTE-M but designed for more infrequent communication purposes."
+  },
+  {
+    "q": "What data rate and bandwidth pairing is given for NB-IoT frequency-band discussion?",
+    "options": [
+      "128 kbps using a 180 kHz band",
+      "1 Mbps using a 20 MHz band",
+      "54 Mbps using a 22 MHz band",
+      "600 kbps using a 1.4 MHz band"
+    ],
+    "correct": 0,
+    "why": "The lecture states 128 kbps using a 180 kHz band."
+  },
+  {
+    "q": "In the NB-IoT frequency-band slide, one 180 kHz band corresponds to what?",
+    "options": [
+      "A single PRB of 12 subcarriers (12 tones)",
+      "12 PRBs of one subcarrier each",
+      "One 20 MHz Wi-Fi channel",
+      "One TDMA frame only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a 180 kHz NB-IoT band corresponds to a single PRB of 12 subcarriers."
+  },
+  {
+    "q": "Which of the following is a valid NB-IoT deployment mode?",
+    "options": [
+      "Stand-alone",
+      "Out-band",
+      "Side-band only",
+      "Ad-hoc mode"
+    ],
+    "correct": 0,
+    "why": "The lecture lists stand-alone, guard-band, and in-band as the three modes of operation."
+  },
+  {
+    "q": "Which option is NOT a lecture-listed NB-IoT deployment mode?",
+    "options": [
+      "Out-band",
+      "Guard band",
+      "Stand-alone",
+      "In-band"
+    ],
+    "correct": 0,
+    "why": "The lecture lists only stand-alone, guard-band, and in-band."
+  },
+  {
+    "q": "In NB-IoT deployment, what does guard-band mode use?",
+    "options": [
+      "Unused resource blocks within an LTE carrier’s guard band",
+      "Only a completely separate GSM carrier",
+      "Only Wi-Fi spectrum",
+      "Only indoor microcells"
+    ],
+    "correct": 0,
+    "why": "The lecture defines guard-band deployment as using unused resource blocks within an LTE carrier’s guard band."
+  },
+  {
+    "q": "In NB-IoT deployment, what does in-band mode use?",
+    "options": [
+      "Resource blocks within a normal LTE carrier",
+      "A stand-alone GSM carrier only",
+      "Bluetooth LE advertising channels",
+      "Infrared wavelengths"
+    ],
+    "correct": 0,
+    "why": "The lecture defines in-band deployment as using resource blocks within a normal LTE carrier."
+  },
+  {
+    "q": "In NB-IoT deployment, what does stand-alone mode use?",
+    "options": [
+      "A stand-alone carrier, such as spectrum previously used by GERAN/GSM",
+      "Only LTE guard-band blocks",
+      "Unlicensed 2.4 GHz ISM spectrum",
+      "A private LoRa gateway"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that stand-alone mode can use a stand-alone carrier, for example spectrum previously used by GERAN/GSM systems."
+  },
+  {
+    "q": "According to the lecture, all three NB-IoT deployment modes are what to non-NB-IoT devices?",
+    "options": [
+      "Invisible",
+      "Mandatory",
+      "Identical to Wi-Fi",
+      "Limited to uplink only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that all three deployment modes are invisible to non-NB-IoT devices."
+  },
+  {
+    "q": "Which application is best suited for NB-IoT according to the practice item and lecture direction?",
+    "options": [
+      "Smart metering in rural areas",
+      "Real-time video streaming",
+      "Wearable fitness trackers needing high mobility",
+      "High-speed asset tracking"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes small, infrequent traffic, long battery life, strong coverage, and static or low-mobility assets, which fit smart metering well."
+  },
+  {
+    "q": "Which statement best matches NB-IoT indoor/urban coverage as described in the lecture?",
+    "options": [
+      "It works well indoors and in dense urban areas",
+      "It is unsuitable for indoor placement",
+      "It only works in rural line-of-sight conditions",
+      "It needs unlicensed spectrum indoors"
+    ],
+    "correct": 0,
+    "why": "The advantages slide states that NB-IoT devices rely on 4G coverage and work well indoors and in dense urban areas."
+  },
+  {
+    "q": "Which pair of advantages is directly stated for NB-IoT?",
+    "options": [
+      "Wide coverage and low power consumption",
+      "High data rate and ultra-low latency",
+      "Free unlicensed spectrum and seamless handoff",
+      "Massive video throughput and no signaling"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT has very good coverage and consumes minimal power when operating."
+  },
+  {
+    "q": "Compared with LoRa, what advantage is specifically mentioned for NB-IoT?",
+    "options": [
+      "Faster response times and better quality of service",
+      "Lower infrastructure complexity with no operator",
+      "Unlicensed-band operation by default",
+      "Built-in firmware-over-the-air for large files"
+    ],
+    "correct": 0,
+    "why": "The advantages slide says NB-IoT has faster response times than LoRa and can guarantee better QoS."
+  },
+  {
+    "q": "Compared with LTE-M, what penetration advantage is mentioned for NB-IoT?",
+    "options": [
+      "Deeper building penetration",
+      "Higher mobility support",
+      "Always-IP operation",
+      "Higher video bitrate"
+    ],
+    "correct": 0,
+    "why": "The lecture states that NB-IoT provides deeper building penetration than LTE-M."
+  },
+  {
+    "q": "Which is a disadvantage of NB-IoT according to the lecture?",
+    "options": [
+      "Firmware-over-the-air and file transfers are difficult",
+      "It cannot support licensed spectrum",
+      "It has no indoor coverage",
+      "It requires every device to move continuously"
+    ],
+    "correct": 0,
+    "why": "The disadvantages slide states that FOTA or file transfers are difficult because sending larger amounts of data down to a device is hard."
+  },
+  {
+    "q": "Why is NB-IoT best suited for primarily static assets?",
+    "options": [
+      "Network and tower handoffs are a problem",
+      "It has no uplink support",
+      "It only works in ad-hoc mode",
+      "It cannot use batteries"
+    ],
+    "correct": 0,
+    "why": "The lecture states that network and tower handoffs are a problem, so NB-IoT suits primarily static assets."
+  },
+  {
+    "q": "Which statement pair is correct based on the lecture?<pre class=\"code-block\">A: Any mobile connected to a 4G network can move while retaining an active connection.\nB: NB-IoT devices can also move while maintaining an active connection.</pre>",
+    "options": [
+      "A is true, B is false",
+      "A is false, B is true",
+      "Both are true",
+      "Both are false"
+    ],
+    "correct": 0,
+    "why": "Regular 4G mobility is supported, but the lecture states NB-IoT devices cannot move while having an active connection."
+  },
+  {
+    "q": "Which statement pair is correct based on the lecture?<pre class=\"code-block\">A: NB-IoT is unsuitable indoors because coverage is insufficient.\nB: NB-IoT devices rely on LTE/4G coverage and can work well indoors.</pre>",
+    "options": [
+      "B is true, A is false",
+      "A is true, B is false",
+      "Both are true",
+      "Both are false"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that NB-IoT works well indoors and in dense urban areas due to its coverage properties."
+  },
+  {
+    "q": "Which statement pair is correct based on the lecture?<pre class=\"code-block\">A: NB-IoT uses licensed or unlicensed spectrum depending on availability.\nB: NB-IoT devices can use long sleep periods through features like PSM/eDRX.</pre>",
+    "options": [
+      "B is true, A is false",
+      "A is true, B is false",
+      "Both are true",
+      "Both are false"
+    ],
+    "correct": 0,
+    "why": "The lecture says NB-IoT targets licensed spectrum, and it also highlights long sleep behavior using PSM and eDRX."
+  },
+  {
+    "q": "Which feature most directly allows devices to “sleep” for extended periods to reduce power consumption?",
+    "options": [
+      "PSM",
+      "VoLTE",
+      "NAT",
+      "RTS/CTS"
+    ],
+    "correct": 0,
+    "why": "The lecture highlights Power Save Mode as the feature that lets NB-IoT devices extend update intervals and sleep for long periods."
+  },
+  {
+    "q": "If QPSK is used as the modulation scheme, how many bits are conveyed by one symbol?",
+    "options": [
+      "2",
+      "1",
+      "3",
+      "4"
+    ],
+    "correct": 0,
+    "why": "In QPSK, one symbol corresponds to two bits."
+  },
+  {
+    "q": "Using the lecture’s link-budget relationship, what minimum transmit power is required for a link budget of 170 dB and receiver sensitivity of -150 dBm?",
+    "options": [
+      "20 dBm",
+      "170 dBm",
+      "-20 dBm",
+      "320 dBm"
+    ],
+    "correct": 0,
+    "why": "Link budget ≈ Tx power − Rx power. So 170 = Tx − (−150), giving Tx = 20 dBm."
+  },
+  {
+    "q": "The early-stage non-technical problem slide says the 3GPP NB-IoT specification had how many competing variants?",
+    "options": [
+      "Two",
+      "Three",
+      "Four",
+      "None"
+    ],
+    "correct": 0,
+    "why": "The slide states that there were two competing NB-IoT variants in the early stage."
+  },
+  {
+    "q": "Which vendor grouping is contrasted on the early-stage non-technical problem slide?",
+    "options": [
+      "Huawei/Vodafone vs Ericsson/Nokia/Intel",
+      "Apple/Google vs Microsoft/Amazon",
+      "IEEE vs IETF",
+      "Qualcomm vs ARM"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly contrasts Huawei/Vodafone with Ericsson/Nokia/Intel."
+  },
+  {
+    "q": "What characterizes the Ericsson approach in the early-stage NB-IoT slide?",
+    "options": [
+      "A scaled-down, lower-power variant of 4G",
+      "A clean-sheet approach",
+      "A Wi-Fi-derived architecture",
+      "A Bluetooth mesh extension"
+    ],
+    "correct": 0,
+    "why": "The lecture describes Ericsson’s approach as a scaled-down, lower-power variant of 4G."
+  },
+  {
+    "q": "What characterizes the Huawei approach in the early-stage NB-IoT slide?",
+    "options": [
+      "A clean-sheet approach",
+      "A scaled-down 4G-only approach",
+      "A Wi-Fi offload approach",
+      "A satellite-first architecture"
+    ],
+    "correct": 0,
+    "why": "The lecture describes the Huawei approach as a clean-sheet approach."
+  },
+  {
+    "q": "Which 5G-NR service class is described as better mobile phones and hot spots, with high data rates and high user density?",
+    "options": [
+      "eMBB",
+      "URLLC",
+      "mMTC",
+      "NIDD"
+    ],
+    "correct": 0,
+    "why": "The lecture defines eMBB as enhanced mobile broadband for better mobile phones and hot spots with high data rates and user density."
+  },
+  {
+    "q": "Which 5G-NR service class is associated with vehicle-to-vehicle communication, Industrial IoT, and 3D gaming?",
+    "options": [
+      "URLLC",
+      "eMBB",
+      "mMTC",
+      "NB1"
+    ],
+    "correct": 0,
+    "why": "The lecture defines URLLC as ultra-reliable and low-latency communications for vehicle-to-vehicle, Industrial IoT, and 3D gaming."
+  },
+  {
+    "q": "Which 5G-NR service class is associated with a huge number of low-data-rate, low-power IoT devices?",
+    "options": [
+      "mMTC",
+      "eMBB",
+      "URLLC",
+      "SC-FDMA"
+    ],
+    "correct": 0,
+    "why": "The lecture defines mMTC as massive machine-type communications with huge numbers of low-data-rate, low-power devices."
+  },
+  {
+    "q": "According to the lecture, 5G mMTC includes support to which cellular IoT technologies?",
+    "options": [
+      "LTE-M and NB-IoT",
+      "Only GSM and Bluetooth",
+      "Only Wi-Fi HaLow",
+      "Only LoRaWAN and Sigfox"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 5G mMTC includes support to LTE-M and NB-IoT as well."
+  },
+  {
+    "q": "What is network slicing in 5G according to the lecture?",
+    "options": [
+      "Dividing bandwidth and resources so different service areas can be customized on shared infrastructure",
+      "Splitting a PRB into Bluetooth packets",
+      "Replacing modulation with virtualization",
+      "A battery-saving mode for eNBs"
+    ],
+    "correct": 0,
+    "why": "The lecture states that network slicing divides bandwidth and resources across service areas while using the same physical infrastructure."
+  },
+  {
+    "q": "What can each 5G network slice be configured independently for?",
+    "options": [
+      "Security, QoS, and network provisioning",
+      "Only antenna color and tower height",
+      "Only IP addresses",
+      "Only modulation symbols"
+    ],
+    "correct": 0,
+    "why": "The lecture states each slice can be configured independently in terms of security, quality of service, and network provisioning."
+  },
+  {
+    "q": "Which example application is shown in the lecture for NB-IoT in 5G?",
+    "options": [
+      "A smart parking solution",
+      "A VR gaming headset",
+      "A Bluetooth beacon mesh",
+      "An Ethernet-only meter"
+    ],
+    "correct": 0,
+    "why": "One of the final lecture slides is titled “NB-IoT in 5G: A Smart Parking Solution.”"
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

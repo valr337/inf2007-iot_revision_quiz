@@ -1,0 +1,1017 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 6 MCQ Quiz: AIoT, Edge & Cloud Computing</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 6 MCQ Quiz: AIoT, Edge & Cloud Computing</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 6</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What does AIoT stand for in this lecture?",
+    "options": [
+      "Artificial Intelligence of Things",
+      "AI + IoT",
+      "Automated Internet of Telemetry",
+      "Adaptive Industrial Operations Technology"
+    ],
+    "correct": 1,
+    "why": "The lecture summary states AIoT = AI + IoT."
+  },
+  {
+    "q": "According to the lecture, AIoT relies on which computing approach?",
+    "options": [
+      "Edge computing",
+      "Batch mainframe computing",
+      "Only cloud data centres",
+      "Manual offline processing"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says AIoT relies on edge computing."
+  },
+  {
+    "q": "Which is given as an example AIoT application in the lecture?",
+    "options": [
+      "Crowd counting",
+      "Word processing",
+      "Spreadsheet formatting",
+      "Local printer spooling"
+    ],
+    "correct": 0,
+    "why": "The AIoT slide shows examples such as crowd counting, object localization/classification, and license plate recognition."
+  },
+  {
+    "q": "What is one key reason edge computing is needed in IoT?",
+    "options": [
+      "IoT devices generate massive amounts of data",
+      "Edge devices remove the need for networking",
+      "Cloud platforms cannot store sensor data",
+      "AI cannot run on embedded hardware"
+    ],
+    "correct": 0,
+    "why": "The lecture motivates edge computing using massive IoT data growth."
+  },
+  {
+    "q": "The lecture cites an IDC estimate of how many connected IoT devices in 2025?",
+    "options": [
+      "4.16 billion",
+      "41.6 billion",
+      "79.4 billion",
+      "416 billion"
+    ],
+    "correct": 1,
+    "why": "The slide states 41.6 billion connected IoT devices in 2025."
+  },
+  {
+    "q": "The lecture cites an IDC estimate of how much IoT data in 2025?",
+    "options": [
+      "7.94 zettabytes",
+      "79.4 zettabytes",
+      "794 petabytes",
+      "41.6 zettabytes"
+    ],
+    "correct": 1,
+    "why": "The slide states 79.4 zettabytes of data in 2025."
+  },
+  {
+    "q": "Which of the following is listed as a communication bottleneck in IoT?",
+    "options": [
+      "Bandwidth limits and the cost of raw telemetry",
+      "Too much local GPU memory",
+      "Unlimited wireless reliability",
+      "Too few sensors connected to the system"
+    ],
+    "correct": 0,
+    "why": "The slide lists bandwidth limits and the cost of raw telemetry as bottlenecks."
+  },
+  {
+    "q": "Which type of task is explicitly described as latency-sensitive?",
+    "options": [
+      "Camera detection",
+      "Daily firmware packaging",
+      "Monthly billing reconciliation",
+      "Archiving inactive user accounts"
+    ],
+    "correct": 0,
+    "why": "The lecture uses camera detection as an example of a latency-sensitive task."
+  },
+  {
+    "q": "Which is NOT listed as a benefit of edge computing in the lecture?",
+    "options": [
+      "Reduces bandwidth consumption",
+      "Reduces latency",
+      "Reduces storage requirements",
+      "Eliminates all security risks"
+    ],
+    "correct": 3,
+    "why": "The lecture lists reduced bandwidth consumption, latency, and storage requirements, but not elimination of all security risks."
+  },
+  {
+    "q": "What does transmission delay mean?",
+    "options": [
+      "Time to push all the packet's bits onto the link",
+      "Time for a router to process the packet header",
+      "Time spent waiting in router queues",
+      "Time spent training a neural network"
+    ],
+    "correct": 0,
+    "why": "The lecture defines transmission delay as the time to push all the packet's bits onto the link."
+  },
+  {
+    "q": "What does queuing delay mean?",
+    "options": [
+      "Time spent waiting in router queues",
+      "Time to push bits onto the link",
+      "Time to execute a GPU kernel",
+      "Time to fetch a model from flash storage"
+    ],
+    "correct": 0,
+    "why": "The lecture defines queuing delay as time spent waiting in router queues."
+  },
+  {
+    "q": "What does processing delay mean in the lecture's latency breakdown?",
+    "options": [
+      "Time for a router to process the packet header",
+      "Time for a user to read a dashboard",
+      "Time spent waiting in the application event loop",
+      "Time to encode a video frame on the cloud"
+    ],
+    "correct": 0,
+    "why": "The slide defines processing delay as the time for a router to process the packet header."
+  },
+  {
+    "q": "Which of the following is part of application processing latency?",
+    "options": [
+      "Running inference on an edge GPU",
+      "ARP address resolution only",
+      "TCP checksum validation in a switch only",
+      "DNS cache expiry"
+    ],
+    "correct": 0,
+    "why": "The slide lists running inference on an edge GPU as a component of application processing latency."
+  },
+  {
+    "q": "Communications latency is described in the lecture as being about which two concerns?",
+    "options": [
+      "Reliability and jitter",
+      "Battery life and storage",
+      "Throughput and encryption",
+      "Compression and indexing"
+    ],
+    "correct": 0,
+    "why": "The slide says communications latency is about reliability and jitter."
+  },
+  {
+    "q": "Which pipeline stage appears in the illegal parking detection example?",
+    "options": [
+      "Background modelling and foreground detection",
+      "Optical character layout printing",
+      "Database schema migration",
+      "Satellite orbit correction"
+    ],
+    "correct": 0,
+    "why": "The pipeline includes pre-processing, background modelling & foreground detection, vehicle localization & tracking, classification, and evidence collection."
+  },
+  {
+    "q": "Which stage is shown after classification in the illegal parking pipeline?",
+    "options": [
+      "Evidence collection",
+      "Protocol optimisation",
+      "Packet retransmission",
+      "Cloud billing"
+    ],
+    "correct": 0,
+    "why": "The diagram shows evidence collection after classification."
+  },
+  {
+    "q": "In the mapping slide, which stage is the most computationally expensive on one A15 core?",
+    "options": [
+      "Classification",
+      "Preprocessing",
+      "Background modelling",
+      "Evidence collection"
+    ],
+    "correct": 0,
+    "why": "Classification is shown as 500 ms on one A15, much higher than the other stages."
+  },
+  {
+    "q": "What throughput target is shown above the illegal parking pipeline?",
+    "options": [
+      "1 FPS",
+      "5 FPS",
+      "15 FPS",
+      "60 FPS"
+    ],
+    "correct": 2,
+    "why": "The diagram shows 15 FPS, corresponding to roughly 66 ms per frame."
+  },
+  {
+    "q": "Which board is shown as an SBC-centric edge device?",
+    "options": [
+      "Raspberry Pi 4",
+      "AWS Snowmobile",
+      "Arduino Uno only",
+      "Cisco Catalyst switch"
+    ],
+    "correct": 0,
+    "why": "The SBC-centric slide shows the Raspberry Pi 4 and an Odroid N2+ example."
+  },
+  {
+    "q": "What wireless feature is listed in the Raspberry Pi 4 specifications on the slide?",
+    "options": [
+      "2.4 GHz and 5.0 GHz IEEE 802.11ac wireless",
+      "Only 60 GHz WiGig",
+      "LTE Category M1 built in",
+      "LoRaWAN Class C radio built in"
+    ],
+    "correct": 0,
+    "why": "The Raspberry Pi 4 spec list includes 2.4 GHz and 5.0 GHz IEEE 802.11ac wireless."
+  },
+  {
+    "q": "Which family is used in the lecture as a GPU-centric edge device example?",
+    "options": [
+      "NVIDIA Jetson",
+      "TP-Link Deco",
+      "ESP8266 NodeMCU",
+      "Intel Edison only"
+    ],
+    "correct": 0,
+    "why": "The lecture compares several NVIDIA Jetson modules as GPU-centric edge devices."
+  },
+  {
+    "q": "According to the updated Jetson slide, which module reaches up to 275 TOPS?",
+    "options": [
+      "Jetson Orin Nano 4GB",
+      "Jetson Orin NX 8GB",
+      "Jetson AGX Orin 64GB",
+      "Jetson Nano"
+    ],
+    "correct": 2,
+    "why": "The updated comparison table lists Jetson AGX Orin 64GB at up to 275 TOPS."
+  },
+  {
+    "q": "Which statement about the AMD-based MiniPC slide is correct?",
+    "options": [
+      "Ryzen AI Max+ 395 is shown as the highest overall performance option",
+      "All AMD options have exactly the same AI TOPS",
+      "Ryzen 8040 has no GPU listed",
+      "MiniPC-centric edge devices cannot be used for AI"
+    ],
+    "correct": 0,
+    "why": "The notes column describes Ryzen AI Max+ 395 as the highest overall performance option."
+  },
+  {
+    "q": "Which model family is listed under lightweight CNNs in the edge AI ecosystem slide?",
+    "options": [
+      "MobileNetV3/V4",
+      "ResNet-152 only",
+      "BERT-Large",
+      "AlexNet only"
+    ],
+    "correct": 0,
+    "why": "The slide lists EfficientNet-Lite, MobileNetV3/V4, and EdgeNeXt under lightweight CNNs."
+  },
+  {
+    "q": "Which model family is listed as a real-time object detector?",
+    "options": [
+      "YOLO family",
+      "Word2Vec family",
+      "WaveNet family",
+      "LSTM family"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly lists the YOLO family under real-time object detectors."
+  },
+  {
+    "q": "Which framework is described as mainstream for training?",
+    "options": [
+      "PyTorch",
+      "SQLite",
+      "Redis",
+      "RabbitMQ"
+    ],
+    "correct": 0,
+    "why": "The edge AI ecosystem slide says PyTorch is mainstream for training."
+  },
+  {
+    "q": "Why is ONNX described as important in the lecture?",
+    "options": [
+      "It is critical for compatibility",
+      "It replaces all hardware accelerators",
+      "It removes the need for model optimisation",
+      "It is only for database indexing"
+    ],
+    "correct": 0,
+    "why": "The slide states ONNX is critical for compatibility."
+  },
+  {
+    "q": "Which of the following is listed as an inference engine or inference stack option?",
+    "options": [
+      "TensorRT",
+      "Git",
+      "Nginx",
+      "Postman"
+    ],
+    "correct": 0,
+    "why": "TensorRT is listed under inference engines."
+  },
+  {
+    "q": "Which item is listed as an edge deployment tool?",
+    "options": [
+      "TFLite Converter",
+      "Photoshop",
+      "Docker Swarm only",
+      "LibreOffice Calc"
+    ],
+    "correct": 0,
+    "why": "The deployment tools listed include DeepStreamEdge, TPU Compiler, TFLite Converter, and the OpenVINO suite."
+  },
+  {
+    "q": "Which CPU-side optimisation/library item is listed on the ecosystem slide?",
+    "options": [
+      "OpenMP and NEON",
+      "DirectX and Vulkan only",
+      "Servlets and JSP",
+      "SPARC VIS and FORTRAN IV"
+    ],
+    "correct": 0,
+    "why": "The slide lists OpenMP and NEON under multi-core CPU."
+  },
+  {
+    "q": "Which GPU-side library group is listed for NVIDIA?",
+    "options": [
+      "cuDNN, cuBLAS, cuFFT",
+      "gprof, Valgrind, perf",
+      "OpenMP, NEON, Zephyr",
+      "LLVM, GCC, TVM"
+    ],
+    "correct": 0,
+    "why": "The hardware programming languages section lists cuDNN, cuBLAS, and cuFFT for NVIDIA GPUs."
+  },
+  {
+    "q": "Which NPU or accelerator is listed in the hardware section?",
+    "options": [
+      "Apple Neural Engine",
+      "Apache Kafka",
+      "OpenSSH",
+      "SQLite WAL"
+    ],
+    "correct": 0,
+    "why": "The hardware section lists Apple Neural Engine, Hailo, and Google TPU 2.0 as NPUs/accelerators."
+  },
+  {
+    "q": "What deployment challenge is explicitly highlighted for real-world edge systems?",
+    "options": [
+      "Waterproofing and thermal requirements can conflict",
+      "Edge devices never overheat outdoors",
+      "Power is always unlimited at the edge",
+      "Outdoor deployments do not require enclosures"
+    ],
+    "correct": 0,
+    "why": "The lecture says waterproofing and thermal requirements are conflicting requirements."
+  },
+  {
+    "q": "According to the lecture, the temperature inside the box can rise above what value during daytime without ventilation?",
+    "options": [
+      "35°C",
+      "45°C",
+      "65°C",
+      "105°C"
+    ],
+    "correct": 2,
+    "why": "The slide states the temperature inside the box can rise over 65°C during daytime without ventilation."
+  },
+  {
+    "q": "According to the lecture, CPU temperature can easily rise to about what value during daytime?",
+    "options": [
+      "55°C",
+      "65°C",
+      "75°C",
+      "85°C"
+    ],
+    "correct": 3,
+    "why": "The lecture says CPU temperature can easily rise to 85°C during daytime."
+  },
+  {
+    "q": "Model-centric optimisation mainly focuses on what?",
+    "options": [
+      "Neural network architecture and parameters",
+      "Billing dashboards and SLAs",
+      "Only wireless channel allocation",
+      "Database sharding across regions"
+    ],
+    "correct": 0,
+    "why": "The comparison table says model-centric optimisation focuses on neural network architecture and parameters."
+  },
+  {
+    "q": "System-level optimisation mainly focuses on what?",
+    "options": [
+      "Hardware, OS, memory, and data movement",
+      "Only image labelling quality",
+      "Marketing analytics",
+      "Human interface design only"
+    ],
+    "correct": 0,
+    "why": "The table says system-level optimisation focuses on hardware, OS, memory, and data movement."
+  },
+  {
+    "q": "Which of the following is listed as a model-centric optimisation technique?",
+    "options": [
+      "Quantization",
+      "Ticket routing",
+      "DNS prefetching",
+      "HTTP caching headers"
+    ],
+    "correct": 0,
+    "why": "The lecture lists pruning, quantization, knowledge distillation, and NAS as model-centric techniques."
+  },
+  {
+    "q": "Which of the following is listed as a system-level optimisation technique?",
+    "options": [
+      "I/O optimization",
+      "Token stemming",
+      "GUI theming",
+      "SQL normalization only"
+    ],
+    "correct": 0,
+    "why": "The lecture lists I/O optimization, memory management, and scheduling as system-level techniques."
+  },
+  {
+    "q": "Which sequence matches the deployment optimisation process in the lecture?",
+    "options": [
+      "Profiling → Analysing → Scheduling → Optimisation",
+      "Design → Packaging → Billing → Archiving",
+      "Authentication → Encryption → Compression → Shutdown",
+      "Cloud upload → Delete → Retry → Reboot"
+    ],
+    "correct": 0,
+    "why": "The slide presents the process as profiling, analysing, scheduling, and optimisation."
+  },
+  {
+    "q": "What is the benefit of advanced profiling according to the lecture?",
+    "options": [
+      "It identifies bottlenecks and guides optimisations",
+      "It guarantees zero latency",
+      "It replaces the need for scheduling",
+      "It removes the need for testing"
+    ],
+    "correct": 0,
+    "why": "The deployment optimisation table says advanced profiling identifies bottlenecks and guides optimisations."
+  },
+  {
+    "q": "Which tool is listed for layer-wise execution time and memory usage?",
+    "options": [
+      "TensorBoard Profiler",
+      "Photoshop Profiler",
+      "Nmap",
+      "Grafana Loki"
+    ],
+    "correct": 0,
+    "why": "TensorBoard Profiler is listed for layer-wise execution time and memory usage."
+  },
+  {
+    "q": "Which tool is listed for GPU-specific profiling for CUDA operations?",
+    "options": [
+      "NVIDIA Nsight Systems",
+      "tcpdump",
+      "Wireshark",
+      "SQLite Analyzer"
+    ],
+    "correct": 0,
+    "why": "The lecture lists NVIDIA Nsight Systems for GPU-specific profiling for CUDA operations."
+  },
+  {
+    "q": "Which tool is listed for cache performance analysis?",
+    "options": [
+      "Valgrind's Cachegrind",
+      "Prometheus",
+      "TensorRT",
+      "Scapy"
+    ],
+    "correct": 0,
+    "why": "Memory analysis on the slide includes Valgrind's Cachegrind."
+  },
+  {
+    "q": "Which tool is listed for power profiling on ARM devices?",
+    "options": [
+      "ARM Energy Probe",
+      "NVIDIA Visual Profiler",
+      "OpenVINO suite",
+      "TVM Runtime"
+    ],
+    "correct": 0,
+    "why": "The power profiling row lists ARM Energy Probe."
+  },
+  {
+    "q": "Which Linux command-line tool is explicitly shown for low-level system metrics?",
+    "options": [
+      "perf",
+      "ping",
+      "traceroute",
+      "top"
+    ],
+    "correct": 0,
+    "why": "The lecture shows perf for cycles, instructions, cache misses, and branch mispredictions."
+  },
+  {
+    "q": "Which tools are listed for network profiling?",
+    "options": [
+      "tcpdump and Wireshark",
+      "Git and Make",
+      "Docker and Kubernetes",
+      "OpenSSL and curl"
+    ],
+    "correct": 0,
+    "why": "The network profiling row lists tcpdump and Wireshark."
+  },
+  {
+    "q": "What optimisation approach is suggested for CPU/GPU utilisation bottlenecks?",
+    "options": [
+      "Load balancing between CPU and GPU",
+      "Increasing packet TTL",
+      "Turning off all sensors",
+      "Replacing JSON with XML only"
+    ],
+    "correct": 0,
+    "why": "The lecture recommends load balancing between CPU and GPU and using heterogeneous computing such as NPUs."
+  },
+  {
+    "q": "What optimisation approach is suggested for memory and I/O bottlenecks?",
+    "options": [
+      "Memory pooling and layer fusion",
+      "Only adding more screen brightness",
+      "Removing all buffering",
+      "Disabling storage"
+    ],
+    "correct": 0,
+    "why": "The slide suggests memory pooling, layer fusion, and optimizing data access patterns."
+  },
+  {
+    "q": "Which runtime is mentioned under OS-level bottlenecks for real-time constraints?",
+    "options": [
+      "Zephyr RTOS",
+      "Hibernate ORM",
+      "Apache Spark",
+      "PostgreSQL"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Zephyr RTOS for real-time constraints."
+  },
+  {
+    "q": "What is the goal of dynamic task scheduling?",
+    "options": [
+      "Assign tasks to CPU, GPU, or NPU based on resource availability",
+      "Assign IP addresses to Wi-Fi clients",
+      "Choose cloud billing plans",
+      "Format camera frames for storage only"
+    ],
+    "correct": 0,
+    "why": "The scheduling table defines dynamic task scheduling this way."
+  },
+  {
+    "q": "Which scheduling idea is explicitly listed under dynamic task scheduling?",
+    "options": [
+      "Work stealing",
+      "Round-robin DNS only",
+      "Bloom filtering",
+      "ACID transactions"
+    ],
+    "correct": 0,
+    "why": "The slide lists work stealing algorithms and priority-based scheduling."
+  },
+  {
+    "q": "What does adaptive model partitioning do?",
+    "options": [
+      "Splits model execution across multiple devices such as edge and cloud",
+      "Splits SSDs into multiple partitions",
+      "Splits IP packets into VLANs",
+      "Splits a battery into two cells"
+    ],
+    "correct": 0,
+    "why": "The lecture defines adaptive model partitioning as splitting model execution across devices."
+  },
+  {
+    "q": "What does adaptive resource allocation do?",
+    "options": [
+      "Dynamically allocates CPU or memory based on system load and task needs",
+      "Fixes resources permanently at boot time",
+      "Disables all background tasks permanently",
+      "Only allocates storage, not compute"
+    ],
+    "correct": 0,
+    "why": "The lecture says adaptive resource allocation dynamically assigns resources based on current load and requirements."
+  },
+  {
+    "q": "Which advanced optimisation technique combines multiple operations into one kernel to reduce memory access?",
+    "options": [
+      "Operator fusion",
+      "Packet fragmentation",
+      "Double buffering",
+      "Header compression"
+    ],
+    "correct": 0,
+    "why": "Operator fusion is described exactly this way on the slide."
+  },
+  {
+    "q": "Which example is given for low-latency inference on edge devices?",
+    "options": [
+      "Google Edge TPU",
+      "Microsoft Word",
+      "Redis Sentinel",
+      "S3 Glacier"
+    ],
+    "correct": 0,
+    "why": "Google Edge TPU is listed as an example under hardware acceleration."
+  },
+  {
+    "q": "Which code optimisation technique is listed for improving cache locality and reducing memory access?",
+    "options": [
+      "Kernel optimisation",
+      "Color correction",
+      "TCP slow start",
+      "Spreadsheet pivoting"
+    ],
+    "correct": 0,
+    "why": "Kernel optimisation is described this way on the code optimisation slide."
+  },
+  {
+    "q": "Which technique is listed under graph-level optimisation?",
+    "options": [
+      "Constant folding",
+      "Packet encapsulation",
+      "Frequency hopping",
+      "Database vacuuming"
+    ],
+    "correct": 0,
+    "why": "Graph-level optimisation includes common subexpression elimination and constant folding."
+  },
+  {
+    "q": "In the smart camera case study, what bottleneck was identified?",
+    "options": [
+      "High latency when sending results to the cloud for processing",
+      "A lack of local storage space for logs only",
+      "Too many keyboard interrupts",
+      "The camera had no image sensor"
+    ],
+    "correct": 0,
+    "why": "The case study says the camera transmitted results with high latency to the cloud for processing."
+  },
+  {
+    "q": "Which protocol change is suggested in the smart camera object detection case study?",
+    "options": [
+      "Switch from HTTP to MQTT",
+      "Switch from MQTT to FTP",
+      "Switch from CoAP to SMTP",
+      "Switch from BLE to Modbus only"
+    ],
+    "correct": 0,
+    "why": "The case study suggests switching from HTTP to MQTT for lighter communication."
+  },
+  {
+    "q": "In the face recognition camera example, what is the key idea of adaptive model partitioning?",
+    "options": [
+      "Run critical layers locally and offload heavier work to the cloud when suitable",
+      "Send all data to the cloud immediately regardless of conditions",
+      "Disable local processing entirely",
+      "Only store frames without inference"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that critical layers run on the edge while heavier layers can be offloaded to the cloud."
+  },
+  {
+    "q": "Which benefit of the face recognition partitioning example is explicitly listed?",
+    "options": [
+      "Saves energy",
+      "Guarantees zero internet outages",
+      "Eliminates all costs",
+      "Replaces all cameras with cloud simulators"
+    ],
+    "correct": 0,
+    "why": "The slide lists fast response, saves energy, and reduces cost."
+  },
+  {
+    "q": "According to the IoT vs IIoT slide, which priority is especially emphasized for IIoT?",
+    "options": [
+      "Accuracy and precision",
+      "Social media engagement",
+      "Theme customization",
+      "Unlimited video streaming"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly says accuracy and precision are top priorities for IIoT."
+  },
+  {
+    "q": "According to the same slide, which concern is critical in IIoT?",
+    "options": [
+      "Cyber security",
+      "Wallpaper selection",
+      "Avatar design",
+      "Spreadsheet formulas"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly states cyber security is critical."
+  },
+  {
+    "q": "Which future smart factory use case is mentioned in the lecture?",
+    "options": [
+      "Asset tagging and locating",
+      "Streaming 8K films to sensors",
+      "Replacing all RFIDs with handwritten labels",
+      "Removing all supply chain systems"
+    ],
+    "correct": 0,
+    "why": "The smart factory slide mentions asset tagging, locating, and supply chain management."
+  },
+  {
+    "q": "What smart inventory capability is described?",
+    "options": [
+      "Sensors on containers can detect when a product is running low",
+      "Inventory is tracked only by manual weekly counting",
+      "Orders can never be automated",
+      "Defective items cannot be tagged"
+    ],
+    "correct": 0,
+    "why": "The slide says sensors on containers can determine when a product is running low."
+  },
+  {
+    "q": "How does the lecture define cloud computing at a high level?",
+    "options": [
+      "On-demand network access to a shared pool of configurable computing resources",
+      "A local-only desktop application runtime",
+      "A serial bus for microcontrollers",
+      "A battery management subsystem"
+    ],
+    "correct": 0,
+    "why": "The lecture cites the NIST definition of cloud computing."
+  },
+  {
+    "q": "Which is a key characteristic of cloud computing listed in the lecture?",
+    "options": [
+      "On-demand self-service",
+      "No network access",
+      "Single-user fixed hardware only",
+      "Manual provisioning by default"
+    ],
+    "correct": 0,
+    "why": "The lecture lists on-demand self-service as a key characteristic."
+  },
+  {
+    "q": "Which of the following is listed as a barrier to cloud adoption?",
+    "options": [
+      "Interoperability",
+      "Infinite battery life",
+      "Guaranteed perfect auditing",
+      "No compliance requirements"
+    ],
+    "correct": 0,
+    "why": "The barrier slide lists security, compliance, interoperability, service level management, and tools."
+  },
+  {
+    "q": "What does the lecture say about taking workloads from provider to provider?",
+    "options": [
+      "Not easily",
+      "Always seamless and free",
+      "Impossible in principle",
+      "Only possible without containers"
+    ],
+    "correct": 0,
+    "why": "The interoperability bullet says workloads cannot be taken from provider to provider easily."
+  },
+  {
+    "q": "Which property is associated with fog computing in the lecture?",
+    "options": [
+      "Location aware and location sensitive",
+      "Always centralized in one continent",
+      "Only for non-real-time workloads",
+      "Limited to wired desktops"
+    ],
+    "correct": 0,
+    "why": "The fog computing slide describes it as location aware and location sensitive."
+  },
+  {
+    "q": "Which statement about fog computing is correct according to the lecture?",
+    "options": [
+      "It is geographically distributed and supports real-time operation",
+      "It is only suitable for offline archiving",
+      "It removes the need for edge devices",
+      "It is identical to a single cloud data centre"
+    ],
+    "correct": 0,
+    "why": "The lecture lists geographically distributed, large scale, mobility, and real-time as fog characteristics."
+  },
+  {
+    "q": "In the lecture summary, edge-to-cloud networking is described as a mix of what?",
+    "options": [
+      "Short-range links like ZigBee/Wi-Fi and long-range links like LTE/5G",
+      "Only Ethernet and HDMI",
+      "Only sub-GHz LPWAN and satellite",
+      "Only Bluetooth Classic and USB"
+    ],
+    "correct": 0,
+    "why": "The final summary explicitly states this mix."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

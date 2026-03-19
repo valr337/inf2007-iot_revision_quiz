@@ -1,0 +1,1490 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 8 MCQ Quiz: Wi‑Fi & Wi‑Fi HaLow</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 8 MCQ Quiz: Wi‑Fi & Wi‑Fi HaLow</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 8</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "In the lecture’s IoT protocol landscape, Wi-Fi and IEEE 802.11ah are placed primarily at which layer?",
+    "options": [
+      "Datalink layer",
+      "Transport layer",
+      "Application layer",
+      "Presentation layer"
+    ],
+    "correct": 0,
+    "why": "The protocol overview slide places Wi-Fi and 802.11ah among datalink-layer IoT technologies."
+  },
+  {
+    "q": "Why is regular Wi-Fi described as a prime contender for IoT even though it consumes significant energy?",
+    "options": [
+      "It has wide deployment and Internet compatibility",
+      "It eliminates the need for access points",
+      "It uses no licensed spectrum",
+      "It guarantees the lowest power consumption"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes wide deployment and compatibility with the Internet as key reasons."
+  },
+  {
+    "q": "What is IEEE 802.11?",
+    "options": [
+      "A wireless networking standard",
+      "A Wi-Fi trademark",
+      "A cloud service model",
+      "An IoT application protocol"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that IEEE 802.11 is a standard."
+  },
+  {
+    "q": "What is Wi-Fi in the lecture’s terminology?",
+    "options": [
+      "A trademark associated with interoperable equipment",
+      "A separate PHY-only standard",
+      "An encryption algorithm",
+      "A routing protocol"
+    ],
+    "correct": 0,
+    "why": "The slides state that Wi-Fi is a trademark and refers to compatibility-tested equipment."
+  },
+  {
+    "q": "What does “fidelity” mean in “Wireless Fidelity” according to the lecture?",
+    "options": [
+      "Compatibility between wireless equipment from different manufacturers",
+      "Low latency over wireless links",
+      "High signal strength at all ranges",
+      "Guaranteed security in all deployments"
+    ],
+    "correct": 0,
+    "why": "The lecture defines fidelity as compatibility between equipment from different manufacturers."
+  },
+  {
+    "q": "What is the role of the Wi‑Fi Alliance?",
+    "options": [
+      "It performs compatibility testing for Wi‑Fi equipment",
+      "It assigns IP addresses to Wi‑Fi devices",
+      "It manufactures Wi‑Fi chipsets",
+      "It defines the OSI model"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Wi‑Fi Alliance does compatibility testing."
+  },
+  {
+    "q": "Why can two devices that are only described as “802.11 compliant” still be incompatible?",
+    "options": [
+      "Because 802.11 contains many options and implementations may differ",
+      "Because 802.11 devices cannot use the same channel",
+      "Because 802.11 requires wired backhaul only",
+      "Because 802.11 devices do not use MAC addresses"
+    ],
+    "correct": 0,
+    "why": "The slide notes that 802.11 has many options, so interoperability is not automatically guaranteed."
+  },
+  {
+    "q": "What can be confidently said about devices with the Wi‑Fi logo?",
+    "options": [
+      "They interoperate using selected compatible options",
+      "They always support mesh routing",
+      "They always use 2.4 GHz only",
+      "They never need access points"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Wi‑Fi-logo devices use selected options such that they interoperate."
+  },
+  {
+    "q": "The first IEEE 802.11 version in 1997 included MAC plus how many PHY specifications?",
+    "options": [
+      "Three",
+      "One",
+      "Two",
+      "Four"
+    ],
+    "correct": 0,
+    "why": "The lecture says the first version included three physical-layer specifications."
+  },
+  {
+    "q": "What data rates were supported by the original 1997 IEEE 802.11 version?",
+    "options": [
+      "1 and 2 Mbps",
+      "11 and 54 Mbps",
+      "72 and 600 Mbps",
+      "Up to 10 Gbps"
+    ],
+    "correct": 0,
+    "why": "The first version operated at 1 and 2 Mbps."
+  },
+  {
+    "q": "Which amendment introduced 5 GHz operation with 54 Mbps over 20 MHz using OFDM?",
+    "options": [
+      "IEEE 802.11a",
+      "IEEE 802.11b",
+      "IEEE 802.11g",
+      "IEEE 802.11n"
+    ],
+    "correct": 0,
+    "why": "The lecture identifies 802.11a-1999 as 5 GHz, 54 Mbps/20 MHz, OFDM."
+  },
+  {
+    "q": "Which amendment introduced 2.4 GHz operation at 11 Mbps over 22 MHz?",
+    "options": [
+      "IEEE 802.11b",
+      "IEEE 802.11a",
+      "IEEE 802.11g",
+      "IEEE 802.11ax"
+    ],
+    "correct": 0,
+    "why": "The lecture identifies 802.11b-1999 as 2.4 GHz, 11 Mbps/22 MHz."
+  },
+  {
+    "q": "Which amendment brought 54 Mbps over 20 MHz OFDM in the 2.4 GHz band?",
+    "options": [
+      "IEEE 802.11g",
+      "IEEE 802.11b",
+      "IEEE 802.11ac",
+      "IEEE 802.11ah"
+    ],
+    "correct": 0,
+    "why": "The lecture lists IEEE 802.11g-2003 as 2.4 GHz, 54 Mbps/20 MHz, OFDM."
+  },
+  {
+    "q": "Wi‑Fi 4 is based on which IEEE standard?",
+    "options": [
+      "IEEE 802.11n",
+      "IEEE 802.11ac",
+      "IEEE 802.11ax",
+      "IEEE 802.11ah"
+    ],
+    "correct": 0,
+    "why": "The slide states that Wi‑Fi 4 is based on IEEE 802.11n."
+  },
+  {
+    "q": "What major antenna technique was first introduced in Wi‑Fi 4 according to the lecture?",
+    "options": [
+      "MIMO",
+      "FHSS",
+      "TDMA",
+      "CDMA"
+    ],
+    "correct": 0,
+    "why": "The lecture says Wi‑Fi 4 was the first Wi‑Fi generation to introduce MIMO."
+  },
+  {
+    "q": "Which Wi‑Fi generation operates in the 5 GHz band and uses Multiuser‑MIMO and OFDM?",
+    "options": [
+      "Wi‑Fi 5",
+      "Wi‑Fi 4",
+      "Wi‑Fi 6",
+      "Wi‑Fi HaLow"
+    ],
+    "correct": 0,
+    "why": "The lecture attributes these features to Wi‑Fi 5."
+  },
+  {
+    "q": "What modulation enhancement is associated with Wi‑Fi 5 in the lecture?",
+    "options": [
+      "256 QAM",
+      "1024 QAM",
+      "4096 QAM",
+      "BPSK only"
+    ],
+    "correct": 0,
+    "why": "The slide notes that Wi‑Fi 5 can use 256 QAM."
+  },
+  {
+    "q": "Which Wi‑Fi generation introduced OFDMA to support multiple users in a single band?",
+    "options": [
+      "Wi‑Fi 6 / 6E",
+      "Wi‑Fi 4",
+      "Wi‑Fi 5",
+      "Wi‑Fi HaLow"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Wi‑Fi 6 / 6E introduced OFDMA."
+  },
+  {
+    "q": "Which Wi‑Fi generation is associated with enhancements like 4096 QAM and up to 46 Gbps in the lecture?",
+    "options": [
+      "Wi‑Fi 7",
+      "Wi‑Fi 6",
+      "Wi‑Fi 5",
+      "Wi‑Fi 4"
+    ],
+    "correct": 0,
+    "why": "The Wi‑Fi 7 slide mentions 4096 QAM and data rates up to 46 Gbps."
+  },
+  {
+    "q": "In the 2.4 GHz band, how many 5 MHz Wi‑Fi channels are shown in the lecture, and how many are non-overlapping?",
+    "options": [
+      "14 channels, with only 3 non-overlapping",
+      "11 channels, all non-overlapping",
+      "14 channels, with 12 non-overlapping",
+      "3 channels, all overlapping"
+    ],
+    "correct": 0,
+    "why": "The Wi‑Fi channels slide states there are 14 5 MHz channels and only 3 are non-overlapping."
+  },
+  {
+    "q": "What is a station in IEEE 802.11 terminology?",
+    "options": [
+      "A device that connects to the wireless medium",
+      "A wired-only router",
+      "A distribution protocol",
+      "A channel number"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a station as the component or device that connects to the wireless medium."
+  },
+  {
+    "q": "What is an infrastructure BSS?",
+    "options": [
+      "A BSS whose stations associate with one access point",
+      "A BSS made only of relays",
+      "A temporary point-to-point wired link",
+      "A BSS that never uses beacons"
+    ],
+    "correct": 0,
+    "why": "The lecture defines an infrastructure BSS as a BSS with stations associated with one AP."
+  },
+  {
+    "q": "What is an IBSS in the lecture?",
+    "options": [
+      "A short-lived ad-hoc BSS where stations communicate with one another",
+      "A BSS with multiple APs linked by a distribution system",
+      "A BSS reserved only for sensors",
+      "A beacon-free BSS for broadcast traffic"
+    ],
+    "correct": 0,
+    "why": "The lecture describes IBSS as a small, typically short-lived ad-hoc network."
+  },
+  {
+    "q": "What is an ESS?",
+    "options": [
+      "A set of infrastructure BSSs whose APs communicate with each other",
+      "A PHY-only enhancement for OFDM",
+      "A mechanism for channel backoff",
+      "A special low-power beacon"
+    ],
+    "correct": 0,
+    "why": "The lecture defines an ESS as a set of infrastructure BSSs with AP coordination."
+  },
+  {
+    "q": "What is the distribution system (DS) used for?",
+    "options": [
+      "Exchanging frames between APs and with the wired network",
+      "Encrypting Wi‑Fi frames",
+      "Assigning channel widths",
+      "Selecting MCS values only"
+    ],
+    "correct": 0,
+    "why": "The DS lets APs exchange frames between BSSs, follow mobile stations, and interact with wired networks."
+  },
+  {
+    "q": "Which scanning method starts with beacon frames sent from APs?",
+    "options": [
+      "Passive scanning",
+      "Active scanning",
+      "RTS scanning",
+      "PCF scanning"
+    ],
+    "correct": 0,
+    "why": "In passive scanning, the station listens for beacon frames from APs."
+  },
+  {
+    "q": "Which scanning method starts with a probe request broadcast by the station?",
+    "options": [
+      "Active scanning",
+      "Passive scanning",
+      "DTIM scanning",
+      "RID scanning"
+    ],
+    "correct": 0,
+    "why": "The active scanning slide begins with a probe request from the station."
+  },
+  {
+    "q": "During passive scanning, what is sent after the station selects an AP?",
+    "options": [
+      "Association request frame",
+      "CTS frame",
+      "PS-Poll frame",
+      "TIM segment"
+    ],
+    "correct": 0,
+    "why": "The lecture sequence is beacon, then association request, then association response."
+  },
+  {
+    "q": "When a mobile station associates with an AP in legacy Wi‑Fi, what value does the AP assign?",
+    "options": [
+      "Association ID (AID)",
+      "Contention Window (CW)",
+      "MCS index",
+      "Distribution ID (DID)"
+    ],
+    "correct": 0,
+    "why": "The AP assigns an Association ID when the station associates."
+  },
+  {
+    "q": "What AID range is given in the lecture for legacy association?",
+    "options": [
+      "1–2007",
+      "1–8191",
+      "0–1022",
+      "1–65535"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the AP assigns an AID from the range 1–2007."
+  },
+  {
+    "q": "Why might active scanning be better than passive scanning?",
+    "options": [
+      "It can find APs faster without waiting for beacons",
+      "It avoids the need for association",
+      "It removes collisions entirely",
+      "It works only in wired networks"
+    ],
+    "correct": 0,
+    "why": "Active scanning can be quicker because the station probes instead of waiting for beacons."
+  },
+  {
+    "q": "What is a collision in the channel-access discussion?",
+    "options": [
+      "Two nodes transmitting at the same time",
+      "A station changing channels",
+      "An AP losing power",
+      "Two beacons having different SSIDs"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a collision as two nodes transmitting simultaneously."
+  },
+  {
+    "q": "What is Distributed Coordination Function (DCF)?",
+    "options": [
+      "A set of collision-avoidance rules based on CSMA",
+      "A relay-based forwarding protocol",
+      "A power-save beacon format",
+      "An authentication threshold mechanism"
+    ],
+    "correct": 0,
+    "why": "DCF is introduced as the collision-avoidance rule set built on CSMA."
+  },
+  {
+    "q": "Under DCF, when may a node transmit?",
+    "options": [
+      "Only after sensing the channel idle for DIFS",
+      "As soon as it has data, regardless of the channel",
+      "Only after a CTS from every AP",
+      "Only during a contention-free period"
+    ],
+    "correct": 0,
+    "why": "DCF requires the channel to be idle for a DIFS duration before transmission."
+  },
+  {
+    "q": "What does DIFS stand for?",
+    "options": [
+      "DCF Inter Frame Space",
+      "Distributed Idle Frame Slot",
+      "Data Interference Free Section",
+      "Default Internet Framing Scheme"
+    ],
+    "correct": 0,
+    "why": "The lecture expands DIFS as DCF Inter Frame Space."
+  },
+  {
+    "q": "What does SIFS stand for?",
+    "options": [
+      "Short Inter Frame Space",
+      "Sensed Interference Free Slot",
+      "Secondary Idle Frame Space",
+      "Short Internet Frame Service"
+    ],
+    "correct": 0,
+    "why": "The lecture defines SIFS as Short Inter Frame Space."
+  },
+  {
+    "q": "According to the lecture, how is DIFS related to SIFS?",
+    "options": [
+      "DIFS = SIFS + 2 slot times",
+      "DIFS = 2 × SIFS",
+      "DIFS = SIFS − 2 slot times",
+      "DIFS is unrelated to SIFS"
+    ],
+    "correct": 0,
+    "why": "The CSMA slide states DIFS equals SIFS plus two slot times."
+  },
+  {
+    "q": "Why is a positive ACK used in Wi‑Fi channel access?",
+    "options": [
+      "To confirm that a frame was successfully received",
+      "To assign an AID to the station",
+      "To indicate MCS selection",
+      "To start active scanning"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that a positive ACK confirms successful frame reception."
+  },
+  {
+    "q": "What is virtual carrier sense based on?",
+    "options": [
+      "Duration ID and the NAV timer",
+      "Only physical signal strength",
+      "Only beacon SSIDs",
+      "Only MCS index values"
+    ],
+    "correct": 0,
+    "why": "Virtual carrier sense uses Duration ID information and the Network Allocation Vector."
+  },
+  {
+    "q": "What does the Duration ID indicate?",
+    "options": [
+      "How long the medium will be busy",
+      "How far the AP is from the station",
+      "How many APs are in the ESS",
+      "How many relays are active"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Duration ID indicates medium busy time."
+  },
+  {
+    "q": "What does NAV stand for?",
+    "options": [
+      "Network Allocation Vector",
+      "Node Access Value",
+      "Network Association Variable",
+      "Non-overlapping Access Vector"
+    ],
+    "correct": 0,
+    "why": "NAV is expanded in the lecture as Network Allocation Vector."
+  },
+  {
+    "q": "When do stations need not physically sense the channel under virtual carrier sense?",
+    "options": [
+      "Until NAV becomes zero",
+      "Until the next beacon interval ends",
+      "Until an ESS is formed",
+      "Until MCS drops to zero"
+    ],
+    "correct": 0,
+    "why": "The slide states that stations do not need to sense the channel until NAV becomes zero."
+  },
+  {
+    "q": "In the lecture’s example diagram, which node starts transmitting in slot 4?",
+    "options": [
+      "Node B",
+      "Node A",
+      "Node C",
+      "Node D"
+    ],
+    "correct": 0,
+    "why": "The example explicitly states that Node B starts transmitting in slot 4."
+  },
+  {
+    "q": "Does plain CSMA completely eliminate collisions?",
+    "options": [
+      "No, collisions can still happen",
+      "Yes, collisions are impossible",
+      "Only in 5 GHz",
+      "Only if NAV is disabled"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says collisions can still happen under CSMA."
+  },
+  {
+    "q": "What technique is introduced in CSMA/CA to further reduce collisions?",
+    "options": [
+      "Exponential backoff",
+      "Frequency hopping",
+      "Polling by the AP only",
+      "SSID segmentation"
+    ],
+    "correct": 0,
+    "why": "The lecture introduces exponential backoff under CSMA/CA."
+  },
+  {
+    "q": "What does CW stand for in the backoff process?",
+    "options": [
+      "Contention Window",
+      "Carrier Width",
+      "Control Wait",
+      "Current Waveform"
+    ],
+    "correct": 0,
+    "why": "The lecture defines CW as the Contention Window."
+  },
+  {
+    "q": "What happens when a node’s backoff counter reaches zero and the channel is available?",
+    "options": [
+      "The node transmits and resets CW to its original value",
+      "The node immediately goes to sleep",
+      "The AP assigns a new AID",
+      "NAV is disabled for the network"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the node transmits and then resets CW."
+  },
+  {
+    "q": "If the channel is still not available after CW becomes zero, how is CW updated?",
+    "options": [
+      "CW = min(2CW + 1, CWmax)",
+      "CW = CW / 2",
+      "CW = CW + SIFS",
+      "CW = 0 permanently"
+    ],
+    "correct": 0,
+    "why": "The CSMA/CA slide gives the exponential-backoff update rule."
+  },
+  {
+    "q": "What hidden-node issue is highlighted in the lecture?",
+    "options": [
+      "Two nodes may collide at the AP even if they cannot hear each other",
+      "Stations always hear every transmission",
+      "Hidden nodes only exist in wired Ethernet",
+      "Hidden nodes are caused by too many SSIDs"
+    ],
+    "correct": 0,
+    "why": "The hidden-node slide shows two stations colliding at the AP despite not sensing each other."
+  },
+  {
+    "q": "What does RTS stand for?",
+    "options": [
+      "Request To Send",
+      "Ready To Scan",
+      "Response Timing Signal",
+      "Random Transmission Slot"
+    ],
+    "correct": 0,
+    "why": "The lecture expands RTS as Request To Send."
+  },
+  {
+    "q": "What does CTS stand for?",
+    "options": [
+      "Clear To Send",
+      "Carrier Time Slot",
+      "Control To Scan",
+      "Confirmed Transmission Start"
+    ],
+    "correct": 0,
+    "why": "The lecture expands CTS as Clear To Send."
+  },
+  {
+    "q": "How does RTS/CTS help with hidden nodes?",
+    "options": [
+      "CTS alerts all nodes near the destination so they defer transmission",
+      "It removes the need for ACK",
+      "It replaces association",
+      "It forces all stations into active mode"
+    ],
+    "correct": 0,
+    "why": "The lecture states that CTS is heard by all nodes and makes others defer using NAV."
+  },
+  {
+    "q": "Which part of RTS/CTS may still collide?",
+    "options": [
+      "The RTS packets",
+      "The CTS packets only",
+      "The ACK packets only",
+      "The beacon frames only"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that RTS packets may still collide, but they are short."
+  },
+  {
+    "q": "According to the lecture, what is the propagation delay in the overall channel-access example?",
+    "options": [
+      "2 slots",
+      "1 slot",
+      "4 slots",
+      "6 slots"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly answers the propagation delay question as 2 slots."
+  },
+  {
+    "q": "What is Point Coordination Function (PCF) intended for?",
+    "options": [
+      "Time-critical services",
+      "Long-range sub-GHz relaying only",
+      "Hidden-node detection only",
+      "Cloud authentication only"
+    ],
+    "correct": 0,
+    "why": "The PCF slide says time-critical services use Point Coordination Function."
+  },
+  {
+    "q": "How does PCF coordinate transmissions?",
+    "options": [
+      "The AP polls devices and gives scheduled permission to send",
+      "Each station transmits whenever it wants",
+      "Only relays are allowed to transmit",
+      "The AP disables beacons"
+    ],
+    "correct": 0,
+    "why": "In PCF, the point coordinator polls nodes and grants access on a schedule."
+  },
+  {
+    "q": "PCF is described as what kind of mechanism?",
+    "options": [
+      "An optional mechanism built on top of DCF",
+      "A replacement for the PHY layer",
+      "A cloud-side scheduling service",
+      "A beaconless contention protocol"
+    ],
+    "correct": 0,
+    "why": "The lecture describes PCF as optional and built on top of DCF."
+  },
+  {
+    "q": "What does the AP announce in the beacon when using PCF?",
+    "options": [
+      "A contention-free period (CFP)",
+      "A new ESS identifier",
+      "A new MCS table",
+      "A relay election result"
+    ],
+    "correct": 0,
+    "why": "The PCF slide says the AP announces a contention-free period in the beacon."
+  },
+  {
+    "q": "What does PIFS stand for?",
+    "options": [
+      "PCF Inter Frame Space",
+      "Primary Interference Free Signal",
+      "Point Idle Framing Scheme",
+      "Power Interval for Sensors"
+    ],
+    "correct": 0,
+    "why": "The lecture defines PIFS as PCF Inter Frame Space."
+  },
+  {
+    "q": "What is MCS?",
+    "options": [
+      "A combination of modulation and coding used to improve data transmission rate",
+      "A beacon-only power-save mode",
+      "A Wi‑Fi trademark test suite",
+      "A hidden-node detection scheme"
+    ],
+    "correct": 0,
+    "why": "The lecture defines MCS as a combination of modulation and coding techniques."
+  },
+  {
+    "q": "What channel-quality measure is used in selecting an MCS?",
+    "options": [
+      "Signal-to-noise ratio (SNR)",
+      "Association ID (AID)",
+      "Beacon interval only",
+      "SSID length"
+    ],
+    "correct": 0,
+    "why": "The lecture states that MCS selection is based on the channel’s SNR."
+  },
+  {
+    "q": "How does higher SNR affect possible data transmission rate according to the lecture?",
+    "options": [
+      "Higher SNR allows more data to be transmitted without errors",
+      "Higher SNR forces lower data rate",
+      "SNR does not affect data rate",
+      "Higher SNR disables OFDM"
+    ],
+    "correct": 0,
+    "why": "The lecture states that higher SNR allows more data to be transmitted error-free."
+  },
+  {
+    "q": "What does the MCS index represent?",
+    "options": [
+      "An arbitrary number assigned to a modulation/coding combination",
+      "A station’s MAC address",
+      "A hidden-node severity value",
+      "A relay priority level"
+    ],
+    "correct": 0,
+    "why": "The lecture says standards assign arbitrary numbers to MCS combinations, called the MCS index."
+  },
+  {
+    "q": "What are the two main power-management states discussed for IEEE 802.11?",
+    "options": [
+      "Awake and doze",
+      "Transmit and collision",
+      "Beacon and poll",
+      "RTS and CTS"
+    ],
+    "correct": 0,
+    "why": "The power-management slide is based on alternating between awake and doze states."
+  },
+  {
+    "q": "What can a station do in the awake state?",
+    "options": [
+      "Receive and transmit frames",
+      "Only receive, never transmit",
+      "Only transmit beacons",
+      "Neither receive nor transmit"
+    ],
+    "correct": 0,
+    "why": "In the awake state, the station can both receive and transmit."
+  },
+  {
+    "q": "What happens in the doze state?",
+    "options": [
+      "The station switches off its radio and cannot receive or transmit",
+      "The station can transmit only ACKs",
+      "The station scans faster",
+      "The AP assigns a new MCS automatically"
+    ],
+    "correct": 0,
+    "why": "The lecture says the radio is switched off in doze state."
+  },
+  {
+    "q": "What is the difference between power-save (PS) mode and active mode?",
+    "options": [
+      "PS alternates between awake and doze; active mode stays awake",
+      "PS uses only 5 GHz; active mode uses only 2.4 GHz",
+      "PS disables beacons; active mode enables them",
+      "PS removes association; active mode requires association"
+    ],
+    "correct": 0,
+    "why": "The lecture defines PS mode as alternating between awake and doze, while active mode stays awake."
+  },
+  {
+    "q": "What does the AP do for a station in PS mode?",
+    "options": [
+      "Buffers frames destined for that station",
+      "Turns off all beacons",
+      "Assigns it a relay",
+      "Forces it into IBSS mode"
+    ],
+    "correct": 0,
+    "why": "The AP buffers frames destined for stations in power-save mode."
+  },
+  {
+    "q": "What does TIM stand for in the power-management discussion?",
+    "options": [
+      "Traffic Indication Map",
+      "Transmission Interval Metric",
+      "Timed Internet Mode",
+      "Targeted Interference Marker"
+    ],
+    "correct": 0,
+    "why": "TIM is expanded as Traffic Indication Map."
+  },
+  {
+    "q": "What is the purpose of TIM in a beacon?",
+    "options": [
+      "It indicates the presence of buffered packets for stations",
+      "It selects the PHY channel width",
+      "It announces the MCS index",
+      "It defines the ESS name"
+    ],
+    "correct": 0,
+    "why": "TIM tells PS stations whether the AP has buffered packets for them."
+  },
+  {
+    "q": "What is a listen interval in this context?",
+    "options": [
+      "A longer sleep duration between beacon checks for a PS station",
+      "The time before sending ACK",
+      "The PCF polling slot",
+      "The propagation delay of the medium"
+    ],
+    "correct": 0,
+    "why": "A station in PS mode may sleep for a listen interval longer than the beacon period."
+  },
+  {
+    "q": "In practice, when do PS stations often wake up according to the lecture?",
+    "options": [
+      "Just before a DTIM beacon",
+      "Only after receiving CTS",
+      "Immediately after every ACK",
+      "At the end of every CFP"
+    ],
+    "correct": 0,
+    "why": "The lecture notes that, in practice, PS stations often wake just before DTIM beacons."
+  },
+  {
+    "q": "What frame does a station send to request buffered frames after groupcast transmission?",
+    "options": [
+      "PS-Poll",
+      "RTS",
+      "Probe Request",
+      "NDP"
+    ],
+    "correct": 0,
+    "why": "The slide states that the station sends a PS-Poll frame, then the AP sends buffered frames."
+  },
+  {
+    "q": "Which of the following is a control frame in 802.11 according to the lecture?",
+    "options": [
+      "RTS",
+      "Beacon",
+      "Payload data frame",
+      "SSID advertisement page"
+    ],
+    "correct": 0,
+    "why": "The lecture lists RTS, CTS, and ACK as control frames."
+  },
+  {
+    "q": "Which of the following is a management frame purpose?",
+    "options": [
+      "It is transmitted like data but not forwarded to upper layers",
+      "It carries only user payload",
+      "It exists only in 802.11ah",
+      "It replaces ACK and CTS"
+    ],
+    "correct": 0,
+    "why": "The lecture describes management frames as transmitted like data frames but not forwarded upward."
+  },
+  {
+    "q": "Which PHY-header component appears before MAC data in the lecture’s frame layout?",
+    "options": [
+      "PLCP Header",
+      "TIM",
+      "NAV",
+      "SSID field"
+    ],
+    "correct": 0,
+    "why": "The frame illustration shows Preamble, PLCP Header, MAC Data, and CRC."
+  },
+  {
+    "q": "What basic problem does the lecture highlight about using legacy Wi‑Fi for all IoT devices?",
+    "options": [
+      "Treating all devices symmetrically is inefficient",
+      "Legacy Wi‑Fi has no Internet compatibility",
+      "Legacy Wi‑Fi cannot use OFDM",
+      "Legacy Wi‑Fi has no frame types"
+    ],
+    "correct": 0,
+    "why": "The lecture says a symmetrical design is inefficient because IoT devices have different traffic and energy constraints."
+  },
+  {
+    "q": "Legacy Wi‑Fi is said to be originally designed mainly for what scenario?",
+    "options": [
+      "High throughput for a limited number of indoor stations at short distance",
+      "Sub-GHz long-range sensor networks",
+      "Ultra-low-power coin-cell devices only",
+      "Distributed authentication across thousands of nodes only"
+    ],
+    "correct": 0,
+    "why": "The lecture describes legacy Wi‑Fi as designed for high throughput, limited indoor stations, and short range."
+  },
+  {
+    "q": "What is IEEE 802.11ah commonly called by the Wi‑Fi Alliance?",
+    "options": [
+      "Wi‑Fi HaLow",
+      "Wi‑Fi Mesh",
+      "Wi‑Fi Sensor",
+      "Wi‑Fi Relay"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says IEEE 802.11ah is also called Wi‑Fi HaLow."
+  },
+  {
+    "q": "What kind of applications is IEEE 802.11ah designed for?",
+    "options": [
+      "Low-rate long-range IoT applications",
+      "High-end video streaming only",
+      "Wired Ethernet replacement only",
+      "Short-range Bluetooth audio only"
+    ],
+    "correct": 0,
+    "why": "The introduction slide calls it an IEEE spec for low-rate, long-range IoT applications."
+  },
+  {
+    "q": "What spectrum does Wi‑Fi HaLow use?",
+    "options": [
+      "Sub-GHz license-exempt spectrum",
+      "Only 60 GHz",
+      "Only 2.4 GHz",
+      "Only TV white spaces under 802.11af"
+    ],
+    "correct": 0,
+    "why": "The lecture says 802.11ah uses sub-GHz license-exempt spectrum and excludes TV white spaces."
+  },
+  {
+    "q": "Which benefit is directly associated with sub-GHz frequency in the lecture?",
+    "options": [
+      "Longer range and better penetration",
+      "Shorter range but higher energy usage",
+      "Guaranteed zero collisions",
+      "No need for MAC protocols"
+    ],
+    "correct": 0,
+    "why": "The lecture says sub-GHz gives longer range, less congestion, and better penetration."
+  },
+  {
+    "q": "What design goals are highlighted for 802.11ah?",
+    "options": [
+      "Low bit rate, short transmissions, power savings, efficient MAC",
+      "High bandwidth only and no power savings",
+      "Elimination of beacons",
+      "Removal of access points"
+    ],
+    "correct": 0,
+    "why": "These are listed on the introductory 802.11ah slide."
+  },
+  {
+    "q": "What scaling goal is mentioned for number of devices per AP in 802.11ah?",
+    "options": [
+      "At least 4× devices per AP compared with legacy 802.11",
+      "Exactly the same number as legacy Wi‑Fi",
+      "Half the number to reduce collisions",
+      "Unlimited devices without addressing"
+    ],
+    "correct": 0,
+    "why": "The lecture states a goal of supporting at least 4X devices per AP."
+  },
+  {
+    "q": "How is the 802.11ah PHY described relative to 802.11ac?",
+    "options": [
+      "Down-clocked by 10× compared with 802.11ac",
+      "Identical with no changes",
+      "Converted from FHSS to OFDM for the first time ever",
+      "Limited to infrared only"
+    ],
+    "correct": 0,
+    "why": "The introductory slide says the 802.11ah PHY is down-clocked by 10X compared to 802.11ac."
+  },
+  {
+    "q": "Which channel widths are used by 802.11ah instead of the wider legacy/ac options?",
+    "options": [
+      "2, 4, 8, and 16 MHz",
+      "20, 40, 80, and 160 MHz only",
+      "1, 3, 5, and 7 MHz",
+      "10, 30, 50, and 70 MHz"
+    ],
+    "correct": 0,
+    "why": "The introductory slide lists 2/4/8/16 MHz in place of 20/40/80/160 MHz."
+  },
+  {
+    "q": "According to the later detail slide, which 802.11ah channel widths are mandatory?",
+    "options": [
+      "1 and 2 MHz",
+      "2 and 4 MHz",
+      "8 and 16 MHz",
+      "Only 16 MHz"
+    ],
+    "correct": 0,
+    "why": "The lecture specifies that only the 1 MHz and 2 MHz channels are mandatory."
+  },
+  {
+    "q": "Which transmission technique does 802.11ah use according to the lecture?",
+    "options": [
+      "OFDM",
+      "Pure CDMA",
+      "Only infrared modulation",
+      "TDMA without modulation"
+    ],
+    "correct": 0,
+    "why": "The lecture says that 802.11ah uses OFDM for transmission."
+  },
+  {
+    "q": "How many data subcarriers are available in a 1 MHz 802.11ah channel?",
+    "options": [
+      "24",
+      "52",
+      "14",
+      "79"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a 1 MHz 802.11ah channel has 24 data subcarriers."
+  },
+  {
+    "q": "How many data subcarriers are available in a 2 MHz 802.11ah channel?",
+    "options": [
+      "52",
+      "24",
+      "30",
+      "2007"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a 2 MHz 802.11ah channel has 52 data subcarriers."
+  },
+  {
+    "q": "What is the maximum AID in legacy Wi‑Fi according to the comparison slide?",
+    "options": [
+      "2007",
+      "8191",
+      "1022",
+      "4096"
+    ],
+    "correct": 0,
+    "why": "The lecture says legacy Wi‑Fi has a maximum AID of 2007."
+  },
+  {
+    "q": "What is the increased maximum AID in IEEE 802.11ah?",
+    "options": [
+      "8191",
+      "2007",
+      "1022",
+      "65535"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 802.11ah increases the AID to 8191."
+  },
+  {
+    "q": "Why was header reduction introduced in 802.11ah?",
+    "options": [
+      "To reduce MAC overhead, especially for small payloads",
+      "To increase beacon size",
+      "To remove all control frames",
+      "To disable power management"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that legacy header overhead is high relative to small payloads."
+  },
+  {
+    "q": "What key field is removed from the short header in 802.11ah that leads to RID?",
+    "options": [
+      "Duration/ID",
+      "Source address only",
+      "CRC",
+      "Preamble"
+    ],
+    "correct": 0,
+    "why": "The lecture says the short header contains no Duration/ID field, prompting RID."
+  },
+  {
+    "q": "What does RID stand for?",
+    "options": [
+      "Response Indication Deferral",
+      "Relay Identification Descriptor",
+      "Reduced Internet Delay",
+      "Restricted Idle Distribution"
+    ],
+    "correct": 0,
+    "why": "The lecture names the novel channel-access mechanism as Response Indication Deferral."
+  },
+  {
+    "q": "What is the main difference between RID and NAV in the lecture?",
+    "options": [
+      "RID is set just after the PHY header is received, while NAV needs the whole frame",
+      "RID uses only CTS while NAV uses only RTS",
+      "RID is for wired networks only",
+      "RID replaces MCS selection"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly compares RID and NAV this way."
+  },
+  {
+    "q": "On what does RID estimate duration?",
+    "options": [
+      "The response type stored in the 2-bit Response Indication field of the PHY header",
+      "Only the station MAC address",
+      "Only the beacon interval",
+      "Only the channel number"
+    ],
+    "correct": 0,
+    "why": "RID uses the 2-bit Response Indication field in the PHY header."
+  },
+  {
+    "q": "What are NDP MAC frames intended to reduce?",
+    "options": [
+      "Overhead from short control-like frames such as ACK and CTS",
+      "The number of channels in the band",
+      "The need for APs",
+      "The MCS index range"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that ACK/CTS-like frames cause overhead, so 802.11ah uses NDP MAC frames."
+  },
+  {
+    "q": "What does NDP stand for here?",
+    "options": [
+      "Null Data Packet",
+      "Network Distribution Poll",
+      "Non-Delay Protocol",
+      "New Data Preamble"
+    ],
+    "correct": 0,
+    "why": "The lecture names them Null Data Packet MAC frames."
+  },
+  {
+    "q": "What beacon types does 802.11ah use to reduce overhead and power consumption?",
+    "options": [
+      "Full and short beacons",
+      "RTS and CTS beacons",
+      "RAW and NAV beacons",
+      "Sensor and cloud beacons"
+    ],
+    "correct": 0,
+    "why": "The lecture says 802.11ah uses two beacon types: full and short."
+  },
+  {
+    "q": "What major problem appears when the number of devices grows very large?",
+    "options": [
+      "High collision probability",
+      "Loss of OFDM capability",
+      "Removal of the PHY layer",
+      "Need to abandon beacons completely"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly highlights high collision probability with more devices."
+  },
+  {
+    "q": "What does RAW stand for in 802.11ah?",
+    "options": [
+      "Restricted Access Window",
+      "Relay Access Width",
+      "Random AID Workflow",
+      "Reduced Authentication Window"
+    ],
+    "correct": 0,
+    "why": "The lecture names the mechanism Restricted Access Window."
+  },
+  {
+    "q": "What is the purpose of RAW?",
+    "options": [
+      "To divide stations into groups and limit channel access to assigned slots",
+      "To replace OFDM with CDMA",
+      "To eliminate association IDs",
+      "To disable authentication"
+    ],
+    "correct": 0,
+    "why": "RAW spreads access attempts over time by grouping stations and assigning slots."
+  },
+  {
+    "q": "Which two approaches are described for handling many stations authenticating at once?",
+    "options": [
+      "Centralized and distributed authentication control",
+      "DCF and PCF only",
+      "RID and NAV only",
+      "TIM and DTIM only"
+    ],
+    "correct": 0,
+    "why": "The lecture lists centralized and distributed authentication control."
+  },
+  {
+    "q": "In centralized authentication control, what does the AP include in the beacon?",
+    "options": [
+      "A control threshold",
+      "A relay path",
+      "A static MCS value",
+      "A full payload buffer dump"
+    ],
+    "correct": 0,
+    "why": "The lecture says the AP includes a control threshold in the beacon."
+  },
+  {
+    "q": "In centralized authentication control, what random range does the device use?",
+    "options": [
+      "[0, 1022]",
+      "[1, 2007]",
+      "[0, 8191]",
+      "[0, 65535]"
+    ],
+    "correct": 0,
+    "why": "The lecture states the device generates a random value between 0 and 1022."
+  },
+  {
+    "q": "In distributed authentication control, what happens if authentication is unsuccessful?",
+    "options": [
+      "TI is increased similar to binary exponential backoff",
+      "The station permanently disconnects",
+      "The AP disables beacons",
+      "The station switches to 5 GHz only"
+    ],
+    "correct": 0,
+    "why": "The lecture says TI is increased similarly to binary exponential backoff."
+  },
+  {
+    "q": "What does 802.11ah do to increase doze-state duration?",
+    "options": [
+      "It extends max idle period handling, including a scaling-factor approach",
+      "It removes sleep states entirely",
+      "It forces every station to wake for every beacon",
+      "It disables TIM"
+    ],
+    "correct": 0,
+    "why": "The lecture explains two solutions that modify max-idle-period usage."
+  },
+  {
+    "q": "What scaling factors are represented by the two most significant bits in the modified max idle field?",
+    "options": [
+      "1, 10, 1000, and 10,000",
+      "1, 2, 4, and 8",
+      "10, 20, 40, and 80",
+      "100, 200, 400, and 800"
+    ],
+    "correct": 0,
+    "why": "The lecture gives these four scaling factors explicitly."
+  },
+  {
+    "q": "How much greater can the maximal max idle period become with the new scaling approach?",
+    "options": [
+      "2500 times greater",
+      "10 times greater",
+      "100 times greater",
+      "8191 times greater"
+    ],
+    "correct": 0,
+    "why": "The lecture says the maximal value becomes 2500 times greater."
+  },
+  {
+    "q": "Which of the following is one of the three 802.11ah BSS operation modes listed in the lecture?",
+    "options": [
+      "Sensor Only BSS",
+      "RTS Only BSS",
+      "Cloud Only BSS",
+      "MCS Only BSS"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Sensor Only BSS, Non-sensor only BSS, and Mixed mode."
+  },
+  {
+    "q": "What does TIM segmentation do in 802.11ah?",
+    "options": [
+      "Splits TIM information into several separately transmitted segments",
+      "Removes TIM from all beacons",
+      "Replaces TIM with NAV",
+      "Turns control frames into data frames"
+    ],
+    "correct": 0,
+    "why": "The lecture says TIM segmentation divides TIM information into segments."
+  },
+  {
+    "q": "How are stations grouped for TIM segmentation according to the lecture?",
+    "options": [
+      "Into pages, blocks, and subblocks",
+      "Into APs, ESSs, and DSs",
+      "Into SIFS, DIFS, and PIFS",
+      "Into PHYs, MACs, and CRCs"
+    ],
+    "correct": 0,
+    "why": "The lecture specifies grouping into pages, blocks, and subblocks."
+  },
+  {
+    "q": "What do relays do in 802.11ah?",
+    "options": [
+      "Forward frames between associated stations and the root AP",
+      "Replace the AP completely",
+      "Only carry beacon timestamps",
+      "Only calculate MCS indexes"
+    ],
+    "correct": 0,
+    "why": "The lecture says relays forward frames between stations and the parent/root AP."
+  },
+  {
+    "q": "What benefit do relays provide for distant edge stations?",
+    "options": [
+      "Longer effective reach and better reliability around obstructions",
+      "Guaranteed zero latency",
+      "Removal of authentication procedures",
+      "Elimination of AIDs"
+    ],
+    "correct": 0,
+    "why": "The lecture says relays extend distance and improve reliability in obstructed scenarios."
+  },
+  {
+    "q": "Why can relays reduce station energy consumption?",
+    "options": [
+      "Stations can transmit at lower power and often at higher data rate due to being closer",
+      "Relays eliminate all frame overhead",
+      "Relays disable ACKs",
+      "Relays stop beacons completely"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that being closer to a relay reduces required power and shortens transmissions."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

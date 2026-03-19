@@ -1,0 +1,1545 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 10 MCQ Quiz: IEEE 802.15.4 & Thread</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 10 MCQ Quiz: IEEE 802.15.4 & Thread</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 10</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "What is Thread according to the lecture?",
+    "options": [
+      "An open standard for reliable, cost-effective, low-power, secure, wireless IPv6 communication",
+      "A cellular-only protocol for wide-area IoT",
+      "A replacement for IEEE 802.15.4 PHY/MAC",
+      "A Bluetooth profile for home automation"
+    ],
+    "correct": 0,
+    "why": "The lecture defines Thread as an open standard for reliable, cost-effective, low-power, secure, wireless IPv6 communication."
+  },
+  {
+    "q": "Thread is designed specifically for which environments?",
+    "options": [
+      "Connected home and commercial applications where IP-based networking is desired",
+      "Satellite backhaul between datacenters",
+      "High-speed multimedia over 60 GHz only",
+      "Industrial Ethernet fieldbus only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Thread is designed for connected home and commercial applications where IP-based networking is desired."
+  },
+  {
+    "q": "Which is listed as a general characteristic of Thread?",
+    "options": [
+      "Devices cannot easily join the network and communication is encrypted",
+      "It requires a single central controller to avoid routing loops",
+      "It only supports one application layer at a time",
+      "It is tied to TCP and cannot use other transports"
+    ],
+    "correct": 0,
+    "why": "The lecture highlights security by stating devices cannot easily join the network and communication is encrypted."
+  },
+  {
+    "q": "Why does the lecture say Thread has no single point of failure?",
+    "options": [
+      "Because networks are auto-configuring and self-healing",
+      "Because every device must connect through one cloud broker",
+      "Because only one router is allowed at a time",
+      "Because border routers are prohibited"
+    ],
+    "correct": 0,
+    "why": "The lecture says Thread networks are auto-configuring and self-healing, so there is no single point of failure."
+  },
+  {
+    "q": "What does “application-layer agnostic” mean for Thread in the lecture?",
+    "options": [
+      "Any low-bandwidth application layer that can run over IPv6 can run over Thread, and multiple application layers can share the same network",
+      "Thread only supports MQTT",
+      "Thread only supports one proprietary application layer",
+      "Thread applications must be rewritten for every vendor"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that any low-bandwidth application layer over IPv6 can run over Thread and multiple application layers can share the same network."
+  },
+  {
+    "q": "Which sequence matches the Thread stack shown in the lecture from upper to lower layers?",
+    "options": [
+      "Application → UDP → IP Routing → 6LoWPAN → IEEE 802.15.4 MAC → IEEE 802.15.4 PHY",
+      "Application → TCP → RPL → IPv4 → Wi-Fi MAC → Wi-Fi PHY",
+      "Application → BLE ATT → GATT → L2CAP → PHY",
+      "Application → CoAP → MQTT → ZigBee → DSSS → Ethernet"
+    ],
+    "correct": 0,
+    "why": "The stack diagram shows Application, UDP, IP Routing, 6LoWPAN, IEEE 802.15.4 MAC, and IEEE 802.15.4 PHY."
+  },
+  {
+    "q": "What vertical function is shown alongside the Thread stack in the lecture diagram?",
+    "options": [
+      "Security/Commissioning",
+      "Virtualization/Containerization",
+      "Paging/RRC",
+      "Source Coding/Compression"
+    ],
+    "correct": 0,
+    "why": "The diagram places Security/Commissioning alongside the Thread stack."
+  },
+  {
+    "q": "IEEE 802.15.4-2015 is described in the lecture as which kind of network?",
+    "options": [
+      "A low-rate wireless personal area network (LR-WPAN)",
+      "A high-rate cellular WAN",
+      "A wired industrial bus",
+      "A metropolitan optical ring"
+    ],
+    "correct": 0,
+    "why": "The lecture describes IEEE 802.15.4 as a low-rate wireless personal area network."
+  },
+  {
+    "q": "What is the most common frequency band mentioned for IEEE 802.15.4 in the lecture?",
+    "options": [
+      "2.4 GHz",
+      "433 MHz",
+      "5 GHz",
+      "28 GHz"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 2.4 GHz is the most common IEEE 802.15.4 band."
+  },
+  {
+    "q": "How many “5-MHz channels” are mentioned for 2.4 GHz IEEE 802.15.4?",
+    "options": [
+      "16",
+      "8",
+      "24",
+      "32"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 2.4 GHz IEEE 802.15.4 has 16 “5-MHz channels”."
+  },
+  {
+    "q": "What PHY rate does the lecture give for IEEE 802.15.4?",
+    "options": [
+      "250 kbps",
+      "1 Mbps",
+      "11 Mbps",
+      "54 Mbps"
+    ],
+    "correct": 0,
+    "why": "The lecture gives 250 kbps as the PHY rate."
+  },
+  {
+    "q": "What approximate application data rate is paired with the 250 kbps PHY in the lecture?",
+    "options": [
+      "50 kbps",
+      "125 kbps",
+      "500 kbps",
+      "2 Mbps"
+    ],
+    "correct": 0,
+    "why": "The slide states 250 kbps PHY corresponds to about 50 kbps application data rate."
+  },
+  {
+    "q": "Which set of mechanisms is explicitly listed for IEEE 802.15.4?",
+    "options": [
+      "DSSS, CSMA/CA, backoff, beacon, and coordinator",
+      "OFDMA, HARQ, beamforming, and MIMO",
+      "FHSS, polling, and ARQ only",
+      "Token passing and collision detection"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Direct Sequence Spread Spectrum, CSMA/CA, backoff, beacon, and coordinator."
+  },
+  {
+    "q": "Why does the lecture associate IEEE 802.15.4 with low energy?",
+    "options": [
+      "Lower rate and short distance lead to lower power",
+      "It uses fiber instead of radio",
+      "It transmits only once per day",
+      "It disables acknowledgements"
+    ],
+    "correct": 0,
+    "why": "The slide states lower rate and short distance imply lower power and therefore low energy."
+  },
+  {
+    "q": "What unique identifier does each IEEE 802.15.4 node have?",
+    "options": [
+      "A 64-bit EUI-64",
+      "A 32-bit IPv4 address",
+      "A 16-bit TCP port",
+      "A 24-bit OUI only"
+    ],
+    "correct": 0,
+    "why": "The lecture states each node has a 64-bit Extended Unique ID (EUI-64)."
+  },
+  {
+    "q": "What is the maximum MAC frame size given for IEEE 802.15.4?",
+    "options": [
+      "127 bytes",
+      "256 bytes",
+      "512 bytes",
+      "1280 bytes"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the maximum MAC frame size is 127 bytes."
+  },
+  {
+    "q": "Which statement about IEEE 802.15.4 MAC segmentation is correct?",
+    "options": [
+      "There is no segmentation/reassembly at the MAC layer",
+      "MAC always fragments IPv6 packets automatically",
+      "Every frame is reassembled by the coordinator",
+      "MAC fragmentation is mandatory for all data"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says there is no segmentation/reassembly at the MAC layer."
+  },
+  {
+    "q": "In DSSS, what happens to each input bit?",
+    "options": [
+      "It is replaced with multiple bits according to a spreading sequence",
+      "It is always compressed into a single symbol",
+      "It is converted directly into an IP address",
+      "It is duplicated exactly once"
+    ],
+    "correct": 0,
+    "why": "The DSSS slide says each bit is replaced with multiple bits using a spreading sequence."
+  },
+  {
+    "q": "What determines the bandwidth width in DSSS according to the lecture?",
+    "options": [
+      "The length of the spreading code",
+      "The IPv6 header size",
+      "The PAN ID value",
+      "The number of border routers"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the length of the spreading code determines the width of the bandwidth."
+  },
+  {
+    "q": "What other names does the lecture use in the DSSS context?",
+    "options": [
+      "Spreading code is also called a chipping sequence, and the bits are chips",
+      "Spreading code is also called a beacon, and the bits are packets",
+      "Spreading code is also called a prefix, and the bits are hops",
+      "Spreading code is also called a slot map, and the bits are symbols only"
+    ],
+    "correct": 0,
+    "why": "The lecture says the spreading code may be called the chipping sequence and the bits are referred to as chips."
+  },
+  {
+    "q": "Which expression is used on the lecture slide to illustrate DSSS generation?",
+    "options": [
+      "C = A ⊕ B",
+      "C = A + B",
+      "C = A / B",
+      "C = A − B"
+    ],
+    "correct": 0,
+    "why": "The slide uses XOR and writes C = A ⊕ B."
+  },
+  {
+    "q": "According to the lecture, how is a DSSS signal produced from a BPSK signal?",
+    "options": [
+      "By multiplying the BPSK signal by the chipping sequence c(t)",
+      "By adding two IPv6 headers",
+      "By dividing the carrier frequency by the PAN ID",
+      "By replacing UDP with TCP"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the DS spreader multiplies the BPSK signal by c(t)."
+  },
+  {
+    "q": "How does the receiver recover the BPSK signal in the lecture’s DSSS explanation?",
+    "options": [
+      "By multiplying the incoming DSSS signal by c(t) again",
+      "By removing the UDP header",
+      "By asking the coordinator to resend the frame",
+      "By changing the PAN ID"
+    ],
+    "correct": 0,
+    "why": "The lecture explains that the signal is recovered by multiplying c(t) to the incoming signal."
+  },
+  {
+    "q": "If a chipping sequence has length 6 and the original packet has 100 bits, how many transmitted chips result?",
+    "options": [
+      "600",
+      "100",
+      "106",
+      "60"
+    ],
+    "correct": 0,
+    "why": "DSSS replaces each bit with 6 chips here, so 100 × 6 = 600."
+  },
+  {
+    "q": "If a DSSS system used 11 chips per original bit and transmitted 330 chips, how many original data bits were sent?",
+    "options": [
+      "30",
+      "11",
+      "33",
+      "300"
+    ],
+    "correct": 0,
+    "why": "330 transmitted chips divided by 11 chips per bit gives 30 original bits."
+  },
+  {
+    "q": "If XOR is used for DSSS and the data bit is 0, what happens to the chipping sequence?",
+    "options": [
+      "It is preserved unchanged",
+      "It is inverted bit by bit",
+      "It is replaced by all zeros",
+      "It is converted into decimal"
+    ],
+    "correct": 0,
+    "why": "With XOR, 0 ⊕ sequence = sequence."
+  },
+  {
+    "q": "If XOR is used for DSSS and the data bit is 1, what happens to the chipping sequence?",
+    "options": [
+      "It is inverted bit by bit",
+      "It is preserved unchanged",
+      "It disappears from the transmitted signal",
+      "It becomes the PAN ID"
+    ],
+    "correct": 0,
+    "why": "With XOR, 1 ⊕ sequence gives the bitwise inversion of the sequence."
+  },
+  {
+    "q": "Using XOR-based DSSS, what is the transmitted signal for data bit 0 and chipping sequence <code>011011000101</code>?",
+    "options": [
+      "011011000101",
+      "100100111010",
+      "111111111111",
+      "000000000000"
+    ],
+    "correct": 0,
+    "why": "For XOR-based spreading, a data bit of 0 preserves the chipping sequence."
+  },
+  {
+    "q": "Using XOR-based DSSS, what is the transmitted signal for data bit 1 and chipping sequence <code>101011010011</code>?",
+    "options": [
+      "010100101100",
+      "101011010011",
+      "001100110011",
+      "111111111111"
+    ],
+    "correct": 0,
+    "why": "A data bit of 1 inverts the chipping sequence bit by bit."
+  },
+  {
+    "q": "Which IEEE 802.15.4 topologies are explicitly mentioned on the topology slide?",
+    "options": [
+      "Star and peer-to-peer",
+      "Bus and ring",
+      "Tree and token ring only",
+      "Only full mesh"
+    ],
+    "correct": 0,
+    "why": "The topology slide explicitly mentions star and peer-to-peer."
+  },
+  {
+    "q": "What two device classes are given for IEEE 802.15.4 topologies?",
+    "options": [
+      "Full Function Device (FFD) and Reduced Function Device (RFD)",
+      "Router and gateway",
+      "Server and client",
+      "Coordinator and border router only"
+    ],
+    "correct": 0,
+    "why": "The topology slide lists FFD and RFD."
+  },
+  {
+    "q": "What happens when an FFD starts a PAN?",
+    "options": [
+      "It becomes the coordinator",
+      "It becomes a border router automatically",
+      "It must switch to IPv4",
+      "It loses its EUI-64 address"
+    ],
+    "correct": 0,
+    "why": "The lecture states that FFDs that start a PAN become the coordinator."
+  },
+  {
+    "q": "What name does the lecture give to each piconet in IEEE 802.15.4 topology?",
+    "options": [
+      "A cluster",
+      "A subnet mask",
+      "A superframe only",
+      "A path vector"
+    ],
+    "correct": 0,
+    "why": "The topology slide says each piconet has a PAN ID and is called a cluster."
+  },
+  {
+    "q": "How do nodes join a cluster in IEEE 802.15.4 according to the lecture?",
+    "options": [
+      "By sending an association request to the coordinator",
+      "By sending an HTTP POST to the leader",
+      "By requesting a TCP socket from a border router",
+      "By broadcasting a DNS query"
+    ],
+    "correct": 0,
+    "why": "The lecture states that nodes join a cluster by sending an association request to the coordinator."
+  },
+  {
+    "q": "What address does the coordinator assign to a joining IEEE 802.15.4 device?",
+    "options": [
+      "A 16-bit short address",
+      "A 32-bit MAC address",
+      "A 48-bit BLE identity",
+      "A 20-bit flow label"
+    ],
+    "correct": 0,
+    "why": "The coordinator assigns a 16-bit short address to the joining device."
+  },
+  {
+    "q": "Which addresses can an IEEE 802.15.4 device use after joining according to the lecture?",
+    "options": [
+      "Either the 16-bit short address or the EUI-64 address",
+      "Only the short address",
+      "Only IPv4",
+      "Only a cloud-assigned UUID"
+    ],
+    "correct": 0,
+    "why": "The lecture says devices can use either the short address or the EUI-64 address."
+  },
+  {
+    "q": "What is the defining property of the IEEE 802.15.4 cluster tree network shown in the lecture?",
+    "options": [
+      "It is a tree with no loops",
+      "It requires exactly 32 routers",
+      "It is always a star",
+      "It uses TCP for control"
+    ],
+    "correct": 0,
+    "why": "The lecture states “Tree ⇒ No loops.”"
+  },
+  {
+    "q": "In beacon-enabled IEEE 802.15.4 CSMA/CA, what does the coordinator do?",
+    "options": [
+      "Sends out beacons periodically",
+      "Disables all acknowledgements",
+      "Fragments IPv6 packets at MAC",
+      "Assigns a new PAN ID for every frame"
+    ],
+    "correct": 0,
+    "why": "The beacon-enabled MAC slide states that the coordinator sends out beacons periodically."
+  },
+  {
+    "q": "What happens during part of the beacon interval in beacon-enabled IEEE 802.15.4?",
+    "options": [
+      "It is inactive so everyone sleeps",
+      "It becomes a wired Ethernet phase",
+      "Only border routers may transmit",
+      "IPv6 headers are omitted completely"
+    ],
+    "correct": 0,
+    "why": "The lecture states that part of the beacon interval is inactive and everyone sleeps."
+  },
+  {
+    "q": "How many slots are in the active interval according to the lecture?",
+    "options": [
+      "16",
+      "8",
+      "32",
+      "64"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the active interval consists of 16 slots."
+  },
+  {
+    "q": "What are Guaranteed Timed Slots (GTS) for in beacon-enabled IEEE 802.15.4?",
+    "options": [
+      "Real-time services in the contention-free period",
+      "IPv6 address compression",
+      "Commissioning new Thread devices",
+      "Assigning OUIs to vendors"
+    ],
+    "correct": 0,
+    "why": "The lecture says GTS are periodic reserved slots for real-time services in the CFP."
+  },
+  {
+    "q": "What does CAP use in beacon-enabled IEEE 802.15.4?",
+    "options": [
+      "Slotted CSMA",
+      "Unslotted TCP",
+      "Token passing",
+      "Pure ALOHA"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Contention Access Period uses slotted CSMA."
+  },
+  {
+    "q": "What kind of operation is beaconless IEEE 802.15.4?",
+    "options": [
+      "Unslotted CSMA",
+      "Slotted TDMA",
+      "Scheduled OFDMA",
+      "Circuit switching"
+    ],
+    "correct": 0,
+    "why": "The beaconless MAC slide states that it uses unslotted CSMA."
+  },
+  {
+    "q": "What happens if the coordinator does not send beacons?",
+    "options": [
+      "There are no slots",
+      "The network becomes IPv4-only",
+      "All traffic must go through a leader",
+      "The EUI-64 is removed"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says that if the coordinator does not send beacons, there are no slots."
+  },
+  {
+    "q": "When are acknowledgements sent in beaconless IEEE 802.15.4?",
+    "options": [
+      "If requested by the sender",
+      "Only after discovery",
+      "Never",
+      "Only by border routers"
+    ],
+    "correct": 0,
+    "why": "The lecture says acknowledgements are sent if requested by the sender."
+  },
+  {
+    "q": "Which inter-frame spacing is used if the previous transmission is shorter than a specified duration?",
+    "options": [
+      "SIFS",
+      "LIFS",
+      "RIFS",
+      "PIFS"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Short Inter-Frame Spacing is used when the previous transmission is short."
+  },
+  {
+    "q": "Which inter-frame spacing is used otherwise?",
+    "options": [
+      "LIFS",
+      "SIFS",
+      "No spacing is used",
+      "Only CFP is used"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Long Inter-Frame Spacing is used otherwise."
+  },
+  {
+    "q": "Which IEEE 802.15.4 frames are described as short on the lecture slide?",
+    "options": [
+      "Acknowledgement, beacon, and MAC command frames",
+      "Only data frames",
+      "Only mesh addressing headers",
+      "Only IPv6 headers"
+    ],
+    "correct": 0,
+    "why": "The lecture says acknowledgement, beacon, and MAC command frames are short, while data frames are long."
+  },
+  {
+    "q": "What is the first step in IEEE 802.15.4 CSMA/CA according to the lecture?",
+    "options": [
+      "Wait until the channel is free",
+      "Send a beacon immediately",
+      "Ask the leader for permission",
+      "Reserve a GTS first"
+    ],
+    "correct": 0,
+    "why": "The CSMA/CA slide says the node first waits until the channel is free."
+  },
+  {
+    "q": "What does IEEE 802.15.4 CSMA/CA do after finding the channel free?",
+    "options": [
+      "Wait a random backoff period and then transmit if still free",
+      "Transmit continuously without checks",
+      "Switch to TCP",
+      "Allocate a new PAN ID"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the node waits a random backoff period and transmits if the channel is still free."
+  },
+  {
+    "q": "What happens if the channel is busy in IEEE 802.15.4 CSMA/CA?",
+    "options": [
+      "The node backs off again",
+      "The node becomes a coordinator",
+      "The packet is converted to IPv4",
+      "The node must reboot"
+    ],
+    "correct": 0,
+    "why": "The lecture states that if the channel is busy, the device backs off again."
+  },
+  {
+    "q": "What backoff exponent limit is given for battery life-extension mode?",
+    "options": [
+      "0–2",
+      "0–7",
+      "1–8",
+      "4–16"
+    ],
+    "correct": 0,
+    "why": "The CSMA/CA slide states that the backoff exponent is limited to 0–2 in battery life-extension mode."
+  },
+  {
+    "q": "Which frames are sent without CSMA/CA according to the lecture?",
+    "options": [
+      "Acknowledgements and beacons",
+      "Only data frames",
+      "Only MAC command frames",
+      "All frames"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that acknowledgements and beacons are sent without CSMA/CA."
+  },
+  {
+    "q": "What is the size of a standard Ethernet MAC address according to the lecture?",
+    "options": [
+      "48 bits",
+      "64 bits",
+      "16 bits",
+      "128 bits"
+    ],
+    "correct": 0,
+    "why": "The EUI64 slide contrasts Ethernet’s 48-bit MAC addresses with IEEE 802.15.4 EUI-64 addresses."
+  },
+  {
+    "q": "What is the size of an IEEE 802.15.4 EUI address?",
+    "options": [
+      "64 bits",
+      "48 bits",
+      "32 bits",
+      "16 bits"
+    ],
+    "correct": 0,
+    "why": "IEEE 802.15.4 uses a 64-bit Extended Unique ID."
+  },
+  {
+    "q": "What change did RFC4291 make according to the lecture’s EUI64 slide?",
+    "options": [
+      "It changed the meaning so that L = 0 indicates local",
+      "It changed IPv6 to 64-bit addressing",
+      "It removed the need for EUI-64",
+      "It made all-broadcast equal to local"
+    ],
+    "correct": 0,
+    "why": "The lecture says RFC4291 changed the meaning so that L = 0 indicates local."
+  },
+  {
+    "q": "What is the second bit called after the RFC4291 change, according to the lecture?",
+    "options": [
+      "The Universal bit (U-bit)",
+      "The Beacon bit",
+      "The Security bit",
+      "The Flow bit"
+    ],
+    "correct": 0,
+    "why": "The lecture says the second bit is now called the Universal bit (U-bit)."
+  },
+  {
+    "q": "What does 6LoWPAN stand for?",
+    "options": [
+      "IPv6 over Low-Power Wireless Personal Area Networks",
+      "6 Low-Power Wide Personal Area Networks",
+      "IPv6 over Long-Range Private Access Networks",
+      "6-bit Low-Power Wide Area Networking"
+    ],
+    "correct": 0,
+    "why": "The lecture defines 6LoWPAN as IPv6 over Low-Power Wireless Personal Area Networks."
+  },
+  {
+    "q": "How does the lecture describe 6LoWPAN in the IoT stack?",
+    "options": [
+      "As networking-layer protocols for IoT",
+      "As a replacement for 802.15.4 PHY",
+      "As an application-layer only protocol",
+      "As a cloud storage API"
+    ],
+    "correct": 0,
+    "why": "The 6LoWPAN slide describes it as networking-layer protocols for the Internet of Things."
+  },
+  {
+    "q": "Which statement about 6LoWPAN and IEEE 802.15.4 is correct?",
+    "options": [
+      "6LoWPAN is not the same as IEEE 802.15.4; it operates above it",
+      "6LoWPAN is exactly the PHY layer of 802.15.4",
+      "6LoWPAN replaces EUI-64 with IPv4",
+      "6LoWPAN is a Bluetooth profile"
+    ],
+    "correct": 0,
+    "why": "The lecture presents 6LoWPAN as an adaptation/networking layer on top of IEEE 802.15.4, not the same technology."
+  },
+  {
+    "q": "6LoWPAN technology sits on top of which technology in this lecture?",
+    "options": [
+      "IEEE 802.15.4",
+      "Ethernet",
+      "LTE-M",
+      "802.11ax"
+    ],
+    "correct": 0,
+    "why": "The lecture shows 6LoWPAN over IEEE 802.15.4 links."
+  },
+  {
+    "q": "What IPv6-versus-802.15.4 size mismatch is highlighted in the lecture?",
+    "options": [
+      "IPv6 MTU is at least 1280 bytes, while IEEE 802.15.4 packets are 127 bytes",
+      "IPv6 MTU is 127 bytes and 802.15.4 supports 1280 bytes",
+      "Both have the same packet size",
+      "IPv6 requires only 33 bytes total"
+    ],
+    "correct": 0,
+    "why": "The lecture highlights the mismatch between the 1280-byte IPv6 MTU and the 127-byte IEEE 802.15.4 frame size."
+  },
+  {
+    "q": "What optional 6LoWPAN feature is mentioned at the data-link layer?",
+    "options": [
+      "Mesh routing",
+      "TLS termination",
+      "Database sharding",
+      "CDMA scheduling"
+    ],
+    "correct": 0,
+    "why": "The lecture says 6LoWPAN can support optional mesh routing in the data-link layer."
+  },
+  {
+    "q": "What does that optional 6LoWPAN mesh routing need according to the lecture?",
+    "options": [
+      "Destination and intermediate addresses",
+      "Only a TCP port number",
+      "Only the OUI",
+      "A DNS server"
+    ],
+    "correct": 0,
+    "why": "The lecture says it needs destination and intermediate addresses."
+  },
+  {
+    "q": "In the lecture’s worst-case header-size calculation, how many bytes are left for actual payload?",
+    "options": [
+      "33 bytes",
+      "81 bytes",
+      "41 bytes",
+      "127 bytes"
+    ],
+    "correct": 0,
+    "why": "The header-size slide concludes that only 33 bytes are left for actual payload in the worst case."
+  },
+  {
+    "q": "Why does the lecture say 6LoWPAN needs an adaptation layer?",
+    "options": [
+      "To satisfy the 127-byte IEEE 802.15.4 frame constraint",
+      "To replace UDP with TCP",
+      "To add MIMO support",
+      "To eliminate EUI-64 addresses"
+    ],
+    "correct": 0,
+    "why": "The lecture states that an adaptation layer is needed to satisfy the 127-byte frame constraint."
+  },
+  {
+    "q": "Which is listed as a 6LoWPAN adaptation-layer concern?",
+    "options": [
+      "Balancing MAC-level retransmissions versus end-to-end retransmissions",
+      "Choosing a cloud region",
+      "Allocating GTS in Bluetooth",
+      "Managing NB-IoT paging cycles"
+    ],
+    "correct": 0,
+    "why": "The adaptation-layer slide discusses MAC-level retransmissions versus end-to-end retransmissions."
+  },
+  {
+    "q": "Which 6LoWPAN extension header is explicitly mentioned?",
+    "options": [
+      "Mesh addressing header",
+      "TLS record header",
+      "HTTP host header",
+      "GATT header"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly lists the mesh addressing header."
+  },
+  {
+    "q": "Which additional 6LoWPAN extension header is explicitly mentioned?",
+    "options": [
+      "Fragment header",
+      "ARP header",
+      "PPP header",
+      "RTP header"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly lists the fragment header."
+  },
+  {
+    "q": "What kind of compression does 6LoWPAN use according to the lecture?",
+    "options": [
+      "IPv6 and UDP header compression",
+      "JPEG image compression",
+      "Video compression only",
+      "Database row compression"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 6LoWPAN compresses IPv6 and UDP headers."
+  },
+  {
+    "q": "Which two compression types does the lecture say Thread uses over 6LoWPAN?",
+    "options": [
+      "IPHC and NHC",
+      "MIMO and OFDM",
+      "FDMA and TDMA",
+      "ARP and NAT"
+    ],
+    "correct": 0,
+    "why": "The lecture says Thread uses IPHC (Improved Header Compression) and NHC (Next Header Compression)."
+  },
+  {
+    "q": "How is a 6LoWPAN link-local IPv6 address formed from an EUI64 address according to the lecture?",
+    "options": [
+      "FE80:: followed by the U-bit formatted EUI64",
+      "By appending the EUI64 to 2001::/16",
+      "By using the PAN ID only",
+      "By converting it to IPv4 first"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the link-local IPv6 address is FE80:: plus the U-bit formatted EUI64."
+  },
+  {
+    "q": "What example is shown in the lecture for 6LoWPAN address formation?",
+    "options": [
+      "EUI64 local address 40::1 becomes U-bit formatted 0::1, so the link-local address is FE80::1",
+      "EUI64 local address 40::1 becomes FF02::1",
+      "EUI64 local address 40::1 becomes 2001::40::1",
+      "EUI64 local address 40::1 becomes FE80::40::1"
+    ],
+    "correct": 0,
+    "why": "The lecture’s worked example shows 40::1 becoming 0::1 and then FE80::1."
+  },
+  {
+    "q": "If the PAN ID is unknown and the 16-bit short address is <code>4EA1</code>, what 6LoWPAN link-local address format does the lecture imply?",
+    "options": [
+      "FE80::4EA1",
+      "FE80::1111:4EA1",
+      "FE80:4EA1::0",
+      "FE80::PAN:4EA1 where PAN must never be zero"
+    ],
+    "correct": 0,
+    "why": "The lecture says IPv6 link-local address can be FE80::PAN ID:Short Address and to use 0 if PAN ID is unknown, which reduces to FE80::4EA1 here."
+  },
+  {
+    "q": "If the PAN ID is <code>5678</code> and the short address is <code>4EA1</code>, what link-local address matches the lecture format?",
+    "options": [
+      "FE80::5678:4EA1",
+      "FE80::4EA1",
+      "FE80:5678::4EA1",
+      "5678::FE80:4EA1"
+    ],
+    "correct": 0,
+    "why": "The lecture gives the form FE80::PAN ID:Short Address."
+  },
+  {
+    "q": "What are the two high-level device categories in Thread?",
+    "options": [
+      "Full Thread Device (FTD) and Minimal Thread Device (MTD)",
+      "Router and coordinator",
+      "Leader and gateway",
+      "Client and server"
+    ],
+    "correct": 0,
+    "why": "The device-type slide states that Thread has Full Thread Devices and Minimal Thread Devices."
+  },
+  {
+    "q": "Which statement about a Thread Router is correct?",
+    "options": [
+      "It provides routing, joining, and security services, and it cannot sleep",
+      "It can only act as a sleepy child",
+      "It has no routing role at all",
+      "It is used only for application compression"
+    ],
+    "correct": 0,
+    "why": "The lecture describes a Router as providing routing, joining, and security services, and says routers cannot sleep."
+  },
+  {
+    "q": "What is the Leader role in Thread?",
+    "options": [
+      "An additional role held by one Router in the network",
+      "A non-routing sleepy child",
+      "A Wi-Fi access point",
+      "A cloud-only coordinator"
+    ],
+    "correct": 0,
+    "why": "The lecture says the Leader is an additional role of one Router."
+  },
+  {
+    "q": "Which Thread device can become a router if elected by the leader?",
+    "options": [
+      "Router Eligible End Device (REED)",
+      "Full End Device",
+      "Minimal End Device",
+      "Synchronized Sleepy End Device"
+    ],
+    "correct": 0,
+    "why": "The lecture says REEDs have the capability to become routers and will be elected by the leader."
+  },
+  {
+    "q": "How does the lecture describe a Full End Device (FED)?",
+    "options": [
+      "Similar to a REED but without the capability to become a router",
+      "A device that must always be a border router",
+      "A router that cannot forward",
+      "A device that only uses IPv4"
+    ],
+    "correct": 0,
+    "why": "The lecture describes FEDs as similar to REEDs but unable to become routers."
+  },
+  {
+    "q": "How does a Minimal End Device communicate in Thread?",
+    "options": [
+      "Only through its parent router, with the radio always on or idle",
+      "Directly with every other router in the mesh",
+      "Only through Ethernet",
+      "Only through the cloud"
+    ],
+    "correct": 0,
+    "why": "The lecture says a Minimal End Device communicates only through its parent router and keeps the radio always on or idle."
+  },
+  {
+    "q": "How does a Sleepy End Device differ from a Minimal End Device?",
+    "options": [
+      "It turns its radio off during idle periods and wakes periodically",
+      "It becomes the leader automatically",
+      "It uses TCP instead of UDP",
+      "It must act as a border router"
+    ],
+    "correct": 0,
+    "why": "The lecture says the radio of a Sleepy End Device is turned off during idle periods and wakes periodically."
+  },
+  {
+    "q": "What is distinctive about a Synchronized Sleepy End Device?",
+    "options": [
+      "It wakes periodically at scheduled intervals",
+      "It uses a 5 GHz radio only",
+      "It maintains full routing tables",
+      "It cannot attach to a parent router"
+    ],
+    "correct": 0,
+    "why": "The lecture says a synchronized sleepy end device wakes periodically at scheduled intervals."
+  },
+  {
+    "q": "What is a Thread Border Router?",
+    "options": [
+      "A role that provides connectivity from the Thread Network to adjacent networks such as Wi-Fi or Ethernet",
+      "The only device allowed to send beacons",
+      "A special form of IPv6 header compression",
+      "A mandatory role for all sleepy end devices"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a border router as a Thread role that connects the Thread network to adjacent networks such as Wi-Fi or Ethernet."
+  },
+  {
+    "q": "What services do Border Routers provide within a Thread network?",
+    "options": [
+      "Routing services for off-network operations",
+      "Only local Bluetooth pairing",
+      "Only DSSS despreading",
+      "Only PAN ID assignment"
+    ],
+    "correct": 0,
+    "why": "The lecture says border routers provide services for devices within the Thread network, including routing services for off-network operations."
+  },
+  {
+    "q": "How many Border Routers may there be in one Thread Network according to the lecture?",
+    "options": [
+      "Several",
+      "Exactly one",
+      "At most three",
+      "None"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says there may be several Border Routers in one Thread Network."
+  },
+  {
+    "q": "Who can provide Border Router services according to the lecture?",
+    "options": [
+      "Any Routing FTD, even if it is not currently acting as a Router in the Thread network",
+      "Only sleepy end devices",
+      "Only REEDs",
+      "Only the first device that joined the network"
+    ],
+    "correct": 0,
+    "why": "The border router slide states that any Routing FTD can provide Border Router services."
+  },
+  {
+    "q": "What prefix is generated by the device that forms a Thread network?",
+    "options": [
+      "A /64 Mesh Local Prefix",
+      "A /32 IPv4 netmask",
+      "A /128 loopback prefix",
+      "A /24 OUI block"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the device forming the network generates a /64 Mesh Local Prefix."
+  },
+  {
+    "q": "How many Mesh Local Addresses does each Thread device generate from the Mesh Local Prefix?",
+    "options": [
+      "Two",
+      "One",
+      "Four",
+      "None"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Mesh Local Prefix is used by every device to generate two Mesh Local Addresses."
+  },
+  {
+    "q": "Which address is used for communication within the Thread Network?",
+    "options": [
+      "IPv6 Unique Local Address (ULA)",
+      "Only an FE80::/64 link-local address",
+      "Only an IPv4 private address",
+      "Only a cloud relay address"
+    ],
+    "correct": 0,
+    "why": "The addressing slide says the IPv6 ULA is used for communication within the Thread network."
+  },
+  {
+    "q": "Which address type is used for mesh establishment and link maintenance in Thread?",
+    "options": [
+      "A link-local Interface Identifier with an FE80::/64 prefix",
+      "The IPv6 ULA only",
+      "An IPv4 APIPA address",
+      "A temporary TCP session ID"
+    ],
+    "correct": 0,
+    "why": "The lecture says every Thread device configures a link-local Interface Identifier with an FE80::/64 prefix for mesh establishment and link maintenance."
+  },
+  {
+    "q": "What does the lecture say about Thread network topology?",
+    "options": [
+      "Thread enables full mesh connectivity between all routers in the network",
+      "Thread enables full mesh connectivity between all devices including sleepy end devices",
+      "Thread only allows a single bus topology",
+      "Thread requires a cluster tree only"
+    ],
+    "correct": 0,
+    "why": "The lecture specifically says full mesh connectivity is between all routers in the network."
+  },
+  {
+    "q": "What topology forms if there is only one router in a Thread network?",
+    "options": [
+      "A basic star topology with a single router",
+      "A ring topology",
+      "A cluster tree with multiple coordinators",
+      "A pure peer-to-peer mesh with no parent-child structure"
+    ],
+    "correct": 0,
+    "why": "The lecture says that if only one router exists, a basic star topology with a single router is formed."
+  },
+  {
+    "q": "What topology forms automatically if there is more than one router?",
+    "options": [
+      "A mesh topology",
+      "A bus topology",
+      "A wired tree topology",
+      "A token ring"
+    ],
+    "correct": 0,
+    "why": "The lecture says that if more than one router exists, a mesh topology is formed automatically."
+  },
+  {
+    "q": "How many active routers can the Thread network have according to the lecture?",
+    "options": [
+      "Up to 32 active routers",
+      "Exactly 10 routers",
+      "Up to 3 routers",
+      "Unlimited routers with no stated limit"
+    ],
+    "correct": 0,
+    "why": "The routing slide states that the Thread network has up to 32 active routers."
+  },
+  {
+    "q": "What routing method is used for messages in the Thread network according to the lecture?",
+    "options": [
+      "Next-hop routing based on the device’s link-layer routing table",
+      "Distance-vector routing over TCP",
+      "Source routing carried in HTTP headers",
+      "Pure flooding with no routing table"
+    ],
+    "correct": 0,
+    "why": "The lecture states that active routers use next-hop routing based on the device’s link-layer routing table."
+  },
+  {
+    "q": "What is MLE in the Thread lecture?",
+    "options": [
+      "Mesh Link Establishment",
+      "Minimal Link Encryption",
+      "Managed Local Ethernet",
+      "Mesh Local Expansion"
+    ],
+    "correct": 0,
+    "why": "The lecture expands MLE as Mesh Link Establishment."
+  },
+  {
+    "q": "What is MLE used for according to the lecture?",
+    "options": [
+      "Establishing and configuring secure radio links, detecting neighbors, and maintaining routing costs",
+      "Compressing audio payloads",
+      "Assigning OUIs to manufacturers",
+      "Converting IPv6 to IPv4"
+    ],
+    "correct": 0,
+    "why": "The routing slide lists these exact MLE uses."
+  },
+  {
+    "q": "What additional property do MLE messages consider according to the lecture?",
+    "options": [
+      "Asymmetric link costs",
+      "Only symmetric links",
+      "Only cloud-provided routes",
+      "Application-layer priorities only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that MLE messages ensure asymmetric link costs are considered."
+  },
+  {
+    "q": "What do routers periodically exchange in Thread according to the lecture?",
+    "options": [
+      "MLE advertisement packets containing link quality, link cost, and path cost information",
+      "HTTP GET requests only",
+      "Only PAN IDs",
+      "Only border router passwords"
+    ],
+    "correct": 0,
+    "why": "The lecture says routers periodically exchange MLE advertisement packets with link and path cost information."
+  },
+  {
+    "q": "Why is Thread routing described as self-healing?",
+    "options": [
+      "Routers can detect dropped routers quickly and calculate new best routes",
+      "It always uses one permanent route",
+      "It disables routing updates to save power",
+      "It requires manual repair after each failure"
+    ],
+    "correct": 0,
+    "why": "The lecture states that self-healing lets routers quickly detect dropped routers and calculate the best routes to maintain connectivity."
+  },
+  {
+    "q": "How are packets forwarded inside the Thread Network according to the lecture?",
+    "options": [
+      "Using IP routing and a device routing table with compressed mesh-local router addresses and next hops",
+      "Only by broadcasting to every node",
+      "Only through the Leader",
+      "Only through a single border router"
+    ],
+    "correct": 0,
+    "why": "The forwarding slide says devices use IP routing and a device routing table populated with compressed mesh-local addresses for routers and the appropriate next hop."
+  },
+  {
+    "q": "How does forwarding work beyond the Thread Network?",
+    "options": [
+      "Border Routers are used",
+      "Every sleepy end device forwards directly to Wi-Fi",
+      "IPv6 forwarding stops at the leader",
+      "Only Bluetooth bridges are allowed"
+    ],
+    "correct": 0,
+    "why": "The lecture states that forwarding beyond the Thread network uses Border Routers."
+  },
+  {
+    "q": "What does each Border Router notify to the Leader for off-network forwarding?",
+    "options": [
+      "The IPv6 prefix or prefixes it serves",
+      "Its EUI-64 manufacturer code",
+      "Its random backoff value",
+      "Its HTTP host header"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each Border Router notifies the Leader of the IPv6 prefix or prefixes it serves."
+  },
+  {
+    "q": "How is that off-network prefix information distributed in Thread?",
+    "options": [
+      "The Leader distributes it as Thread Network Data using MLE messages",
+      "The coordinator sends it in an Ethernet frame",
+      "It is embedded in the PAN ID",
+      "It is stored only in the cloud"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the Leader distributes this information as Thread Network Data using MLE messages."
+  },
+  {
+    "q": "What are the three phases a device goes through before it can participate in a Thread Network?",
+    "options": [
+      "Discovery, Commissioning, and Attaching",
+      "Scanning, Pairing, and Streaming",
+      "Provisioning, Tunneling, and Paging",
+      "Authentication, Handover, and Sleep"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Discovery, Commissioning, and Attaching as the three phases."
+  },
+  {
+    "q": "What happens during the Discovery phase?",
+    "options": [
+      "The joining device sends MLE Discovery Requests on all channels and waits for Discovery Responses",
+      "The device immediately becomes Leader",
+      "The device gets a GTS reservation",
+      "The device disables security to join faster"
+    ],
+    "correct": 0,
+    "why": "The lecture says the joining device issues MLE Discovery Requests on all channels and waits for Responses."
+  },
+  {
+    "q": "What information is included in the Discovery Response according to the lecture?",
+    "options": [
+      "The network name and steering data",
+      "Only a PAN ID",
+      "Only a TCP port",
+      "Only the border router MAC address"
+    ],
+    "correct": 0,
+    "why": "The lecture says the Discovery Response contains the network name and steering data."
+  },
+  {
+    "q": "What is Thread Commissioning?",
+    "options": [
+      "The process of authenticating a new device and providing it with the network credentials",
+      "A method for compressing IPv6 headers",
+      "A way to convert a sleepy end device into a border router",
+      "A MAC-layer fragmentation method"
+    ],
+    "correct": 0,
+    "why": "The lecture defines commissioning as authenticating a new device and providing network credentials."
+  },
+  {
+    "q": "What happens during the Attaching phase?",
+    "options": [
+      "A detached device with credentials multicasts MLE Parent Requests to nearby Routers and REEDs, then uses MLE to form a secure link and provision IPv6 addresses",
+      "The device becomes a border router immediately",
+      "The device negotiates TCP windows only",
+      "The device disables IPv6 compression"
+    ],
+    "correct": 0,
+    "why": "The lecture describes attaching exactly this way."
+  },
+  {
+    "q": "What may a REED do when it hears a parent request from a joining device?",
+    "options": [
+      "Upgrade to a Router role if needed to support connectivity",
+      "Shut down its radio permanently",
+      "Become a border router automatically",
+      "Delete the network credentials"
+    ],
+    "correct": 0,
+    "why": "The lecture says a REED may upgrade to a Router role to support connectivity of the newly attaching device."
+  },
+  {
+    "q": "How does a Thread device attach initially according to the lecture?",
+    "options": [
+      "It always attaches as an End Device first",
+      "It always attaches as the Leader",
+      "It always attaches as a Border Router",
+      "It skips directly to Router without joining"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a Thread Device always attaches as an End Device."
+  },
+  {
+    "q": "How can a Thread device later become a Router according to the lecture?",
+    "options": [
+      "By requesting a Router ID from the Leader",
+      "By changing its PAN ID locally",
+      "By switching from UDP to TCP",
+      "By sending a beacon to every node"
+    ],
+    "correct": 0,
+    "why": "The lecture says it can upgrade later by requesting a Router ID from the Leader."
+  },
+  {
+    "q": "Which phases are only required for the very first attachment of a Thread device?",
+    "options": [
+      "Discovery and Commissioning",
+      "Commissioning and Attaching",
+      "Discovery and Attaching",
+      "Only Attaching"
+    ],
+    "correct": 0,
+    "why": "The lecture states that discovery and commissioning are only required for the very first attachment."
+  },
+  {
+    "q": "For a later re-attachment of a Thread device that already has network credentials, which phase is still required?",
+    "options": [
+      "Attaching",
+      "Discovery only",
+      "Commissioning only",
+      "All three phases again"
+    ],
+    "correct": 0,
+    "why": "The lecture states that devices store network credentials for subsequent attachments, so only attaching is needed later."
+  },
+  {
+    "q": "Which statement about Thread addressing is true?",
+    "options": [
+      "IPv6 ULA is used for communication within the Thread Network, while FE80::/64 link-local addresses are used for mesh establishment and link maintenance",
+      "IPv6 ULA is used for mesh establishment and FE80::/64 is used only off-network",
+      "Thread devices use only one mesh-local address",
+      "Thread does not use IPv6 addressing internally"
+    ],
+    "correct": 0,
+    "why": "The lecture distinguishes ULA for internal communication from FE80::/64 link-local addressing for mesh establishment and link maintenance."
+  },
+  {
+    "q": "Which statement about Thread mesh connectivity is correct?",
+    "options": [
+      "Thread enables full mesh connectivity between all routers, not necessarily all devices",
+      "Thread guarantees full mesh links between every sleepy end device",
+      "Thread only supports single-hop star networks",
+      "Thread does not use parent-child relationships"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says full mesh connectivity is between all routers in the network."
+  },
+  {
+    "q": "Which statement best matches the lecture’s conclusion about Thread?",
+    "options": [
+      "Thread is a low-power wireless mesh networking protocol based on IP and open standards, built over IEEE 802.15.4",
+      "Thread is a proprietary cellular standard that replaces IPv6",
+      "Thread uses Ethernet PHY/MAC directly for sleepy end devices",
+      "Thread is an application-only protocol unrelated to routing"
+    ],
+    "correct": 0,
+    "why": "The conclusion slide describes Thread as a low-power wireless mesh networking protocol based on IP and open standards, built over IEEE 802.15.4."
+  },
+  {
+    "q": "Which statement best matches the lecture’s conclusion about IEEE 802.15.4?",
+    "options": [
+      "It is a low-data-rate PHY/MAC used by many IoT protocols and supports star, mesh, or cluster tree topologies",
+      "It is a transport protocol above UDP",
+      "It only supports wired networks",
+      "It requires TCP and HTTP"
+    ],
+    "correct": 0,
+    "why": "The conclusion slide summarizes IEEE 802.15.4 as a low-data-rate PHY/MAC used by many IoT protocols and supporting star, mesh, or cluster tree topologies."
+  },
+  {
+    "q": "Which network layers does IEEE 802.15.4 define according to the lecture?",
+    "options": [
+      "Physical (PHY) and Data Link (MAC)",
+      "Network and Transport",
+      "Application and Session",
+      "Presentation and Session"
+    ],
+    "correct": 0,
+    "why": "The lecture consistently presents IEEE 802.15.4 as the PHY and MAC basis for Thread and other IoT protocols."
+  },
+  {
+    "q": "Which paired answer matches the lecture reference to popular IoT protocols built on IEEE 802.15.4?",
+    "options": [
+      "ZigBee and Thread",
+      "LTE-M and NB-IoT",
+      "HTTP and REST",
+      "Bluetooth Classic and Wi-Fi 7"
+    ],
+    "correct": 0,
+    "why": "The lecture mentions IEEE 802.15.4-2015 as ZigBee and notes it is now used by Thread as well."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>

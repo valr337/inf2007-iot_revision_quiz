@@ -1,0 +1,1721 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSC2106 – Lecture 7 MCQ Quiz: Bluetooth</title>
+  <style>
+    :root { --maxw: 980px; --accent: #0f766e; --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Noto Sans", sans-serif; line-height: 1.45; margin: 0; background: #f7f7f8;
+    color:#111827; }
+    header { background: white; border-bottom: 1px solid #e5e7eb; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 18px 16px; }
+    h1 { font-size: clamp(20px, 2.6vw, 28px); margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    button { cursor:pointer; border:1px solid #e5e7eb; background:white;
+    padding:8px 12px; border-radius:10px; font-weight:600; }
+    button.primary { background: var(--accent); color: white; border-color:
+    var(--accent); }
+    button:disabled { opacity:.6; cursor:not-allowed }
+    .stats { display:flex; gap:18px; align-items:center; margin-top:10px; }
+    .pill { background:#eef2ff; color:#3730a3; font-weight:700; padding:6px
+    10px; border-radius:999px; }
+    main { max-width: var(--maxw); margin: 12px auto 60px; padding: 0 16px; }
+    .qcard { background:white; border:1px solid #e5e7eb; border-radius:14px;
+    padding:14px; margin:14px 0; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+    .qhead { display:flex; justify-content:space-between; align-items:baseline;
+    gap:6px }
+    .qtitle { font-weight:700; margin:0 0 8px }
+    .badge { font-size:12px; color:#374151; background:#f3f4f6; border:1px
+    solid #e5e7eb; padding:2px 8px; border-radius:999px }
+    .opts { display:grid; gap:8px; margin-top:8px }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px;
+    border:1px solid #e5e7eb; border-radius:12px; background:white; cursor:pointer; }
+    .opt:hover { border-color:#c7d2fe; }
+    .opt.correct { border-color:#16a34a; background:#f0fdf4; }
+    .opt.wrong { border-color:#dc2626; background:#fef2f2; }
+    .opt.disabled { pointer-events:none; opacity:.8 }
+    .letter { width:28px; height:28px; border-radius:999px; border:1px
+    solid #e5e7eb; display:grid; place-items:center; font-weight:700; }
+    .exp { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px;
+    color:#111827; }
+    .exp strong { color:#065f46 }
+    pre.code-block {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      margin: 12px 0;
+    }
+    footer { text-align:center; color:#6b7280; padding:30px 12px; }
+    details > summary { cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>CSC2106 – Lecture 7 MCQ Quiz: Bluetooth</h1>
+      <div class="sub">CSC2106 – Internet of Things: Protocols and Networks • Lecture 7</div>
+      <div class="stats" id="stats">
+        <span class="pill" id="score">Score: 0</span>
+        <span class="pill" id="progress">Answered: 0 / 0</span>
+        <span class="pill" id="percent">0%</span>
+      </div>
+      <div class="controls">
+        <button class="primary" id="resetBtn" title="Reset the quiz to try again">Reset quiz</button>
+        <button id="revealBtn" title="Reveal correct answers for all questions">Reveal all answers</button>
+        <button id="shuffleBtn" title="Shuffle questions and answer options">Shuffle</button>
+      </div>
+    </div>
+  </header>
+  <main id="quiz"></main>
+  <footer>
+    Based on lecture material. This educational quiz is for practice.
+  </footer>
+  <script>
+    const QUESTIONS = [
+  {
+    "q": "In the lecture's IoT ecosystem table, where is Bluetooth Smart placed?",
+    "options": [
+      "Datalink layer",
+      "Transport layer",
+      "Network layer",
+      "Application layer"
+    ],
+    "correct": 0,
+    "why": "The IoT ecosystem slide lists Bluetooth Smart under the datalink layer."
+  },
+  {
+    "q": "In the 'Recent Protocols for IoT' slide, Bluetooth Low Energy appears under which category?",
+    "options": [
+      "Datalink",
+      "Session",
+      "Security",
+      "Management"
+    ],
+    "correct": 0,
+    "why": "The protocol overview slide places Bluetooth Low Energy under datalink technologies."
+  },
+  {
+    "q": "How are messages represented before wireless transmission, according to the preliminaries slide?",
+    "options": [
+      "As bits 1 and 0",
+      "As analog voltages only",
+      "As file packets only",
+      "As IP addresses"
+    ],
+    "correct": 0,
+    "why": "The lecture states that messages are represented using bits '1' and '0'."
+  },
+  {
+    "q": "Before transmission over a wireless medium, a group of bits is encoded as what?",
+    "options": [
+      "A symbol",
+      "A packet header",
+      "A MAC address",
+      "A UUID"
+    ],
+    "correct": 0,
+    "why": "The preliminaries slide says a group of bits is encoded as a symbol before transmission."
+  },
+  {
+    "q": "In BPSK, what symbol is used for bit '1'?",
+    "options": [
+      "+1",
+      "-1",
+      "+2",
+      "0"
+    ],
+    "correct": 0,
+    "why": "The lecture states that in BPSK, bit '1' is mapped to the symbol +1."
+  },
+  {
+    "q": "In BPSK, what symbol is used for bit '0'?",
+    "options": [
+      "-1",
+      "+1",
+      "0",
+      "+2"
+    ],
+    "correct": 0,
+    "why": "The lecture states that in BPSK, bit '0' is mapped to the symbol -1."
+  },
+  {
+    "q": "What is the key idea of QPSK in the lecture?",
+    "options": [
+      "One symbol is assigned for every two bits",
+      "One symbol is assigned for every four bits",
+      "Each bit uses a different antenna",
+      "Only zeros are transmitted"
+    ],
+    "correct": 0,
+    "why": "The QPSK example states that one symbol is assigned for every two bits."
+  },
+  {
+    "q": "To generate the transmitted signal, symbols are multiplied by what?",
+    "options": [
+      "A carrier cosine function",
+      "A random MAC address",
+      "An IP header",
+      "A UUID table"
+    ],
+    "correct": 0,
+    "why": "The lecture states that symbols are multiplied by a carrier, generally written as cos(2*pi*fc*t)."
+  },
+  {
+    "q": "Why is multiple access needed in wireless systems?",
+    "options": [
+      "To allow multiple users to transmit",
+      "To remove all noise",
+      "To replace modulation",
+      "To eliminate antennas"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly says multiple access is needed for multiple users to transmit."
+  },
+  {
+    "q": "Which of the following is listed as a multiple access scheme in the lecture?",
+    "options": [
+      "TDMA",
+      "CRC",
+      "TLS",
+      "GATT"
+    ],
+    "correct": 0,
+    "why": "The preliminaries slide lists TDMA, FDMA, CDMA, and OFDMA."
+  },
+  {
+    "q": "Bluetooth started with Ericsson's Bluetooth Project in which year?",
+    "options": [
+      "1994",
+      "1998",
+      "1999",
+      "2002"
+    ],
+    "correct": 0,
+    "why": "The lecture says Bluetooth started with Ericsson's Bluetooth Project in 1994."
+  },
+  {
+    "q": "Bluetooth was originally started for radio communication between what devices?",
+    "options": [
+      "Cell phones over short distances",
+      "Satellites and base stations",
+      "Routers across the Internet",
+      "Only industrial PLCs"
+    ],
+    "correct": 0,
+    "why": "The slide says the project targeted radio communication between cell phones over short distances."
+  },
+  {
+    "q": "Bluetooth is named after which historical figure?",
+    "options": [
+      "Danish king Herald Blatand",
+      "Alan Turing",
+      "Nikola Tesla",
+      "King George I"
+    ],
+    "correct": 0,
+    "why": "The lecture states Bluetooth was named after Danish king Herald Blatand."
+  },
+  {
+    "q": "Which organization group formed the Bluetooth SIG in May 1998?",
+    "options": [
+      "Intel, IBM, Nokia, Toshiba, and Ericsson",
+      "Apple, Google, Microsoft, Sony, and Cisco",
+      "IEEE alone",
+      "Samsung, Huawei, ARM, Oracle, and Dell"
+    ],
+    "correct": 0,
+    "why": "The history slide lists Intel, IBM, Nokia, Toshiba, and Ericsson as the Bluetooth SIG founders."
+  },
+  {
+    "q": "When did Bluetooth specification version 1.0A come out?",
+    "options": [
+      "Late 1999",
+      "Early 1994",
+      "May 1998",
+      "Early 2002"
+    ],
+    "correct": 0,
+    "why": "The lecture states version 1.0A came out in late 1999."
+  },
+  {
+    "q": "IEEE 802.15.1 approved in early 2002 is based on what?",
+    "options": [
+      "Bluetooth",
+      "Wi-Fi",
+      "ZigBee",
+      "LoRaWAN"
+    ],
+    "correct": 0,
+    "why": "The slide says IEEE 802.15.1 approved in early 2002 is based on Bluetooth."
+  },
+  {
+    "q": "At the time of Bluetooth's launch, the standby current was listed as approximately:",
+    "options": [
+      "10 mA",
+      "50 mA",
+      "100 mA",
+      "1 A"
+    ],
+    "correct": 0,
+    "why": "The lecture lists 10 mA in standby as a key early Bluetooth feature."
+  },
+  {
+    "q": "At the time of Bluetooth's launch, the transmit current was listed as approximately:",
+    "options": [
+      "50 mA",
+      "10 mA",
+      "1 mA",
+      "500 mA"
+    ],
+    "correct": 0,
+    "why": "The history slide lists 50 mA while transmitting."
+  },
+  {
+    "q": "Which Bluetooth version group introduced Low Energy (BLE) as its main focus?",
+    "options": [
+      "4.x",
+      "3.0",
+      "1.0–2.x",
+      "6.0"
+    ],
+    "correct": 0,
+    "why": "The versions table states that Bluetooth 4.x focused on Low Energy (BLE)."
+  },
+  {
+    "q": "Which Bluetooth version group is associated with 'Faster file transfers' through Wi-Fi?",
+    "options": [
+      "3.0",
+      "4.x",
+      "5.4",
+      "6.0"
+    ],
+    "correct": 0,
+    "why": "The versions table lists version 3.0 as high speed via Wi-Fi for faster file transfers."
+  },
+  {
+    "q": "Which version group is associated with 'Years of battery life for small sensors'?",
+    "options": [
+      "4.x",
+      "1.0–2.x",
+      "3.0",
+      "5.0–5.3"
+    ],
+    "correct": 0,
+    "why": "The versions table lists that effect for Bluetooth 4.x."
+  },
+  {
+    "q": "Which version group adds 'Precise distance, smarter scanning, lower latency'?",
+    "options": [
+      "6.0",
+      "4.0",
+      "3.0",
+      "1.0–2.x"
+    ],
+    "correct": 0,
+    "why": "The versions table lists those improvements under Bluetooth 6.0."
+  },
+  {
+    "q": "What frequency range does classic Bluetooth use in the lecture?",
+    "options": [
+      "2402–2480 MHz",
+      "868–915 MHz",
+      "5.1–5.9 GHz",
+      "13.56 MHz"
+    ],
+    "correct": 0,
+    "why": "The Bluetooth details slide gives a frequency range of 2402–2480 MHz."
+  },
+  {
+    "q": "The classic Bluetooth band shown in the lecture is how wide?",
+    "options": [
+      "79 MHz",
+      "40 MHz",
+      "27 MHz",
+      "2 MHz"
+    ],
+    "correct": 0,
+    "why": "The lecture states that Bluetooth uses a total 79 MHz band."
+  },
+  {
+    "q": "What nominal data rate is listed for classic Bluetooth?",
+    "options": [
+      "1 Mbps using 1 MHz",
+      "2 Mbps using 2 MHz",
+      "250 kbps using 1 MHz",
+      "10 Mbps using 5 MHz"
+    ],
+    "correct": 0,
+    "why": "The Bluetooth details slide lists 1 Mbps using 1 MHz as the nominal rate."
+  },
+  {
+    "q": "What user data rate is listed for classic Bluetooth?",
+    "options": [
+      "720 kbps",
+      "1 Mbps",
+      "2 Mbps",
+      "50 kbps"
+    ],
+    "correct": 0,
+    "why": "The lecture lists 720 kbps as the user data rate."
+  },
+  {
+    "q": "What enhanced data rate does the lecture say Bluetooth can achieve with better encoding?",
+    "options": [
+      "3 Mbps",
+      "2 Mbps",
+      "10 Mbps",
+      "500 kbps"
+    ],
+    "correct": 0,
+    "why": "The slide states that enhanced data rate can achieve 3 Mbps."
+  },
+  {
+    "q": "What spread spectrum technique does Bluetooth use?",
+    "options": [
+      "Frequency Hopping Spread Spectrum",
+      "Direct Sequence Spread Spectrum",
+      "Carrier Sense Multiple Access",
+      "Orthogonal coding only"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that Bluetooth uses Frequency Hopping Spread Spectrum (FHSS)."
+  },
+  {
+    "q": "How often does classic Bluetooth hop according to the lecture?",
+    "options": [
+      "1600 times per second",
+      "625 times per second",
+      "79 times per second",
+      "2000 times per second"
+    ],
+    "correct": 0,
+    "why": "The Bluetooth details slide states 1600 times per second."
+  },
+  {
+    "q": "A hop time of 625 microseconds corresponds to what hopping rate?",
+    "options": [
+      "1600 hops per second",
+      "625 hops per second",
+      "3200 hops per second",
+      "79 hops per second"
+    ],
+    "correct": 0,
+    "why": "The lecture equates 1600 times/s with 625 microseconds per hop."
+  },
+  {
+    "q": "What security mechanism is explicitly listed for classic Bluetooth?",
+    "options": [
+      "Challenge/Response authentication with 128-bit encryption",
+      "TLS certificates only",
+      "OAuth 2.0 tokens",
+      "AES-256 only with no authentication"
+    ],
+    "correct": 0,
+    "why": "The slide lists challenge/response authentication and 128-bit encryption."
+  },
+  {
+    "q": "Which transmit power class is listed as up to 100 m range?",
+    "options": [
+      "Class 1",
+      "Class 2",
+      "Class 3",
+      "BLE advertising class"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Class 1 as 20 dBm max with about 100 m range."
+  },
+  {
+    "q": "Which transmit power class is listed as 0 dBm (1 mW) and about 10 m range?",
+    "options": [
+      "Class 3",
+      "Class 1",
+      "Class 2",
+      "Class 4"
+    ],
+    "correct": 0,
+    "why": "The lecture lists Class 3 as 0 dBm (1 mW) and about 10 m range."
+  },
+  {
+    "q": "FHSS refers to a spread spectrum method where the carrier does what?",
+    "options": [
+      "Hops randomly from one frequency to another",
+      "Stays fixed at one frequency forever",
+      "Moves only in time but not frequency",
+      "Uses only a wired medium"
+    ],
+    "correct": 0,
+    "why": "The FHSS slide defines it as a carrier hopping randomly from one frequency to another."
+  },
+  {
+    "q": "In the FHSS notation, what does Ws represent?",
+    "options": [
+      "Spread spectrum bandwidth",
+      "Signal bandwidth",
+      "Hopping time",
+      "Carrier seed"
+    ],
+    "correct": 0,
+    "why": "The symbols slide defines Ws as spread spectrum bandwidth."
+  },
+  {
+    "q": "In the FHSS notation, what does Wd represent?",
+    "options": [
+      "Signal bandwidth",
+      "Spread spectrum bandwidth",
+      "Carrier seed",
+      "Hop count"
+    ],
+    "correct": 0,
+    "why": "The symbols slide defines Wd as signal bandwidth."
+  },
+  {
+    "q": "Which formula is given for FHSS bandwidth?",
+    "options": [
+      "Ws = C × Wd",
+      "Ws = Wd / C",
+      "Ws = Th + C",
+      "Ws = 2^k + Wd"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly states that Ws = C Wd."
+  },
+  {
+    "q": "If the signal bandwidth is 10 MHz and the number of carrier frequencies is 20, what is the spread spectrum bandwidth?",
+    "options": [
+      "200 MHz",
+      "20 MHz",
+      "10 MHz",
+      "100 MHz"
+    ],
+    "correct": 0,
+    "why": "Using Ws = C × Wd gives 20 × 10 MHz = 200 MHz."
+  },
+  {
+    "q": "What determines the FHSS channel sequence in the lecture?",
+    "options": [
+      "A predefined random number seed",
+      "The application UUID",
+      "The IP address",
+      "The battery level"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the sequence is dictated by a predefined random number seed."
+  },
+  {
+    "q": "For successful synchronization in FHSS, transmitter and receiver must share what?",
+    "options": [
+      "The same seed",
+      "The same MAC vendor",
+      "The same application profile",
+      "The same Wi-Fi SSID"
+    ],
+    "correct": 0,
+    "why": "The slide says both transmitter and receiver use the same seed to tune into the channel sequence in synchronization."
+  },
+  {
+    "q": "At each FHSS interval, what happens next?",
+    "options": [
+      "A new carrier frequency is selected",
+      "The packet is deleted",
+      "The MAC address changes",
+      "The signal becomes wired"
+    ],
+    "correct": 0,
+    "why": "The lecture states that at each successive interval, a new carrier frequency is selected."
+  },
+  {
+    "q": "Using a k-bit PRN generator, the maximum number of carrier frequencies is:",
+    "options": [
+      "2^k",
+      "k^2",
+      "k/2",
+      "k+2"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly notes that a k-bit PRN generator can produce a maximum of 2^k carrier frequencies."
+  },
+  {
+    "q": "If the number of carrier frequencies is 25, what is the minimum number of PRN output bits needed?",
+    "options": [
+      "5",
+      "4",
+      "6",
+      "25"
+    ],
+    "correct": 0,
+    "why": "Since 2^4 = 16 is too small and 2^5 = 32 is enough, at least 5 bits are needed."
+  },
+  {
+    "q": "If the spread spectrum bandwidth is 180 MHz and the signal bandwidth is 15 MHz, how many carrier frequencies are required?",
+    "options": [
+      "12",
+      "15",
+      "10",
+      "9"
+    ],
+    "correct": 0,
+    "why": "From Ws = C × Wd, C = 180/15 = 12."
+  },
+  {
+    "q": "If the hopping time is 500 microseconds, how many hops occur in one second?",
+    "options": [
+      "2000",
+      "1600",
+      "500",
+      "625"
+    ],
+    "correct": 0,
+    "why": "One second divided by 500 microseconds gives 2000 hops."
+  },
+  {
+    "q": "In classic Bluetooth channel access, the total bandwidth is divided into what size physical channels?",
+    "options": [
+      "1 MHz",
+      "2 MHz",
+      "5 MHz",
+      "79 MHz"
+    ],
+    "correct": 0,
+    "why": "The channel access slide says the total bandwidth is divided into 1 MHz physical channels."
+  },
+  {
+    "q": "Who shares the hopping sequence in a Bluetooth piconet?",
+    "options": [
+      "All devices on the piconet",
+      "Only the master",
+      "Only parked slaves",
+      "Only external routers"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the hopping sequence is shared with all devices on the piconet."
+  },
+  {
+    "q": "Bluetooth packets in the lecture can be how many slots long?",
+    "options": [
+      "1, 3, or 5 slots",
+      "Only 1 slot",
+      "2 or 4 slots",
+      "Any number of slots"
+    ],
+    "correct": 0,
+    "why": "The channel access slide states that packets can be 1 slot, 3 slots, or 5 slots long."
+  },
+  {
+    "q": "What happens to frequency hopping during a Bluetooth packet?",
+    "options": [
+      "The hop is skipped during the packet",
+      "It doubles during the packet",
+      "It stops permanently",
+      "It changes every bit"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly says the frequency hop is skipped during a packet."
+  },
+  {
+    "q": "Which duplexing approach is listed for Bluetooth channel access?",
+    "options": [
+      "TDD",
+      "FDD",
+      "CDMA",
+      "OFDM"
+    ],
+    "correct": 0,
+    "why": "The slide lists TDD for Bluetooth channel access."
+  },
+  {
+    "q": "Under Bluetooth TDD, the master starts in which slots?",
+    "options": [
+      "Even-numbered slots only",
+      "Odd-numbered slots only",
+      "Any random slot",
+      "Only slot 0 forever"
+    ],
+    "correct": 0,
+    "why": "The lecture says the master starts in even-numbered slots only."
+  },
+  {
+    "q": "Under Bluetooth TDD, slaves start in which slots?",
+    "options": [
+      "Odd-numbered slots only",
+      "Even-numbered slots only",
+      "Only slot 0",
+      "Only 5-slot packets"
+    ],
+    "correct": 0,
+    "why": "The lecture says slaves start in odd-numbered slots only."
+  },
+  {
+    "q": "What is the basic unit of Bluetooth networking?",
+    "options": [
+      "Piconet",
+      "Scatternet",
+      "Beacon frame",
+      "Wi-Fi cell"
+    ],
+    "correct": 0,
+    "why": "The topology slide states that the piconet is the basic unit of Bluetooth networking."
+  },
+  {
+    "q": "A piconet is formed by what arrangement?",
+    "options": [
+      "One master and many slaves",
+      "Only equal peers with no master",
+      "Only two routers",
+      "Only broadcasters"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a piconet is formed by a master and many slaves."
+  },
+  {
+    "q": "How many active slaves can a Bluetooth piconet support according to the lecture?",
+    "options": [
+      "Up to 7",
+      "Up to 3",
+      "Up to 40",
+      "Unlimited"
+    ],
+    "correct": 0,
+    "why": "The topology slide states up to 7 active slaves per piconet."
+  },
+  {
+    "q": "How many parked slaves can a Bluetooth piconet support according to the lecture?",
+    "options": [
+      "Up to 255",
+      "Up to 7",
+      "Up to 79",
+      "Unlimited"
+    ],
+    "correct": 0,
+    "why": "The lecture states up to 255 parked slaves per piconet."
+  },
+  {
+    "q": "When can slaves transmit in a piconet?",
+    "options": [
+      "Only when requested by the master",
+      "At any time they want",
+      "Only after a beacon from another piconet",
+      "Only during Wi-Fi idle periods"
+    ],
+    "correct": 0,
+    "why": "The lecture says slaves can only transmit when requested by the master."
+  },
+  {
+    "q": "How are active slaves granted transmission opportunities?",
+    "options": [
+      "They are polled by the master",
+      "They use CSMA/CD freely",
+      "They use DHCP",
+      "They use REST requests"
+    ],
+    "correct": 0,
+    "why": "The topology slide states that active slaves are polled by the master for transmission."
+  },
+  {
+    "q": "What address size is assigned to each parked station?",
+    "options": [
+      "8-bit parked address",
+      "3-bit logical address",
+      "16-bit IP address",
+      "128-bit UUID"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each station gets an 8-bit parked address for parking."
+  },
+  {
+    "q": "A Bluetooth node can simultaneously play which cross-piconet roles?",
+    "options": [
+      "Master in one piconet and slave in another",
+      "Only master in all piconets",
+      "Only parked slave in all piconets",
+      "Router and gateway only"
+    ],
+    "correct": 0,
+    "why": "The topology slide says a node can be both a master in one piconet and a slave in another."
+  },
+  {
+    "q": "What is a scatternet?",
+    "options": [
+      "Multiple piconets joined together",
+      "A single BLE advertising channel",
+      "A MAC header field",
+      "A wired backbone"
+    ],
+    "correct": 0,
+    "why": "The lecture defines a scatternet as multiple piconets joined together."
+  },
+  {
+    "q": "What is the main disadvantage of a scatternet listed in the lecture?",
+    "options": [
+      "Collisions can occur if different piconets use the same hopping sequence",
+      "It cannot support more than one slave",
+      "It requires IPv6",
+      "It does not use frequency hopping"
+    ],
+    "correct": 0,
+    "why": "The lecture says collisions can occur when devices in different piconets use the same frequency hopping sequence."
+  },
+  {
+    "q": "What is the initial Bluetooth operational state?",
+    "options": [
+      "Standby",
+      "Inquiry",
+      "Connected",
+      "Transmit"
+    ],
+    "correct": 0,
+    "why": "The operational states slide states that Standby is the initial state."
+  },
+  {
+    "q": "In the Inquiry state, what does the master send?",
+    "options": [
+      "An inquiry packet",
+      "A GATT notification",
+      "A Wi-Fi beacon",
+      "A page response"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the master sends an inquiry packet in the Inquiry state."
+  },
+  {
+    "q": "During Inquiry, what do slaves return after a random delay?",
+    "options": [
+      "Their address and clock",
+      "Their UUID and GATT profile",
+      "Their IP route table",
+      "Their sensor payload only"
+    ],
+    "correct": 0,
+    "why": "The lecture says slaves respond with their address and clock after a random delay."
+  },
+  {
+    "q": "Which medium access idea is mentioned for inquiry response random delay?",
+    "options": [
+      "CSMA/CA",
+      "CSMA/CD",
+      "ALOHA only",
+      "Pure TDMA only"
+    ],
+    "correct": 0,
+    "why": "The operational states slide explicitly mentions CSMA/CA."
+  },
+  {
+    "q": "In the Page state, how many consecutive slots are used to send the page message?",
+    "options": [
+      "3 consecutive slots",
+      "1 slot",
+      "5 consecutive slots",
+      "7 consecutive slots"
+    ],
+    "correct": 0,
+    "why": "The lecture states the page message is sent in 3 consecutive slots (3 frequencies)."
+  },
+  {
+    "q": "What does the slave send back in the page response state?",
+    "options": [
+      "Its device access code",
+      "Its IP address",
+      "Its GATT descriptor",
+      "Its OUI certificate"
+    ],
+    "correct": 0,
+    "why": "The lecture says the page response includes the device access code."
+  },
+  {
+    "q": "What is assigned in the Connected state?",
+    "options": [
+      "A short 3-bit logical address",
+      "An 8-bit parked address",
+      "A 48-bit replacement MAC",
+      "A 128-bit UUID"
+    ],
+    "correct": 0,
+    "why": "The lecture states that a short 3-bit logical address is assigned in the Connected state."
+  },
+  {
+    "q": "Which Bluetooth operational state is simply described as 'Data is Transmitted'?",
+    "options": [
+      "Transmit",
+      "Standby",
+      "Inquiry",
+      "Park"
+    ],
+    "correct": 0,
+    "why": "The slide explicitly labels Transmit as the state where data is transmitted."
+  },
+  {
+    "q": "Which inactive state keeps SCO while disabling ACL and lets the node scan, page, or inquire?",
+    "options": [
+      "Hold",
+      "Sniff",
+      "Park",
+      "Transmit"
+    ],
+    "correct": 0,
+    "why": "The energy management slide states that Hold has no ACL, keeps SCO, and allows scan/page/inquire."
+  },
+  {
+    "q": "Which inactive Bluetooth state is described as a low-power mode where the slave listens after fixed sniff intervals?",
+    "options": [
+      "Sniff",
+      "Hold",
+      "Park",
+      "Inquiry"
+    ],
+    "correct": 0,
+    "why": "The lecture defines Sniff that way."
+  },
+  {
+    "q": "Which inactive state is described as very low power and replaces the 3-bit active address with an 8-bit parked address?",
+    "options": [
+      "Park",
+      "Sniff",
+      "Hold",
+      "Connected"
+    ],
+    "correct": 0,
+    "why": "The lecture defines Park as the very low-power state with an 8-bit parked member address."
+  },
+  {
+    "q": "How long can Bluetooth MAC frames be at most?",
+    "options": [
+      "Up to five slots",
+      "Up to one slot",
+      "Up to ten slots",
+      "Exactly two slots"
+    ],
+    "correct": 0,
+    "why": "The frame format slide states that frames can be up to five slots long."
+  },
+  {
+    "q": "Five Bluetooth slots correspond to what duration in the lecture?",
+    "options": [
+      "3125 microseconds",
+      "625 microseconds",
+      "1600 microseconds",
+      "5 milliseconds exactly"
+    ],
+    "correct": 0,
+    "why": "The frame format slide states that five slots equal 3125 microseconds."
+  },
+  {
+    "q": "Which access code identifies the piconet in the connection state?",
+    "options": [
+      "Channel access code",
+      "Device access code",
+      "Inquiry access code",
+      "UUID access code"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the channel access code identifies the piconet in the connection state."
+  },
+  {
+    "q": "Which access code is used for paging requests and responses?",
+    "options": [
+      "Device access code",
+      "Channel access code",
+      "Inquiry access code",
+      "Service access code"
+    ],
+    "correct": 0,
+    "why": "The frame format slide says the device access code is used during paging."
+  },
+  {
+    "q": "Which access code is used to discover units during inquiry?",
+    "options": [
+      "Inquiry access code",
+      "Device access code",
+      "Channel access code",
+      "Member address code"
+    ],
+    "correct": 0,
+    "why": "The lecture states that inquiry access code is used to discover units."
+  },
+  {
+    "q": "Which of the following is part of the Bluetooth MAC header according to the lecture?",
+    "options": [
+      "Ack/Nack",
+      "GATT UUID",
+      "HTTP method",
+      "DNS record"
+    ],
+    "correct": 0,
+    "why": "The frame format slide lists member address, type code, flow control, ack/nack, sequence number, and header error check."
+  },
+  {
+    "q": "How large is a Bluetooth device MAC address in the lecture?",
+    "options": [
+      "48 bits",
+      "32 bits",
+      "64 bits",
+      "128 bits"
+    ],
+    "correct": 0,
+    "why": "The lecture states that each device has a 48-bit IEEE MAC address."
+  },
+  {
+    "q": "What is the size of the Lower Address Part (LAP) of a Bluetooth MAC address?",
+    "options": [
+      "24 bits",
+      "8 bits",
+      "16 bits",
+      "48 bits"
+    ],
+    "correct": 0,
+    "why": "The frame format slide lists LAP as 24 bits."
+  },
+  {
+    "q": "What is the size of the Upper Address Part (UAP) of a Bluetooth MAC address?",
+    "options": [
+      "8 bits",
+      "24 bits",
+      "16 bits",
+      "3 bits"
+    ],
+    "correct": 0,
+    "why": "The lecture lists UAP as 8 bits."
+  },
+  {
+    "q": "What is the size of the Non-significant Address Part (NAP) of a Bluetooth MAC address?",
+    "options": [
+      "16 bits",
+      "8 bits",
+      "24 bits",
+      "32 bits"
+    ],
+    "correct": 0,
+    "why": "The lecture lists NAP as 16 bits."
+  },
+  {
+    "q": "What does UAP + NAP form according to the lecture?",
+    "options": [
+      "The Organizationally Unique Identifier (OUI)",
+      "The UUID handle",
+      "The inquiry access code",
+      "The GATT profile ID"
+    ],
+    "correct": 0,
+    "why": "The frame format slide states that UAP + NAP equals the IEEE OUI."
+  },
+  {
+    "q": "What does BLE stand for?",
+    "options": [
+      "Bluetooth Low Energy",
+      "Bluetooth Long Engagement",
+      "Basic Link Encryption",
+      "Bluetooth Layer Extension"
+    ],
+    "correct": 0,
+    "why": "BLE stands for Bluetooth Low Energy."
+  },
+  {
+    "q": "Which Bluetooth version introduced BLE?",
+    "options": [
+      "Bluetooth 4.0",
+      "Bluetooth 3.0",
+      "Bluetooth 5.0",
+      "Bluetooth 2.0"
+    ],
+    "correct": 0,
+    "why": "The lecture labels Bluetooth 4.0 as the BLE generation."
+  },
+  {
+    "q": "What is the key feature that distinguishes BLE from classic Bluetooth in the lecture?",
+    "options": [
+      "Lower energy consumption",
+      "Better audio quality",
+      "Longer fixed packet size",
+      "Higher classic throughput"
+    ],
+    "correct": 0,
+    "why": "The lecture emphasizes BLE as Low Energy."
+  },
+  {
+    "q": "According to the lecture, BLE power usage can be roughly what fraction of Bluetooth Classic?",
+    "options": [
+      "About 1% to 50% of Bluetooth Classic",
+      "Always exactly 100%",
+      "Always higher than Bluetooth Classic",
+      "About 200% of Bluetooth Classic"
+    ],
+    "correct": 0,
+    "why": "The BLE slide states that BLE uses about 1% to 50% of Bluetooth Classic energy."
+  },
+  {
+    "q": "BLE is mainly designed for what kind of communication?",
+    "options": [
+      "Short-range, low-power communication with short broadcasts",
+      "Long-distance satellite backhaul",
+      "High-speed file transfer and video streaming",
+      "Heavy database replication"
+    ],
+    "correct": 0,
+    "why": "The lecture says BLE is for short broadcast and low-energy short-range uses, not voice/video/file transfer."
+  },
+  {
+    "q": "Which of the following is explicitly stated as NOT a good fit for BLE?",
+    "options": [
+      "Voice/video and file transfers",
+      "Wearables and sensors",
+      "Heart-rate monitoring",
+      "Automotive sensors"
+    ],
+    "correct": 0,
+    "why": "The BLE slide explicitly says BLE is not for voice/video or file transfers."
+  },
+  {
+    "q": "Why does the lecture say BLE throughput is not critical?",
+    "options": [
+      "Because BLE usually sends small messages and short broadcasts",
+      "Because BLE cannot transmit data at all",
+      "Because BLE is only for wired links",
+      "Because BLE always compresses video"
+    ],
+    "correct": 0,
+    "why": "The lecture says BLE is used for small messages such as sensor readings, so throughput is not critical."
+  },
+  {
+    "q": "What battery-life claim does the lecture make for BLE devices?",
+    "options": [
+      "Years from coin cells",
+      "Only a few minutes",
+      "Always requires mains power",
+      "Less than one day"
+    ],
+    "correct": 0,
+    "why": "The BLE slide states battery life in years from coin cells."
+  },
+  {
+    "q": "Which topology is explicitly listed for BLE in the lecture?",
+    "options": [
+      "Star topology",
+      "Bus topology",
+      "Token ring",
+      "Only scatternet"
+    ],
+    "correct": 0,
+    "why": "The lecture states BLE is simple: star topology, with mesh added from BLE 5.1."
+  },
+  {
+    "q": "From which version does the lecture mention BLE mesh?",
+    "options": [
+      "BLE 5.1",
+      "BLE 4.0",
+      "BLE 3.0",
+      "BLE 2.0"
+    ],
+    "correct": 0,
+    "why": "The BLE slide says Mesh (From BLE 5.1)."
+  },
+  {
+    "q": "BLE's newer protocol design in the lecture is based on which Nokia technology?",
+    "options": [
+      "WiBree",
+      "Symbian RF",
+      "IrDA",
+      "NMT"
+    ],
+    "correct": 0,
+    "why": "The lecture states the new protocol design is based on Nokia's WiBree technology."
+  },
+  {
+    "q": "What radio band does BLE share with Bluetooth according to the lecture?",
+    "options": [
+      "2.4 GHz",
+      "868 MHz",
+      "433 MHz",
+      "13.56 MHz"
+    ],
+    "correct": 0,
+    "why": "The slide says BLE shares the same 2.4 GHz radio as Bluetooth."
+  },
+  {
+    "q": "What are the two BLE device types listed in the PHY slide?",
+    "options": [
+      "Peripheral and central",
+      "Master and router",
+      "Server and gateway",
+      "Client and AP"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide lists two device types: peripherals and central."
+  },
+  {
+    "q": "Which BLE device type is described as simpler?",
+    "options": [
+      "Peripheral",
+      "Central",
+      "Observer",
+      "Server"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide says peripherals are simpler than central."
+  },
+  {
+    "q": "What data rate is listed for BLE 4.2 in the lecture?",
+    "options": [
+      "1 Mbps",
+      "2 Mbps",
+      "3 Mbps",
+      "720 kbps"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide lists 1 Mbps for BLE 4.2."
+  },
+  {
+    "q": "What enhanced data rate is listed for BLE 5 and 6 in the lecture?",
+    "options": [
+      "2 Mbps",
+      "3 Mbps",
+      "1 Mbps",
+      "10 Mbps"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide states that BLE 5 and 6 are enhanced to 2 Mbps."
+  },
+  {
+    "q": "How many total BLE channels are shown in the PHY slide?",
+    "options": [
+      "40 channels",
+      "79 channels",
+      "37 channels",
+      "3 channels"
+    ],
+    "correct": 0,
+    "why": "The lecture states BLE uses 40 channels with 2 MHz spacing."
+  },
+  {
+    "q": "What is the spacing between BLE channels?",
+    "options": [
+      "2 MHz",
+      "1 MHz",
+      "5 MHz",
+      "79 MHz"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide states 40 channels with 2 MHz spacing."
+  },
+  {
+    "q": "How many BLE channels are reserved for advertising?",
+    "options": [
+      "3",
+      "37",
+      "40",
+      "79"
+    ],
+    "correct": 0,
+    "why": "The lecture states that 3 BLE channels are reserved for advertising."
+  },
+  {
+    "q": "How many BLE channels are used for data?",
+    "options": [
+      "37",
+      "3",
+      "40",
+      "79"
+    ],
+    "correct": 0,
+    "why": "The lecture states 37 channels are used for data."
+  },
+  {
+    "q": "Why are BLE advertising channels specially selected?",
+    "options": [
+      "To avoid interference with Wi-Fi channels",
+      "To increase video throughput",
+      "To match USB timing",
+      "To eliminate pairing"
+    ],
+    "correct": 0,
+    "why": "The BLE PHY slide says advertising channels are specially selected to avoid interference with Wi-Fi channels."
+  },
+  {
+    "q": "Which BLE operational procedure is explicitly listed in the lecture?",
+    "options": [
+      "Scanning Procedure",
+      "Routing Table Flooding",
+      "ARP Procedure",
+      "LoRa Join Procedure"
+    ],
+    "correct": 0,
+    "why": "The BLE procedures slide lists Advertising, Scanning, Discovering, Connecting, and other procedures."
+  },
+  {
+    "q": "What does the lecture say is a key reason for BLE's low energy consumption?",
+    "options": [
+      "Flexible advertising behavior, connection intervals, and sleep scheduling",
+      "Large packet payloads only",
+      "Use of wired backhaul",
+      "Always-on broadcasting"
+    ],
+    "correct": 0,
+    "why": "The lecture explicitly highlights adjustable advertising behavior, connection intervals, and sleep scheduling."
+  },
+  {
+    "q": "In the BLE protocol stack, which layer is responsible for device discovery, topology, and security procedures?",
+    "options": [
+      "GAP",
+      "ATT",
+      "PHY",
+      "L2CAP"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide states that GAP is responsible for device discovery, topology, and security procedures."
+  },
+  {
+    "q": "What does HCI do in the BLE stack?",
+    "options": [
+      "Enables communication between host and controller",
+      "Performs service discovery only",
+      "Defines UUID values",
+      "Replaces the physical layer"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide states that HCI enables communication between the host and controller via a serial interface."
+  },
+  {
+    "q": "Which BLE layer defines packet structure and control?",
+    "options": [
+      "Link Layer",
+      "GAP",
+      "ATT",
+      "Application profile"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide states that the Link Layer defines packet structure and control."
+  },
+  {
+    "q": "Which BLE layer handles transmission, reception, modulation, and demodulation?",
+    "options": [
+      "PHY",
+      "GATT",
+      "SMP",
+      "L2CAP"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide states that the PHY layer handles those physical transmission functions."
+  },
+  {
+    "q": "What does SMP provide in BLE?",
+    "options": [
+      "Pairing, authentication, and encryption",
+      "Routing and flooding",
+      "HTTP tunneling",
+      "Audio transcoding"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide lists SMP as Pairing, Authentication and Encryption."
+  },
+  {
+    "q": "What is one role of L2CAP in BLE?",
+    "options": [
+      "Packet segmentation and reassembly",
+      "Advertising on channel 37 only",
+      "Defining UUID namespaces",
+      "Generating OUI values"
+    ],
+    "correct": 0,
+    "why": "The lecture states that L2CAP supports higher-level multiplexing, segmentation/reassembly, and QoS information."
+  },
+  {
+    "q": "What does ATT define in BLE?",
+    "options": [
+      "How data is represented in a BLE server database and how it is read or written",
+      "How RF hopping seeds are generated",
+      "How IP routing is performed",
+      "How video streams are encoded"
+    ],
+    "correct": 0,
+    "why": "The lecture states that ATT defines BLE server data representation and read/write methods."
+  },
+  {
+    "q": "What does GATT define?",
+    "options": [
+      "A service framework using ATT for discovering services and reading/writing characteristics",
+      "A radio frequency hopping pattern",
+      "A page access code",
+      "A PRN generator format"
+    ],
+    "correct": 0,
+    "why": "The lecture defines GATT as a service framework built on ATT."
+  },
+  {
+    "q": "ATT defines which two roles?",
+    "options": [
+      "Server and client",
+      "Master and piconet",
+      "Router and gateway",
+      "Publisher and broker"
+    ],
+    "correct": 0,
+    "why": "The ATT slide states that ATT defines a server role and a client role."
+  },
+  {
+    "q": "Which of the following is one of the three properties of an ATT attribute?",
+    "options": [
+      "Attribute type defined by a UUID",
+      "IP subnet mask",
+      "Wi-Fi SSID",
+      "Bluetooth OUI vendor string"
+    ],
+    "correct": 0,
+    "why": "The ATT slide lists attribute type (UUID), handle, and permissions as attribute properties."
+  },
+  {
+    "q": "In ATT, what is a command?",
+    "options": [
+      "A PDU sent by a client to a server that does not invoke a response",
+      "A reply from the server to a client",
+      "A confirmation of an indication",
+      "A paging request"
+    ],
+    "correct": 0,
+    "why": "The ATT table defines commands as PDUs that do not invoke a response."
+  },
+  {
+    "q": "In ATT, what is a request?",
+    "options": [
+      "A PDU sent by a client to a server that invokes a response",
+      "A broadcast beacon with no reply",
+      "A server-only advertisement",
+      "An ACK/NACK header"
+    ],
+    "correct": 0,
+    "why": "The ATT table defines requests as PDUs that invoke a response."
+  },
+  {
+    "q": "In ATT, what is a notification?",
+    "options": [
+      "An unsolicited PDU sent by a server to a client that does not invoke a confirmation",
+      "A client request that invokes a response",
+      "A page response during classic Bluetooth",
+      "A piconet access code"
+    ],
+    "correct": 0,
+    "why": "The ATT table defines notifications that way."
+  },
+  {
+    "q": "In ATT, what is an indication?",
+    "options": [
+      "An unsolicited PDU sent by a server to a client that invokes a confirmation",
+      "A client-side scan request",
+      "A frequency hop",
+      "A page response"
+    ],
+    "correct": 0,
+    "why": "The ATT table defines indications as unsolicited server PDUs that invoke confirmation."
+  },
+  {
+    "q": "In ATT, what is a confirmation?",
+    "options": [
+      "A PDU sent by a client to confirm receipt of an indication",
+      "A server broadcast advertisement",
+      "A master inquiry packet",
+      "A piconet join beacon"
+    ],
+    "correct": 0,
+    "why": "The ATT table states that confirmations are sent by a client to confirm receipt of an indication."
+  },
+  {
+    "q": "How many features are defined in the GATT Profile according to the lecture?",
+    "options": [
+      "11",
+      "3",
+      "5",
+      "40"
+    ],
+    "correct": 0,
+    "why": "The GATT operations slide states that 11 features are defined in the GATT profile."
+  },
+  {
+    "q": "Which is one of the GATT operations explicitly listed in the lecture?",
+    "options": [
+      "Characteristic Discovery",
+      "Dynamic DNS Update",
+      "Route Cache Repair",
+      "Packet Flooding"
+    ],
+    "correct": 0,
+    "why": "The GATT operations slide explicitly lists Characteristic Discovery among the 11 operations."
+  },
+  {
+    "q": "In BLE data exchange, who advertises itself and waits for a connection request?",
+    "options": [
+      "The peripheral",
+      "The central",
+      "The host controller interface",
+      "The OUI manager"
+    ],
+    "correct": 0,
+    "why": "The BLE data exchange slide says the peripheral advertises itself and waits for a connection request."
+  },
+  {
+    "q": "In BLE data exchange, what does the central do?",
+    "options": [
+      "Scans for peripherals and initiates a connection request",
+      "Only broadcasts and never connects",
+      "Only receives indications",
+      "Only manages Wi-Fi coexistence"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the central scans for peripherals and initiates connection requests."
+  },
+  {
+    "q": "In GATT request-response exchange, what is a response PDU?",
+    "options": [
+      "The server's reply to the client when a reply is requested",
+      "A client broadcast with no reply",
+      "A hopping sequence packet",
+      "A parked slave beacon"
+    ],
+    "correct": 0,
+    "why": "The BLE data exchange slide states that a response PDU is the server's reply when a reply is requested."
+  },
+  {
+    "q": "Bluetooth beacons are primarily based on what concept?",
+    "options": [
+      "Advertising based on proximity",
+      "Continuous voice streaming",
+      "Long-range cellular handoff",
+      "Wired synchronization"
+    ],
+    "correct": 0,
+    "why": "The Bluetooth beacons slide states that beacons are advertising based on proximity."
+  },
+  {
+    "q": "What is the primary aim of Bluetooth beacon broadcasts in the lecture?",
+    "options": [
+      "Device discovery and indoor navigation",
+      "File transfer acceleration",
+      "LoRaWAN backhaul",
+      "Replacing Wi-Fi routing"
+    ],
+    "correct": 0,
+    "why": "The lecture states that the primary aim is device discovery and indoor navigation."
+  },
+  {
+    "q": "What is the maximum advertising payload size listed for beacon frames?",
+    "options": [
+      "27 bytes",
+      "3 bytes",
+      "79 bytes",
+      "255 bytes"
+    ],
+    "correct": 0,
+    "why": "The lecture states that advertising frames have a header and a maximum of 27 bytes of payload."
+  },
+  {
+    "q": "Beacon frames may include which extra measurement that can imply distance?",
+    "options": [
+      "Signal strength",
+      "IPv6 prefix",
+      "MAC OUI",
+      "Clock offset only"
+    ],
+    "correct": 0,
+    "why": "The lecture states that beacons may include signal strength, which can imply distance."
+  },
+  {
+    "q": "Which of the following is listed as a Bluetooth Smart application?",
+    "options": [
+      "Heart-rate monitoring",
+      "4K video editing",
+      "Cloud VM orchestration",
+      "Ethernet switching"
+    ],
+    "correct": 0,
+    "why": "The applications slide lists heart-rate monitors and other health devices."
+  },
+  {
+    "q": "Which of the following is listed as a Bluetooth Smart application?",
+    "options": [
+      "Remote control for locks and lights",
+      "High-volume file backup",
+      "Satellite telemetry",
+      "Blockchain mining"
+    ],
+    "correct": 0,
+    "why": "The applications slide lists remote control such as opening/closing locks and turning on lights."
+  },
+  {
+    "q": "Which statement matches the lecture summary for Bluetooth Smart?",
+    "options": [
+      "It is designed for short broadcasts by sensors using 40 channels of 2 MHz with 3 advertising channels",
+      "It replaces all classic Bluetooth profiles with Wi-Fi",
+      "It uses 79 channels of 1 MHz and no advertising channels",
+      "It is designed mainly for voice/video streaming"
+    ],
+    "correct": 0,
+    "why": "The summary slide states exactly that Bluetooth Smart is for short broadcasts by sensors and uses 40 2-MHz channels with 3 advertising channels."
+  },
+  {
+    "q": "In BLE, what does pairing involve?",
+    "options": [
+      "Exchanging security material for secure communication",
+      "Increasing the transmit power to maximum",
+      "Switching from central to peripheral mode",
+      "Changing the UUID of every attribute"
+    ],
+    "correct": 0,
+    "why": "The BLE stack slide lists SMP for pairing, authentication, and encryption, so pairing is about establishing secure communication."
+  },
+  {
+    "q": "Assume Bob can send 300 bits in one Bluetooth slot. How many slots are needed to send 600 bits?",
+    "options": [
+      "2",
+      "1",
+      "3",
+      "5"
+    ],
+    "correct": 0,
+    "why": "600 divided by 300 bits per slot equals 2 slots."
+  },
+  {
+    "q": "Assume Bob can send 300 bits in one Bluetooth slot. How many slots are needed to send 1200 bits?",
+    "options": [
+      "4",
+      "2",
+      "3",
+      "5"
+    ],
+    "correct": 0,
+    "why": "1200 divided by 300 bits per slot equals 4 slots."
+  }
+];
+    // --- Quiz Logic (DO NOT MODIFY) ---
+    const quizEl = document.getElementById('quiz');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const percentEl = document.getElementById('percent');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const shuffleBtn = document.getElementById('shuffleBtn');
+    let state = { score: 0, answered: 0 };
+    let currentQuestions = [];
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+    function buildQuestions() {
+      return shuffle(QUESTIONS).map(q => (({
+        q: q.q,
+        options: shuffle(q.options.map((txt, i) => ({ txt, isCorrect: i === q.correct }))),
+        correct: 0,
+        why: q.why,
+        __answered: false
+      }))).map(item => {
+        item.correct = item.options.findIndex(o => o.isCorrect);
+        item.options = item.options.map(o => o.txt);
+        return item;
+      });
+    }
+    function render() {
+      quizEl.innerHTML = '';
+      currentQuestions.forEach((item, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        const head = document.createElement('div');
+        head.className = 'qhead';
+        const titleEl = document.createElement('p');
+        titleEl.className = 'qtitle';
+        titleEl.innerHTML = `${qi + 1}. ${item.q}`;
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = `Q${qi + 1}`;
+        head.appendChild(titleEl);
+        head.appendChild(badge);
+        card.appendChild(head);
+        const opts = document.createElement('div');
+        opts.className = 'opts';
+        item.options.forEach((opt, oi) => {
+          const row = document.createElement('div');
+          row.className = 'opt';
+          row.setAttribute('data-q', qi);
+          row.setAttribute('data-o', oi);
+          const letter = document.createElement('div');
+          letter.className = 'letter';
+          letter.textContent = String.fromCharCode(65 + oi);
+          const span = document.createElement('span');
+          span.innerHTML = opt;
+          row.appendChild(letter);
+          row.appendChild(span);
+          row.addEventListener('click', onChoose);
+          opts.appendChild(row);
+        });
+        const exp = document.createElement('div');
+        exp.className = 'exp';
+        exp.hidden = true;
+        exp.innerHTML = `<strong>Explanation:</strong> ${item.why}`;
+        card.appendChild(opts);
+        card.appendChild(exp);
+        quizEl.appendChild(card);
+      });
+      updateStats();
+    }
+    function onChoose(e) {
+      const btn = e.currentTarget;
+      const qIndex = +btn.getAttribute('data-q');
+      const oIndex = +btn.getAttribute('data-o');
+      const card = btn.closest('.qcard');
+      const exp = card.querySelector('.exp');
+      const data = currentQuestions[qIndex];
+      if (data.__answered) return;
+      const options = card.querySelectorAll('.opt');
+      options.forEach(b => b.classList.add('disabled'));
+      data.__answered = true;
+      state.answered++;
+      if (oIndex === data.correct) {
+        btn.classList.add('correct');
+        state.score++;
+      } else {
+        btn.classList.add('wrong');
+        options[data.correct].classList.add('correct');
+      }
+      exp.hidden = false;
+      updateStats();
+    }
+    function updateStats() {
+      scoreEl.textContent = `Score: ${state.score}`;
+      progressEl.textContent = `Answered: ${state.answered} / ${currentQuestions.length}`;
+      const pct = currentQuestions.length ? Math.round((state.score/currentQuestions.length)*100) : 0;
+      percentEl.textContent = `${pct}%`;
+    }
+    function revealAll() {
+      document.querySelectorAll('.qcard').forEach((card, qi) => {
+        const data = currentQuestions[qi];
+        const exp = card.querySelector('.exp');
+        const options = card.querySelectorAll('.opt');
+        options.forEach((b, oi) => {
+          b.classList.remove('wrong');
+          if (oi === data.correct) b.classList.add('correct');
+          b.classList.add('disabled');
+        });
+        data.__answered = true;
+        exp.hidden = false;
+      });
+    }
+    function resetQuiz() {
+      state.score = 0; state.answered = 0;
+      render();
+    }
+    function shuffleQuiz() {
+      state.score = 0; state.answered = 0;
+      currentQuestions = buildQuestions();
+      render();
+    }
+    resetBtn.addEventListener('click', resetQuiz);
+    revealBtn.addEventListener('click', revealAll);
+    shuffleBtn.addEventListener('click', shuffleQuiz);
+    currentQuestions = buildQuestions();
+    render();
+  </script>
+</body>
+</html>
