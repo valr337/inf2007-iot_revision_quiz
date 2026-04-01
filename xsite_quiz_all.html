@@ -2824,7 +2824,7 @@
       "id": "7-5",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "single",
+      "kind": "multi",
       "prompt": "Which of the following Topology does Bluetooth 4.0 support?",
       "detailBlocks": [
         [
@@ -2841,9 +2841,10 @@
         "Ring"
       ],
       "correct": [
+        0,
         1
       ],
-      "answer": "Scatter Net",
+      "answer": "Scatter Net, Star",
       "shuffleOptions": true
     },
     {
@@ -3084,7 +3085,7 @@
       "id": "7-16",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "multi",
+      "kind": "single",
       "prompt": "Which of the following supports low energy radio operation.",
       "detailBlocks": [
         [
@@ -3101,10 +3102,9 @@
         "Bluetooth"
       ],
       "correct": [
-        1,
-        2
+        1
       ],
-      "answer": "BLE, HaLow",
+      "answer": "BLE",
       "shuffleOptions": true
     },
     {
@@ -3840,7 +3840,7 @@
       "id": "9-4",
       "lectureNumber": 9,
       "lectureTitle": "Cellular IoT",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume that you are a network operator, and you are allocated a frequency spectrum of bandwidth equal to 1000kHz for carrying out cellular operation. You chose to implement FDMA as the multiple access scheme. How many users can you support if each user requires a bandwidth equal to 40kHz. Assume that the bandwidth of the guard band on each side of the spectrum must be equal to 50kHz.",
       "detailBlocks": [
         [
@@ -3856,7 +3856,9 @@
         "24",
         "23"
       ],
-      "correct": [],
+      "correct": [
+        1
+      ],
       "answer": "22 users (Note: Available bandwidth = 1000kHz - 100kHz (guard bands) = 900kHz; 900kHz ÷ 40kHz = 22.5, so 22 users)",
       "shuffleOptions": false
     },
@@ -3890,7 +3892,7 @@
       "id": "9-6",
       "lectureNumber": 9,
       "lectureTitle": "Cellular IoT",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume that you are a network operator, and you are allocated a frequency spectrum of bandwidth equal to 1000kHz for carrying out 4G cellular operation. How many subcarriers (maximum) can you support given the above bandwidth. Assume that the bandwidth of the guard band on each side of the spectrum must be equal to 50kHz.",
       "detailBlocks": [
         [
@@ -3906,7 +3908,9 @@
         "50",
         "70"
       ],
-      "correct": [],
+      "correct": [
+        1
+      ],
       "answer": "60 subcarriers (Note: Available bandwidth = 1000kHz - 100kHz = 900kHz; In 4G, each subcarrier is 15kHz; 900kHz ÷ 15kHz = 60 subcarriers)",
       "shuffleOptions": false
     },
@@ -3940,7 +3944,7 @@
       "id": "9-8",
       "lectureNumber": 9,
       "lectureTitle": "Cellular IoT",
-      "kind": "multi",
+      "kind": "single",
       "prompt": "Which of the following is a key advantage of NB-IoT over traditional cellular networks?",
       "detailBlocks": [
         [
@@ -3957,10 +3961,9 @@
         "High Data Rates"
       ],
       "correct": [
-        1,
         2
       ],
-      "answer": "Low Power Consumption AND Wide Coverage Area (Note: Both are key advantages, but if selecting one, Low Power Consumption is often highlighted)",
+      "answer": "Low Power Consumption",
       "shuffleOptions": true
     },
     {
@@ -4010,9 +4013,9 @@
         "Extended Coverage"
       ],
       "correct": [
-        1
+        2
       ],
-      "answer": "Extended Idle Mode",
+      "answer": "High Receiver Sensitivity",
       "shuffleOptions": true
     },
     {
@@ -4310,9 +4313,9 @@
         "False"
       ],
       "correct": [
-        0
+        1
       ],
-      "answer": "TRUE",
+      "answer": "FALSE",
       "shuffleOptions": true
     },
     {
@@ -4381,7 +4384,7 @@
       "id": "10-5",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "multi",
+      "kind": "single",
       "prompt": "Which of the following phases are required for a device to re-attach to a Thread Network? (You can select more than one)",
       "detailBlocks": [
         [
@@ -4398,10 +4401,9 @@
         "Discovery"
       ],
       "correct": [
-        2,
-        3
+        2
       ],
-      "answer": "Attaching, Discovery",
+      "answer": "Attaching",
       "shuffleOptions": true
     },
     {
@@ -4429,10 +4431,11 @@
         "Full End Device"
       ],
       "correct": [
+        0,
         3,
         4
       ],
-      "answer": "Router, Leader",
+      "answer": "Router, Leader, Router Eligible End Device",
       "shuffleOptions": true
     },
     {
@@ -4510,9 +4513,9 @@
         "FE80:0:0:0:60::1"
       ],
       "correct": [
-        0
+        2
       ],
-      "answer": "FE80:0:0:0:62::1",
+      "answer": "FE80:0:0:0:22::1",
       "shuffleOptions": true
     },
     {
@@ -4614,9 +4617,9 @@
         "Acknowledgements"
       ],
       "correct": [
-        2
+        0
       ],
-      "answer": "All the mentioned frames",
+      "answer": "Data Frames",
       "shuffleOptions": true
     },
     {
@@ -4645,7 +4648,7 @@
         2,
         3
       ],
-      "answer": "ZigBee (and Thread)",
+      "answer": "ZigBee and Thread",
       "shuffleOptions": true
     },
     {
@@ -4657,7 +4660,7 @@
       "detailBlocks": [],
       "options": [],
       "correct": [],
-      "answer": "100111001011 (XOR of bit 0 with chipping sequence inverts the sequence)",
+      "answer": "11011000101",
       "shuffleOptions": false
     },
     {
@@ -4691,7 +4694,7 @@
       "id": "10-17",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "reveal",
+      "kind": "multi",
       "prompt": "What kind of network topology is supported by IEEE 802.15.4?",
       "detailBlocks": [
         [
@@ -4707,8 +4710,12 @@
         "Mesh",
         "Star"
       ],
-      "correct": [],
-      "answer": "Star (and peer-to-peer)",
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "answer": "Star, Mesh & Point to Point",
       "shuffleOptions": false
     },
     {
@@ -4872,9 +4879,9 @@
         "Thread can support large networks."
       ],
       "correct": [
-        1
+        2
       ],
-      "answer": "All the options are characteristics of Thread (This option itself is not a characteristic; it's a statement about the options)",
+      "answer": "Devices can easily join the network.",
       "shuffleOptions": true
     },
     {
@@ -5265,12 +5272,36 @@
       percentEl.textContent = `${percent}%`;
     }
 
+    function normalizeComparableText(text) {
+      return String(text || '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function isDuplicateOptionBlock(item, lines) {
+      if (item.kind === 'reveal' || !Array.isArray(item.options)) {
+        return false;
+      }
+
+      if (lines.length !== item.options.length) {
+        return false;
+      }
+
+      return lines.every((line, index) => (
+        normalizeComparableText(line) === normalizeComparableText(item.options[index])
+      ));
+    }
+
     function createPromptBlocks(item) {
       const wrapper = document.createElement('div');
       wrapper.className = 'prompt-blocks';
 
       item.detailBlocks.forEach((lines) => {
         if (lines.length === 0) {
+          return;
+        }
+
+        if (isDuplicateOptionBlock(item, lines)) {
           return;
         }
 
@@ -5421,8 +5452,11 @@
       lectureMeta.textContent = item.lectureTitle;
       card.appendChild(lectureMeta);
 
-      if (item.detailBlocks.length > 0) {
-        card.appendChild(createPromptBlocks(item));
+      if (item.kind === 'reveal' && item.detailBlocks.length > 0) {
+        const promptBlocks = createPromptBlocks(item);
+        if (promptBlocks.childElementCount > 0) {
+          card.appendChild(promptBlocks);
+        }
       }
 
       if (item.kind !== 'reveal') {
