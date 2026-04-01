@@ -57,7 +57,7 @@
     <div class="wrap">
       <h1>CSC2106 – XSITE Quiz: All XSITE Questions</h1>
       <div class="sub">CSC2106 – Internet of Things: Protocols and Networks</div>
-      <div class="helper">XSITE questions are loaded into this combined quiz page. Rows with exact answer choices are auto-graded; rows that stay free-form or ambiguous in the CSV are shown as reveal-answer cards.</div>
+      <div class="helper">XSITE questions are loaded into this combined quiz page. All questions are graded as single-answer or multi-select.</div>
       <div class="stats">
         <span class="pill" id="score">Score: 0 / 0</span>
         <span class="pill" id="progress">Completed: 0 / 0</span>
@@ -131,8 +131,8 @@
       "id": "1-3",
       "lectureNumber": 1,
       "lectureTitle": "Introduction to IoT",
-      "kind": "reveal",
-      "prompt": "Match",
+      "kind": "multi",
+      "prompt": "Select all correct matches.",
       "detailBlocks": [
         [
           "Embedded Systems - _____",
@@ -148,18 +148,23 @@
         ]
       ],
       "options": [
-        "Embedded Systems - _____",
-        "Pervasive/Ubiquitous Computing - _____",
-        "Cyber-Physical Systems - _____",
-        "Real-time Systems - _____",
-        "1. Focus on anytime/anywhere computing",
-        "2. Focus on time constraints",
-        "3. Not necessarily connected",
-        "4. Focus on interaction between physical and cyber systems"
+        "Embedded Systems -> Not necessarily connected",
+        "Pervasive/Ubiquitous Computing -> Anytime/anywhere computing",
+        "Cyber-Physical Systems -> Interaction between physical and cyber systems",
+        "Real-time Systems -> Time constraints",
+        "Embedded Systems -> Anytime/anywhere computing",
+        "Cyber-Physical Systems -> Time constraints",
+        "Pervasive/Ubiquitous Computing -> Not necessarily connected",
+        "Real-time Systems -> Interaction between physical and cyber systems"
       ],
-      "correct": [],
-      "answer": "Embedded Systems - 3. Not necessarily connected\nPervasive/Ubiquitous Computing - 1. Focus on anytime/anywhere computing\nCyber-Physical Systems - 4. Focus on interaction between physical and cyber systems\nReal-time Systems - 2. Focus on time constraints",
-      "shuffleOptions": false
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer": "Embedded Systems -> Not necessarily connected, Pervasive/Ubiquitous Computing -> Anytime/anywhere computing, Cyber-Physical Systems -> Interaction between physical and cyber systems, Real-time Systems -> Time constraints",
+      "shuffleOptions": true
     },
     {
       "id": "1-4",
@@ -286,8 +291,8 @@
       "id": "1-8",
       "lectureNumber": 1,
       "lectureTitle": "Introduction to IoT",
-      "kind": "reveal",
-      "prompt": "Arrange the various layers for the IoT Reference Model, assuming the following sequence:\n7. Collaboration & Processes\n6. Application\n...",
+      "kind": "single",
+      "prompt": "Which ordering correctly fills layers 5 to 1 of the IoT Reference Model?",
       "detailBlocks": [
         [
           "Physical Devices & Controller",
@@ -298,15 +303,16 @@
         ]
       ],
       "options": [
-        "Physical Devices & Controller",
-        "Connectivity",
-        "Edge Computing",
-        "Data Abstraction",
-        "Data Accumulation"
+        "5. Data Abstraction -> 4. Data Accumulation -> 3. Edge Computing -> 2. Connectivity -> 1. Physical Devices & Controller",
+        "5. Data Accumulation -> 4. Data Abstraction -> 3. Edge Computing -> 2. Connectivity -> 1. Physical Devices & Controller",
+        "5. Data Abstraction -> 4. Edge Computing -> 3. Data Accumulation -> 2. Connectivity -> 1. Physical Devices & Controller",
+        "5. Data Abstraction -> 4. Data Accumulation -> 3. Connectivity -> 2. Edge Computing -> 1. Physical Devices & Controller"
       ],
-      "correct": [],
-      "answer": "5. Data Abstraction\n4. Data Accumulation\n3. Edge Computing\n2. Connectivity\n1. Physical Devices & Controller",
-      "shuffleOptions": false
+      "correct": [
+        0
+      ],
+      "answer": "5. Data Abstraction -> 4. Data Accumulation -> 3. Edge Computing -> 2. Connectivity -> 1. Physical Devices & Controller",
+      "shuffleOptions": true
     },
     {
       "id": "1-9",
@@ -548,8 +554,8 @@
       "id": "2-8",
       "lectureNumber": 2,
       "lectureTitle": "HTTP & REST",
-      "kind": "reveal",
-      "prompt": "What mechanism does RESTful APIs use to indicate the current state of the resource?",
+      "kind": "multi",
+      "prompt": "Select all mechanisms a RESTful API can use to indicate the current state of a resource.",
       "detailBlocks": [
         [
           "Response body",
@@ -564,9 +570,12 @@
         "API tokens",
         "HTTP status codes"
       ],
-      "correct": [],
-      "answer": "Response body (HTTP status codes)",
-      "shuffleOptions": false
+      "correct": [
+        0,
+        3
+      ],
+      "answer": "Response body, HTTP status codes",
+      "shuffleOptions": true
     },
     {
       "id": "2-9",
@@ -1743,13 +1752,24 @@
       "id": "4-14",
       "lectureNumber": 4,
       "lectureTitle": "Wireless Mesh",
-      "kind": "reveal",
+      "kind": "multi",
       "prompt": "Which of the following is not a reactive mesh routing algorithm?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "Wireless Routing Protocol, Optimized Link State Routing, and Destination-Sequenced Distance Vector",
-      "shuffleOptions": false
+      "options": [
+        "Wireless Routing Protocol",
+        "Optimized Link State Routing",
+        "Destination-Sequenced Distance Vector",
+        "Dynamic Source Routing",
+        "Ad hoc On-Demand Distance Vector",
+        "Temporally-Ordered Routing Algorithm"
+      ],
+      "correct": [
+        0,
+        1,
+        2
+      ],
+      "answer": "Wireless Routing Protocol, Optimized Link State Routing, Destination-Sequenced Distance Vector",
+      "shuffleOptions": true
     },
     {
       "id": "5-1",
@@ -2288,8 +2308,8 @@
       "id": "6-3",
       "lectureNumber": 6,
       "lectureTitle": "AIoT, Edge & Cloud Computing",
-      "kind": "reveal",
-      "prompt": "Match the Edge computing platforms to how they perform inferencing on the device.",
+      "kind": "multi",
+      "prompt": "Select all correct matches for edge inferencing platforms.",
       "detailBlocks": [
         [
           "GPU-centric (e.g., NVidia Jetson)",
@@ -2297,12 +2317,17 @@
         ]
       ],
       "options": [
-        "GPU-centric (e.g., NVidia Jetson)",
-        "CPU-centric (e.g., Raspberry Pi)"
+        "NVidia Jetson is GPU-centric",
+        "Raspberry Pi is CPU-centric",
+        "NVidia Jetson is CPU-centric",
+        "Raspberry Pi is GPU-centric"
       ],
-      "correct": [],
-      "answer": "GPU-centric: NVidia Jetson, CPU-centric: Raspberry Pi",
-      "shuffleOptions": false
+      "correct": [
+        0,
+        1
+      ],
+      "answer": "NVidia Jetson is GPU-centric, Raspberry Pi is CPU-centric",
+      "shuffleOptions": true
     },
     {
       "id": "6-4",
@@ -2386,8 +2411,8 @@
       "id": "6-7",
       "lectureNumber": 6,
       "lectureTitle": "AIoT, Edge & Cloud Computing",
-      "kind": "reveal",
-      "prompt": "Match the following services to the components that are NOT managed by the Cloud operator (e.g. Microsoft)?",
+      "kind": "multi",
+      "prompt": "Select all correct service-to-responsibility matches.",
       "detailBlocks": [
         [
           "IaaS: Networking, Storage, Servers, Virtualization",
@@ -2397,14 +2422,23 @@
         ]
       ],
       "options": [
-        "IaaS: Networking, Storage, Servers, Virtualization",
-        "SaaS: Data and Applications",
-        "PaaS: OS, Middleware, Runtime, Data and Applications",
-        "On Premises: Nil (everything managed by user)"
+        "In IaaS, OS, middleware, runtime, data, and applications are user-managed",
+        "In SaaS, data and applications are user-managed",
+        "In PaaS, OS, middleware, runtime, data, and applications are user-managed",
+        "On premises, all components are user-managed",
+        "In IaaS, networking, storage, servers, and virtualization are user-managed",
+        "In SaaS, servers and virtualization are user-managed",
+        "In PaaS, only data and applications are user-managed",
+        "On premises, networking and storage are cloud-managed"
       ],
-      "correct": [],
-      "answer": "IaaS: OS, Middleware, Runtime, Data and Applications; SaaS: Data and Applications; PaaS: OS, Middleware, Runtime, Data and Applications; On Premises: All",
-      "shuffleOptions": false
+      "correct": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "answer": "In IaaS, OS, middleware, runtime, data, and applications are user-managed; In SaaS, data and applications are user-managed; In PaaS, OS, middleware, runtime, data, and applications are user-managed; On premises, all components are user-managed",
+      "shuffleOptions": true
     },
     {
       "id": "6-8",
@@ -3009,13 +3043,20 @@
       "id": "7-12",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "If the bandwidth of the spread spectrum signal is 180MHz and the signal bandwidth is 15MHz. How many carrier frequencies are required for generating the spread spectrum signal?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
+      "options": [
+        "10",
+        "12",
+        "15",
+        "18"
+      ],
+      "correct": [
+        1
+      ],
       "answer": "12",
-      "shuffleOptions": false
+      "shuffleOptions": true
     },
     {
       "id": "7-13",
@@ -3073,13 +3114,20 @@
       "id": "7-15",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume Bob can send 300 bits in one slot while using Bluetooth. How many slots does it take to send 600 bits?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "2",
-      "shuffleOptions": false
+      "options": [
+        "1 slot",
+        "2 slots",
+        "3 slots",
+        "4 slots"
+      ],
+      "correct": [
+        1
+      ],
+      "answer": "2 slots",
+      "shuffleOptions": true
     },
     {
       "id": "7-16",
@@ -3143,25 +3191,39 @@
       "id": "7-18",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Bluetooth is designed for short broadcast. There are forty 2-Mhz channels. How many of these channels are reserved for advertising? (enter numerical number)",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "3",
-      "shuffleOptions": false
+      "options": [
+        "2 channels",
+        "3 channels",
+        "4 channels",
+        "5 channels"
+      ],
+      "correct": [
+        1
+      ],
+      "answer": "3 channels",
+      "shuffleOptions": true
     },
     {
       "id": "7-19",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume Bob can send 300 bits in one slot while using Bluetooth. How many slots does it take to send 1200 bits?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "4",
-      "shuffleOptions": false
+      "options": [
+        "2 slots",
+        "3 slots",
+        "4 slots",
+        "5 slots"
+      ],
+      "correct": [
+        2
+      ],
+      "answer": "4 slots",
+      "shuffleOptions": true
     },
     {
       "id": "7-20",
@@ -3193,13 +3255,20 @@
       "id": "7-21",
       "lectureNumber": 7,
       "lectureTitle": "Bluetooth",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "If the number of carrier frequencies is equal to 25, how many outputs bits must be generated by the PRN generator? (Assume FHSS)",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "5",
-      "shuffleOptions": false
+      "options": [
+        "4 bits",
+        "5 bits",
+        "6 bits",
+        "8 bits"
+      ],
+      "correct": [
+        1
+      ],
+      "answer": "5 bits",
+      "shuffleOptions": true
     },
     {
       "id": "8-1",
@@ -3414,25 +3483,21 @@
       "id": "8-9",
       "lectureNumber": 8,
       "lectureTitle": "Wi-Fi & Wi-Fi HaLow",
-      "kind": "reveal",
-      "prompt": "Which of the following frames are transmitted by a node when it is attempting to join a Basic Service Set using passive scanning? (You can select more than one)",
-      "detailBlocks": [
-        [
-          "Association Response Frame",
-          "Association Request Frame",
-          "Probe Response Frame",
-          "Probe Request Frame"
-        ]
-      ],
+      "kind": "single",
+      "prompt": "Which option best describes the frames a node transmits while joining a Basic Service Set using passive scanning?",
+      "detailBlocks": [],
       "options": [
-        "Association Response Frame",
         "Association Request Frame",
-        "Probe Response Frame",
-        "Probe Request Frame"
+        "Probe Request Frame",
+        "Association Response Frame and Probe Response Frame",
+        "Association Request Frame and Probe Request Frame",
+        "None of the listed frames during passive scanning"
       ],
-      "correct": [],
-      "answer": "None of the provided options (Passive scanning involves listening for Beacons)",
-      "shuffleOptions": false
+      "correct": [
+        4
+      ],
+      "answer": "None of the listed frames during passive scanning",
+      "shuffleOptions": true
     },
     {
       "id": "8-10",
@@ -4260,13 +4325,20 @@
       "id": "9-20",
       "lectureNumber": 9,
       "lectureTitle": "Cellular IoT",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume NB-IoT scenario and calculate the minimum transmit power for a link budget equal to 170dB and receiver sensitivity equal to -150dBm. Enter the numerical number only in dBm.",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "20 dBm (Note: Link Budget = Transmit Power + Receiver Sensitivity; 170dB = Tx Power + (-150dBm); Tx Power = 170 - 150 = 20 dBm)",
-      "shuffleOptions": false
+      "options": [
+        "10 dBm",
+        "15 dBm",
+        "20 dBm",
+        "25 dBm"
+      ],
+      "correct": [
+        2
+      ],
+      "answer": "20 dBm",
+      "shuffleOptions": true
     },
     {
       "id": "9-21",
@@ -4320,13 +4392,20 @@
       "id": "10-2",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume Bob is using DSSS to transmit his data to Alice. Bob decided to use the chipping sequence 101101 to transmit his bits. If the length of the packet is 100 bits, how many bit will Bob actually transmit?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "600 bits (100 bits × 6 chips per bit = 600 bits)",
-      "shuffleOptions": false
+      "options": [
+        "500 bits",
+        "600 bits",
+        "660 bits",
+        "1200 bits"
+      ],
+      "correct": [
+        1
+      ],
+      "answer": "600 bits",
+      "shuffleOptions": true
     },
     {
       "id": "10-3",
@@ -4653,13 +4732,20 @@
       "id": "10-15",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume that a user wants to transmit bit 0 using Direct Sequence Spread Spectrum. The user using \"XOR\" to generate the same. What is the transmitted signal (in binary) if the chipping sequence is 011011000101?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "011011000101",
-      "shuffleOptions": false
+      "options": [
+        "11011000101",
+        "11011000110",
+        "01101100010",
+        "10110001011"
+      ],
+      "correct": [
+        0
+      ],
+      "answer": "11011000101",
+      "shuffleOptions": true
     },
     {
       "id": "10-16",
@@ -4834,25 +4920,39 @@
       "id": "10-22",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume that a user wants to transmit bit 1 using Direct Sequence Spread Spectrum. The user using \"XOR\" to generate the same. What is the transmitted signal (in binary) if the chipping sequence is 101011010011?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "010100101100 (XOR of bit 1 with chipping sequence preserves the sequence)",
-      "shuffleOptions": false
+      "options": [
+        "10100101099",
+        "10101101001",
+        "01010010110",
+        "10100101110"
+      ],
+      "correct": [
+        0
+      ],
+      "answer": "10100101099",
+      "shuffleOptions": true
     },
     {
       "id": "10-23",
       "lectureNumber": 10,
       "lectureTitle": "802.15.4 & Thread",
-      "kind": "reveal",
+      "kind": "single",
       "prompt": "Assume Bob is using DSSS to transmit his data to Alice. Bob decided to use the chipping sequence 10110100110 to transmit his bits. Bob transmitted 330 bits to Alice. Using this information, calculate how many actual bits represent Bob's data?",
       "detailBlocks": [],
-      "options": [],
-      "correct": [],
-      "answer": "30 bits (330 bits ÷ 11 chips per bit = 30 bits)",
-      "shuffleOptions": false
+      "options": [
+        "20 bits",
+        "30 bits",
+        "33 bits",
+        "40 bits"
+      ],
+      "correct": [
+        1
+      ],
+      "answer": "30 bits",
+      "shuffleOptions": true
     },
     {
       "id": "10-24",
@@ -5062,25 +5162,20 @@
       "id": "11-7",
       "lectureNumber": 11,
       "lectureTitle": "ZigBee & Z-Wave",
-      "kind": "reveal",
-      "prompt": "What is the role of Zigbee coordinator in the Zigbee network?",
-      "detailBlocks": [
-        [
-          "Controls the network",
-          "Communicates with other nodes",
-          "Both",
-          "None"
-        ]
-      ],
+      "kind": "single",
+      "prompt": "Which option best describes the primary role of the Zigbee coordinator?",
+      "detailBlocks": [],
       "options": [
         "Controls the network",
-        "Communicates with other nodes",
-        "Both",
-        "None"
+        "Sleeps most of the time to save power",
+        "Acts only as a relay without network control",
+        "Provides only user-interface services"
       ],
-      "correct": [],
-      "answer": "Controls the network (and also communicates with other nodes, so \"Both\" is also correct)",
-      "shuffleOptions": false
+      "correct": [
+        0
+      ],
+      "answer": "Controls the network",
+      "shuffleOptions": true
     },
     {
       "id": "11-8",
@@ -5294,34 +5389,6 @@
       const wrapper = document.createElement('div');
       wrapper.className = 'prompt-blocks';
 
-      item.detailBlocks.forEach((lines) => {
-        if (lines.length === 0) {
-          return;
-        }
-
-        if (isDuplicateOptionBlock(item, lines)) {
-          return;
-        }
-
-        if (lines.length === 1) {
-          const paragraph = document.createElement('p');
-          paragraph.style.margin = '0';
-          paragraph.style.color = '#374151';
-          paragraph.innerHTML = formatText(lines[0]);
-          wrapper.appendChild(paragraph);
-          return;
-        }
-
-        const list = document.createElement('ul');
-        list.className = 'prompt-group';
-        lines.forEach((line) => {
-          const itemEl = document.createElement('li');
-          itemEl.innerHTML = formatText(line);
-          list.appendChild(itemEl);
-        });
-        wrapper.appendChild(list);
-      });
-
       return wrapper;
     }
 
@@ -5450,7 +5517,7 @@
       lectureMeta.textContent = item.lectureTitle;
       card.appendChild(lectureMeta);
 
-      if (item.kind === 'reveal' && item.detailBlocks.length > 0) {
+      if (item.detailBlocks.length > 0) {
         const promptBlocks = createPromptBlocks(item);
         if (promptBlocks.childElementCount > 0) {
           card.appendChild(promptBlocks);
